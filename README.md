@@ -2,6 +2,7 @@
 
 - [R](#r)
   - [R 学习笔记](#r-%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0)
+  - [R 工具](#r-%e5%b7%a5%e5%85%b7)
   - [Reference](#reference)
 
 2020-05-12, 20:15
@@ -11,6 +12,10 @@
 
 - [工作环境](basic/environment.md)
 - [R 内置函数](basic/function.md)
+
+## R 工具
+
+- [R Markdown](r_markdown/1_intro.md)
 
 ## Reference
 

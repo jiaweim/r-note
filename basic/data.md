@@ -16,3 +16,4 @@ R 包含多种数据类型，常用的有：Vector, List, Matrix, Array, Factor,
 其中 vector 是最简单数据类型，有 6 种原子向量，或者称为 6 种向量，如下所示：
 
 ![types](images/2020-05-14-09-37-38.png)
+
