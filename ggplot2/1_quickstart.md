@@ -25,6 +25,7 @@ ggplot(data = mpg) +
 数据点的颜色和 `class` 属性关联。
 
 例3：创建子图
+
 ```r
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy)) + 
@@ -34,7 +35,8 @@ ggplot(data = mpg) +
 ggplot()	creates a coordinate system that you can add layers to
 geom_point()	
 
-# shape
+## shape
+
 ggplot2 最多使用6种形状，不绘制额外的分组数据。
 
 ggplot2 内置的形状：
