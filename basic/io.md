@@ -1,16 +1,18 @@
 # R IO
 
 - [R IO](#r-io)
-  - [控制台 IO](#%e6%8e%a7%e5%88%b6%e5%8f%b0-io)
+  - [控制台 IO](#控制台-io)
     - [scan](#scan)
     - [print](#print)
     - [cat](#cat)
-  - [键盘输入](#%e9%94%ae%e7%9b%98%e8%be%93%e5%85%a5)
-  - [读取带分隔符的文本文件](#%e8%af%bb%e5%8f%96%e5%b8%a6%e5%88%86%e9%9a%94%e7%ac%a6%e7%9a%84%e6%96%87%e6%9c%ac%e6%96%87%e4%bb%b6)
+  - [键盘输入](#键盘输入)
+  - [文件读写](#文件读写)
+    - [常见格式](#常见格式)
+  - [读取带分隔符的文本文件](#读取带分隔符的文本文件)
   - [CSV](#csv)
 
 2020-05-14, 10:58
-***
+*** *
 
 ## 控制台 IO
 
@@ -111,7 +113,6 @@ abc
 y
 ```
 
-
 ```r
 > a <- scan("basic/z1.txt")
 Read 4 items
@@ -153,8 +154,6 @@ Read 4 items
 x =  1.234
 ```
 
-
-
 ## 键盘输入
 
 edit() 函数自动调用一个允许手动输入输入的文本编辑器。步骤：
@@ -183,12 +182,70 @@ mydata <- edit(mydata)
 
 输入完成后，关掉窗口，数据会自动保存到对象中。
 
+## 文件读写
+
+文件的读写在工作目录中完成，使用 `getwd()` 获得工作命令，使用 `setwd("C:/data")` 设置工作目录。如果文件不在工作目录里，则必须给出它的路径。
+
+### 常见格式
+
+| 文件格式      | R函数                                           |
+| ------------- | ----------------------------------------------- |
+| txt           | `read.table()`                                  |
+| csv           | `read.csv()`, `readr:read_csv()`                |
+| xls, xlsx     | `readxl::read_excel()`, `openxlsx::read.xlsx()` |
+| sav           | `foreign::read.spss()`                          |
+| .Rdata or rda | `load()`                                        |
+| rds           | `readRDS()` and `readr:read_rds()`              |
+| dta           | `haven::read_dta()` and `haven::read_stata()`   |
+| Internet      | `download.file()`                               |
+
+基本范例：
+
+```r
+d <- read.table(file= "./data/txt_file.txt", header = TRUE)
+load(file = "./data/rda_file.rda")
+
+d <- readRDS(file = "./data/rds_file.rds")
+
+library(readr)
+d <- read_csv(file = "./data/csv_file.csv")
+
+url <- "https://raw.githubusercontent.com/perlatex/R_for_Data_Science/master/demo_data/wages.csv"
+d <- read_csv(url)
+
+library(readxl)
+d <- read_excel("./data/vowel_data.xlsx")
+
+library(haven)
+d <- read_excel("./data/cfps2010.dta")
+```
+
 ## 读取带分隔符的文本文件
 
 语法：
 
 ```r
-mydataframe <- read.table(file, header=logical_value, sep="delimiter", row.names="name")
+read.table(file, header = FALSE, sep = "", quote = "\"'",
+           dec = ".", numerals = c("allow.loss", "warn.loss", "no.loss"),
+           row.names, col.names, as.is = !stringsAsFactors,
+           na.strings = "NA", colClasses = NA, nrows = -1,
+           skip = 0, check.names = TRUE, fill = !blank.lines.skip,
+           strip.white = FALSE, blank.lines.skip = TRUE,
+           comment.char = "#",
+           allowEscapes = FALSE, flush = FALSE,
+           stringsAsFactors = default.stringsAsFactors(),
+           fileEncoding = "", encoding = "unknown", text, skipNul = FALSE)
+read.csv(file, header = TRUE, sep = ",", quote = "\"",
+         dec = ".", fill = TRUE, comment.char = "", …)
+
+read.csv2(file, header = TRUE, sep = ";", quote = "\"",
+          dec = ",", fill = TRUE, comment.char = "", …)
+
+read.delim(file, header = TRUE, sep = "\t", quote = "\"",
+           dec = ".", fill = TRUE, comment.char = "", …)
+
+read.delim2(file, header = TRUE, sep = "\t", quote = "\"",
+            dec = ",", fill = TRUE, comment.char = "", …)
 ```
 
 参数说明：

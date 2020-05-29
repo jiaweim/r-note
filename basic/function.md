@@ -1,23 +1,22 @@
 # R 内置函数
 
-- [R 内置函数](#r-%e5%86%85%e7%bd%ae%e5%87%bd%e6%95%b0)
-  - [函数列表](#%e5%87%bd%e6%95%b0%e5%88%97%e8%a1%a8)
+- [R 内置函数](#r-内置函数)
+  - [函数列表](#函数列表)
   - [all](#all)
   - [any](#any)
   - [R Base](#r-base)
   - [R Utils](#r-utils)
-    - [ls.str](#lsstr)
   - [rep](#rep)
   - [seq(from=1, to=10, by=2)](#seqfrom1-to10-by2)
   - [str(a)](#stra)
-  - [管理R工作空间的函数](#%e7%ae%a1%e7%90%86r%e5%b7%a5%e4%bd%9c%e7%a9%ba%e9%97%b4%e7%9a%84%e5%87%bd%e6%95%b0)
-  - [sink("filename")](#sink%22filename%22)
-  - [source("filename")](#source%22filename%22)
-  - [图形输出](#%e5%9b%be%e5%bd%a2%e8%be%93%e5%87%ba)
-  - [数学函数](#%e6%95%b0%e5%ad%a6%e5%87%bd%e6%95%b0)
-  - [R 包](#r-%e5%8c%85)
-    - [数据管理](#%e6%95%b0%e6%8d%ae%e7%ae%a1%e7%90%86)
-    - [字符串处理](#%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%a4%84%e7%90%86)
+  - [管理R工作空间的函数](#管理r工作空间的函数)
+  - [sink("filename")](#sinkfilename)
+  - [source("filename")](#sourcefilename)
+  - [图形输出](#图形输出)
+  - [数学函数](#数学函数)
+  - [R 包](#r-包)
+    - [数据管理](#数据管理)
+    - [字符串处理](#字符串处理)
   - [all()](#all-1)
   - [lapply](#lapply)
 
@@ -71,42 +70,6 @@
 ## R Base
 
 ## R Utils
-
-### ls.str
-
-`ls.str` 和 `lsf.str` 是 [ls](#ls) 的变体，对 `ls` 返回的名称应用 `str()` 函数。
-
-语法：
-
-```r
-ls.str(pos = -1, name, envir, all.names = FALSE,
-       pattern, mode = "any")
-lsf.str(pos = -1, envir, …)
-
-# S3 method for ls_str
-print(x, max.level = 1, give.attr = FALSE, …,
-      digits = max(1, getOption("str")$digits.d))
-```
-
-参数：
-
-1. pos
-
-指定 `search` 中的位置，`-1` 表示当前环境。
-
-`name` 和 `envir` 参数都是 `name` 的替代参数，基于兼容性考虑而保留。
-
-2. all.names
-
-是否显示以 `.` 开头的名称，默认为 TRUE.
-
-3. pattern
-
-
-
-4. max.level
-
-指定最大嵌套级别，默认为 `1`，即只显示第一个嵌套级别。
 
 ## rep
 

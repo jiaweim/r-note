@@ -1,10 +1,11 @@
 # RStudio
 
 - [RStudio](#rstudio)
-  - [快捷键](#%e5%bf%ab%e6%8d%b7%e9%94%ae)
+  - [快捷键](#快捷键)
     - [Console](#console)
     - [Source](#source)
     - [Editing (Console and Source)](#editing-console-and-source)
+  - [设置编码](#设置编码)
 
 2020-05-15, 18:45
 ***
@@ -128,3 +129,7 @@
 | 显示光标下函数的信息       | F1                                       |
 | 显示光标下函数的源码       | F2                                       |
 | 光标下符号的 usages  (C++) | Ctrl+Alt+U                               |
+
+## 设置编码
+
+![Code](images/2020-05-28-22-52-17.png)

@@ -1,17 +1,20 @@
 # Introduction
 
 - [Introduction](#introduction)
-  - [简介](#%e7%ae%80%e4%bb%8b)
-  - [安装](#%e5%ae%89%e8%a3%85)
-  - [Markdown 基础](#markdown-%e5%9f%ba%e7%a1%80)
-  - [R 代码块](#r-%e4%bb%a3%e7%a0%81%e5%9d%97)
-  - [inline R Code](#inline-r-code)
-  - [渲染输出](#%e6%b8%b2%e6%9f%93%e8%be%93%e5%87%ba)
-  - [参数](#%e5%8f%82%e6%95%b0)
-  - [输出格式](#%e8%be%93%e5%87%ba%e6%a0%bc%e5%bc%8f)
+  - [简介](#简介)
+  - [安装](#安装)
+  - [Markdown 基础](#markdown-基础)
+    - [R 代码块](#r-代码块)
+    - [inline R Code](#inline-r-code)
+    - [公式](#公式)
+    - [插入图片](#插入图片)
+  - [渲染输出](#渲染输出)
+    - [输出格式](#输出格式)
+    - [输出目录](#输出目录)
+    - [生成 PDF](#生成-pdf)
 
 2020-05-15, 15:42
-***
+*** *
 
 ## 简介
 
@@ -39,29 +42,43 @@ Markdown 是一种简单的标记语言。如下所示，左侧为 Markdown 语�
 
 ![markdown](images/2020-05-15-15-45-21.png)
 
-## R 代码块
+### R 代码块
 
 在 R Markdown 文件中，可以插入 R 代码段。例如，下面计算并绘图：
 
 ![code chunk](images/2020-05-15-15-50-16.png)
 
-## inline R Code
+### inline R Code
 
 甚至可以插入单行表达式，以 `r` 识别，例如：
 
 ![inline](images/2020-05-15-15-51-24.png)
 
-## 渲染输出
+### 公式
 
-将 `.Rmd` 渲染输出的方式有两种，如果使用 RStudio，可以使用 "Knit" 按钮渲染并预览文件。
+例如 $\frac{\sum (\bar{x} - x_i)^2}{n-1}$
 
-如果没有使用 RStudio，则可以使用 `rmarkdown::render` 函数，例如：
+### 插入图片
 
-```r
-rmarkdown::render("input.Rmd")
+```{r, out.width='35%', fig.align='left', fig.cap='this is caption'}
+knitr::include_graphics("images/R_logo.png")
 ```
 
-两个方式本质相同。
+### 表格
+
+参考 [kableExtra](https://haozhu233.github.io/kableExtra/)
+
+## RMarkdown 文件结构
+
+![rmarkdown](images/2020-05-29-12-14-50.png)
+
+基本构成：
+
+- metadata
+- text
+- code
+
+点击 `Knit`，可以输出为需要的文件格式。
 
 ## 参数
 
@@ -93,7 +110,19 @@ rmarkdown::render("input.Rmd", params = list())
 
 ![parameters](images/2020-05-15-16-04-27.png)
 
-## 输出格式
+## 渲染输出
+
+将 `.Rmd` 渲染输出的方式有两种，如果使用 RStudio，可以使用 "Knit" 按钮渲染并预览文件。
+
+如果没有使用 RStudio，则可以使用 `rmarkdown::render` 函数，例如：
+
+```r
+rmarkdown::render("input.Rmd")
+```
+
+两个方式本质相同。
+
+### 输出格式
 
 ![formats](images/2020-05-15-16-05-06.png)
 
@@ -144,3 +173,21 @@ render("input.Rmd", "pdf_document")
 ```r
 render("input.Rmd", "all")
 ```
+
+### 输出目录
+
+在格式下面指定 `toc: true`
+
+例如：
+
+```rmd
+title: "Sample Document"
+output:
+  html_document:
+    toc: true
+    theme: united
+```
+
+### 生成 PDF
+
+pdf 文档可以插入矢量图和数学公式，备受大家喜欢。但是如果包含中午呢，往往编译不成功，可以参考 [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)。
