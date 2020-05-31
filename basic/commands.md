@@ -3,6 +3,9 @@
 - [R Commands](#r-commands)
   - [help](#help)
 
+2020-05-31, 10:23
+***
+
 ## help
 
 启动帮助。例如 `help(lm)` 会显示关于函数 `lm()`（线性模型）的帮助页面。
@@ -49,3 +52,22 @@ Generate the B-spline basis matrix for a polynomial spline.
 ```
 
 使用 `help.start()` 可以启动 HTML 格式的帮助页面。
+
+在RStudio中有一个单独的Help窗格， 如果需要，可以用菜单“View–Panes–Zoom help”将其放大到占据整个窗口空间。 但是，这一功能目前不支持放大显示字体的功能， 不如在浏览器中方便。
+
+RStudio的帮助窗格中包含R软件的官方文档， 以及RStudio软件的的文档。 “Search engine and keywords”项下面有分类的帮助。 有软件包列表。
+
+在基本R软件而不是RStudio的命令行中运行命令help.start()或者用RGUI的帮助菜单中“html帮助”可以打开系统默认的互联网浏览器， 在其中查看帮助文档。
+
+用example(函数名)的格式可以运行此函数的样例，如:
+
+```r
+> example(mean)
+
+mean> x <- c(0:10, 50)
+
+mean> xm <- mean(x)
+
+mean> c(xm, mean(x, trim = 0.10))
+[1] 8.75 5.50
+```

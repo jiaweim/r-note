@@ -5,8 +5,11 @@
     - [数值](#数值)
     - [字符串](#字符串)
     - [逻辑](#逻辑)
-    - [因子](#因子)
   - [数据结构](#数据结构)
+  - [factor](#factor)
+    - [factor 实例](#factor-实例)
+    - [tapply](#tapply)
+    - [Ordered factor](#ordered-factor)
   - [对象](#对象)
   - [矩阵](#矩阵)
     - [矩阵操作](#矩阵操作)
@@ -16,10 +19,10 @@
     - [创建 List](#创建-list)
     - [索引](#索引)
   - [数据框](#数据框)
-  - [增强型数据框](#增强型数据框)
+  - [增强型数据框 tibble](#增强型数据框-tibble)
 
 2020-05-28, 19:20
-*** *
+*** **
 
 ## 基本类型
 
@@ -56,17 +59,6 @@
 [1] "logical"
 ```
 
-### 因子
-
-```r
-> f <- factor(c("a", "b", "c"))
-> f
-[1] a b c
-Levels: a b c
-> class(f)
-[1] "factor"
-```
-
 ## 数据结构
 
 和 C 及 java 不同，R 和 python 一样，在声明变量时不指定数据类型。
@@ -89,6 +81,135 @@ R 包含多种数据类型，常用的有：Vector, List, Matrix, Array, Factor,
 - 矩阵是数组的一个特例，其维度为2
 - 数据库由一个或几个向量或因子构成，它们必须等长，但可以是不同类型
 - 列表可以包含任意类型的对象，包括列表。
+
+## factor
+
+在 R 中，factor 是一种特殊的向量，用于指定其它相同长度向量元素的离散分类（分组）。R 提供了有序和无序 factors。
+
+```r
+> f <- factor(c("a", "b", "c"))
+> f
+[1] a b c
+Levels: a b c
+> class(f)
+[1] "factor"
+```
+
+### factor 实例
+
+假如有来自澳大利亚各地区的 30 名会计师的样本，用一个字符向量提供他们各自来自哪个州。如下：
+
+```r
+> state <- c("tas", "sa",  "qld", "nsw", "nsw", "nt",  "wa",  "wa",
++            "qld", "vic", "nsw", "vic", "qld", "qld", "sa",  "tas",
++            "sa",  "nt",  "wa",  "vic", "qld", "nsw", "nsw", "wa",
++            "sa",  "act", "nsw", "vic", "vic", "act")
+```
+
+> 对字符向量，排序是指按字母顺序排列。
+
+使用向量创建 factor:
+
+```r
+> statef <- factor(state)
+```
+
+factor 输出：
+
+```r
+> statef
+ [1] tas sa  qld nsw nsw nt  wa  wa  qld vic nsw vic qld qld sa  tas sa  nt  wa  vic qld nsw nsw wa
+[25] sa  act nsw vic vic act
+Levels: act nsw nt qld sa tas vic wa
+```
+
+使用 `levels()` 函数查看所有的 levels:
+
+```r
+> levels(statef)
+[1] "act" "nsw" "nt"  "qld" "sa"  "tas" "vic" "wa"
+```
+
+对正数，如：
+
+```r
+> x <- c(5, 12, 13, 12)
+> xf <- factor(x)
+> xf
+[1] 5  12 13 12
+Levels: 5 12 13
+```
+
+额外信息 level 可以表示等级，或者说类别。再看 `xf` 内部信息：
+
+```r
+> str(xf)
+ Factor w/ 3 levels "5","12","13": 1 2 3 2
+> unclass(xf)
+[1] 1 2 3 2
+attr(,"levels")
+[1] "5"  "12" "13"
+```
+
+其中的 `1 2 3 2` 可以看作数据分类。
+
+还可以在定义时指定 level:
+
+```r
+xff <- factor(x, levels = c(5, 12, 13, 88))
+```
+
+虽然 `xff` 不含有 88，但是额外的level是允许的。
+
+### tapply
+
+继续上面的例子，假设我们有另一个向量，该向量包含所有会计的收入：
+
+```r
+> incomes <- c(60, 49, 40, 61, 64, 60, 59, 54, 62, 69, 70, 42, 56,
++              61, 61, 61, 58, 51, 48, 65, 49, 49, 41, 48, 52, 46,
++              59, 46, 58, 43)
+```
+
+要计算每个地区的平均收入，此时可以使用 `tapply()` 函数：
+
+```r
+> incmeans <- tapply(incomes, statef, mean)
+> incmeans
+     act      nsw       nt      qld       sa      tas      vic       wa
+44.50000 57.33333 55.50000 53.60000 55.00000 60.50000 56.00000 52.25000
+```
+
+`tapply()` 将指定函数（第三个参数，如 mean）应用到向量（第一个参数，如 incomes）的每个分组，分组由第二个参数（此处为 `statef`）确定。返回结果的长度和 factor 相同。
+
+`tapply(x, f, g)`
+
+- x 对应向量
+- f 对应因子
+- g 对应函数
+
+假设我们还想计算收入的标准差。为此我们首先需要实现计算标准差的函数。已有内置函数 `var()` 计算样本方差，该函数是一个很简单呐的线性函数：
+
+```r
+> stdError <- function(x) sqrt(var(x)/length(x))
+```
+
+然后，我们就可以使用该函数计算不同地区收入的标准差：
+
+```r
+> incster <- tapply(incomes, statef, stdError)
+> incster
+     act      nsw       nt      qld       sa      tas      vic       wa
+1.500000 4.310195 4.500000 4.106093 2.738613 0.500000 5.244044 2.657536
+```
+
+### Ordered factor
+
+Factor 的 levels 按照字母顺序存储，或者根据指定的顺序存储。
+
+而 levels 有时具有自然顺序，如数值类型。`Ordered()` 函数用于创建此类有序 factor，这类 factor 其它行为和常规 factor 一样。
+
+大多时候，有序和无序 factor 的唯一差别是，输出的level具有顺序。
 
 ## 对象
 
@@ -291,7 +412,7 @@ $abc
 
 ## 数据框
 
-数据框具有 List 和 Matrix 的属性，因此：
+数据框 `data.frame` 具有 List 和 Matrix 的属性，因此：
 
 - 可以和 List 一样，根据位置选择列，如 `df[1:2]` 选择前两列
   - `df["x"]` 选择 `x` 列，返回新的矩阵
@@ -355,7 +476,7 @@ $abc
 4 4
 ```
 
-## 增强型数据框
+## 增强型数据框 tibble
 
 `tibble` 是增强型的 `data.frame`，选取 `tibble` 的行或列，即使遇到当行或单列，数据也不会降维，总是返回 `tibble`。例如：
 

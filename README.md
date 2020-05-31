@@ -15,6 +15,7 @@
 - [工作环境](basic/environment.md)
 - [R 内置函数](basic/function.md)
 - [io](basic/io.md)
+- [ggplot](ggplot2/0_ggplot2_toc.md)
 
 ## R 工具
 
@@ -27,6 +28,12 @@
 - [DataCamp R 教程](https://www.datacamp.com/courses/free-introduction-to-r)
 - [Quick-R](https://www.statmethods.net/index.html)
 - [R for Data Science](https://r4ds.had.co.nz/)
+- [Advaned R](https://adv-r.hadley.nz/)
+- [ggplot2: Element Graphics for Data Analysis](https://ggplot2-book.org/)
+- [Modern Statistics for Modern Biology](https://www.huber.embl.de/msmb/index.html)
+
+R 的统计功能在生物学中的应用。
+
 - [x] [R language for programmers](https://www.johndcook.com/blog/r_language_for_programmers/)
 - [R 语言教程](http://www.math.pku.edu.cn/teachers/lidf/docs/Rbook/html/_Rbook/index.html)
 - [GitHub 整合资源](https://github.com/ujjwalkarn/DataScienceR)
