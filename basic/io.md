@@ -5,11 +5,14 @@
     - [scan](#scan)
     - [print](#print)
     - [cat](#cat)
+    - [sink](#sink)
   - [键盘输入](#键盘输入)
   - [文件读写](#文件读写)
     - [常见格式](#常见格式)
   - [读取带分隔符的文本文件](#读取带分隔符的文本文件)
   - [CSV](#csv)
+    - [read.csv](#readcsv)
+    - [readr.read_csv](#readrread_csv)
 
 2020-05-14, 10:58
 *** *
@@ -146,13 +149,38 @@ Read 4 items
 
 ### cat
 
-用 `cat()` 函数把字符串、变量、表达式连接起来显示，其中变量和表达式的类型一般是变量或向量，而能是矩阵、列表等复杂数据。例如：
+用 `cat()` 把字符串、变量、表达式连接起来显示，其中变量和表达式的类型一般是变量或向量，也可以是矩阵、列表等复杂数据。例如：
 
 ```r
 > x <- 1.234
 > cat("x = ", x, "\n")
 x =  1.234
 ```
+
+再比如：
+
+```r
+> cat("sin(pi/2) =", sin(pi/2), "\n")
+sin(pi/2) = 1
+```
+
+`cat` 的最后一项 `\n` 用于换行。
+
+### sink
+
+`sink()` 可用于收集控制台输出，在 R 命令行中运行过的命令会被保存在工作文件夹的 `.Rhistory` 文件中。而使用 `sink()` 函数可以保存执行命令输出的内容。
+
+`sink()` 打开一个文本，运行结束后再次调用 `sink()` 关闭文件：
+
+```r
+sink("tmpres01.txt", split=TRUE)
+print(sin(pi/6))
+print(cos(pi/6))
+cat("t(10)的双侧0.05分位数（临界值）=", qt(1 - 0.05/2, 10), "\n")
+sink()
+```
+
+`sink()` 用作输出记录，主要用在测试里，正常的输出应该使用 `cat()`、`write.table()`, `write.csv()` 等函数。
 
 ## 键盘输入
 
@@ -265,6 +293,8 @@ a_table <- read.table("io/input.csv", header = TRUE, sep = ",")
 
 ## CSV
 
+### read.csv
+
 读取 csv:
 
 ```r
@@ -273,3 +303,7 @@ print(data)
 ```
 
 `read.csv` 返回的是 data frame 对象，
+
+`read.csv()` 的一个改进版本是 `readr`包的 `read_csv()` 函数，此函数读入较大表格速度要快很多，而且读入的转换设置更倾向于不做不必要的转换。
+
+### readr.read_csv

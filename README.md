@@ -23,7 +23,7 @@
 
 ## Reference
 
-- [An Introduction to R](https://cran.r-project.org/doc/manuals/R-intro.html)
+- [x] [An Introduction to R](https://cran.r-project.org/doc/manuals/R-intro.html)
 - [tutorials point 教程](https://www.tutorialspoint.com/r/index.htm)
 - [DataCamp R 教程](https://www.datacamp.com/courses/free-introduction-to-r)
 - [Quick-R](https://www.statmethods.net/index.html)

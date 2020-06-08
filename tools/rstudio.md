@@ -168,8 +168,8 @@
 | Yank line up to cursor     | Ctrl+U                                   |
 | Yank line after cursor     | Ctrl+K                                   |
 | 插入选中文本               | Ctrl+Y                                   |
-| Insert assignment operator | Alt+-                                    |
-| 插入管道操作符             | Ctrl+Shift+M                             |
+| 插入 `<-`                  | Alt+-                                    |
+| 插入管道操作符 `%>%`       | Ctrl+Shift+M                             |
 | 显示光标下函数的信息       | F1                                       |
 | 显示光标下函数的源码       | F2                                       |
 | 光标下符号的 usages  (C++) | Ctrl+Alt+U                               |

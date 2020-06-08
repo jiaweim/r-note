@@ -2,12 +2,11 @@
 
 - [R 内置函数](#r-内置函数)
   - [函数列表](#函数列表)
-  - [all](#all)
-  - [any](#any)
+  - [逻辑运算函数](#逻辑运算函数)
   - [R Base](#r-base)
-  - [R Utils](#r-utils)
-  - [rep](#rep)
-  - [seq(from=1, to=10, by=2)](#seqfrom1-to10-by2)
+  - [序列函数](#序列函数)
+    - [seq](#seq)
+    - [rep](#rep)
   - [str(a)](#stra)
   - [管理R工作空间的函数](#管理r工作空间的函数)
   - [sink("filename")](#sinkfilename)
@@ -16,10 +15,11 @@
   - [数学函数](#数学函数)
     - [三角函数](#三角函数)
     - [分布函数](#分布函数)
+    - [统计函数](#统计函数)
   - [R 包](#r-包)
     - [数据管理](#数据管理)
     - [字符串处理](#字符串处理)
-  - [all()](#all-1)
+  - [all()](#all)
   - [lapply](#lapply)
 
 2020-05-14, 08:33
@@ -61,30 +61,136 @@
 - RSiteSearch() 可在在线帮助手册和 R-Help 邮件列表的讨论存档中搜索指定主题，并在浏览器中返回结果。
 - vignette() 返回的 vignette 文档一般是PDF格式的实用介绍性文章。不过并非所有的包都提供 vignette文档。
 
-## all
+## 逻辑运算函数
 
-参数是否全部为TRUE。
+| 函数       | 功能                                  |
+| ---------- | ------------------------------------- |
+| all        | 参数是否全部为TRUE                    |
+| any        | 参数是否有一个为TRUE                  |
+| which      | 返回真值对应的下标                    |
+| identical  | 两个对象是否完全相同                  |
+| all.equal  | 与 identical 类似，但不区分实数与整数 |
+| duplicated | 返回每个元素是否为重复值              |
+| unique     | 返回去掉重复值的结果                  |
 
-## any
+```r
+> c(1, NA, 3) > 2
+[1] FALSE    NA  TRUE
+> v <- c(1, NA, 3)
+> v>2
+[1] FALSE    NA  TRUE
+> all(v > 2)
+[1] FALSE
+> any(v > 2)
+[1] TRUE
+> all(NA)
+[1] NA
+> any(NA)
+[1] NA
+```
 
-参数是否有一个为TRUE。
+which 示例：
+
+```r
+> which(c(FALSE, TRUE, TRUE, FALSE, NA))
+[1] 2 3
+> which((11:15) > 12)
+[1] 3 4 5
+```
+
+`identical` 示例：
+
+```r
+> v1 <- c(1, 2, 3)
+> v2 <- c(1L, 2L, 3L)
+> class(v1)
+[1] "numeric"
+> class(v2)
+[1] "integer"
+> identical(v1, v2)
+[1] FALSE
+```
+
+函数all.equal()与identical()类似， 但是在比较数值型时不区分整数型与实数型， 而且相同时返回标量TRUE， 但是不同时会返回一个说明有何不同的字符串。如
+
+```r
+> all.equal(c(1, 2, 3), c(1, 2, NA))
+[1] "'is.NA' value mismatch: 1 in current 0 in target"
+> all.equal(c(1L, 2L, 3L), c(1, 2, 3))
+[1] TRUE
+```
+
+`duplicated` 示例：
+
+```r
+> duplicated(c(1, 2, 1, 3, NA, 4, NA))
+[1] FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE
+> unique(c(1, 2, 1, 3, NA, 4, NA))
+[1]  1  2  3 NA  4
+```
 
 ## R Base
 
-## R Utils
+## 序列函数
 
-## rep
+### seq
 
+用于生成等差数列。语法：
+
+```r
+seq(from=1, to=10, by=2)
+```
+
+说明：
+
+- `from` 指定起始值，默认为 1.
+- `to` 指定终止值
+- `by` 指定差值
+
+另外：
+
+- `seq(5)` 等价于 `1:6`
+- `seq(2, 5)` 等价于 `2:5`
+
+```r
+> seq(5)
+[1] 1 2 3 4 5
+> 1:5
+[1] 1 2 3 4 5
+> seq(2:5)
+[1] 1 2 3 4
+> 2:5
+[1] 2 3 4 5
+> seq(11, 15, by=2)
+[1] 11 13 15
+> seq(0, 2*pi, length.out = 100) # 生成 0 到 2pi 的等差序列，序列长度为100
+```
+
+### rep
+
+`rep()` 用来生成重复数值。语法：
+
+```r
 rep(a, b)
-rep 表示 repeat，将 a 重复 b次，获得一个向量。
+```
 
-each 指定每个数分别重复的次数
-rep(c(5, 12, 13), each=2)
-// 5 5 12 12 13 13
+rep 表示 repeat，将 a 重复 b次，获得一个向量。例如：
 
-## seq(from=1, to=10, by=2)
+- `rep(0, n)`, 初始值为 0 长度为 n 的向量
+- `rep(c(1, 3), 2)`，把第一个向量重复3次，得到 c(1, 3, 1, 3)
+- `rep(c(1,3), c(2, 4))`，按照一一对应原则重复
 
-生成等差数列。
+```r
+> rep(c(1, 3), c(2, 4))
+[1] 1 1 3 3 3 3
+```
+
+如果希望重复完一个元素之后，再重复另一个元素，可以用 `each=` 选项。例如：
+
+```r
+> rep(c(1, 3), each=2)
+[1] 1 1 3 3
+```
 
 ## str(a)
 
@@ -205,7 +311,35 @@ str 表示 structur，用于显示对象结构。a 为任意数据结构。
 
 ### 分布函数
 
-`dnorm(x)` 表示标准正态分布密度函数 $$
+`dnorm(x)` 表示标准正态分布密度函数 $\varPhi(x)=\frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}x^2}$。
+
+`pnorm(x)` 表示标准正态分布函数 $\Phi(x)=\int_{-\infin}^x\varPhi(t)dt$.
+
+`qnorm(y)` 表示标准正态分布分位函数 $\Phi^{-1}(x)$
+
+### 统计函数
+
+| 函数    | 功能           |
+| ------- | -------------- |
+| sum     | 求和           |
+| mean    | 均值           |
+| var     | 方差           |
+| sd      | 标准差         |
+| min     | 最小值         |
+| max     | 最大值         |
+| range   | 最小值和最大值 |
+| prod    | 所有元素乘积   |
+| cumsum  | 累积加和       |
+| cumprod | 累积乘积       |
+
+```r
+> cumsum(1:5)
+[1]  1  3  6 10 15
+> cumprod(1:5)
+[1]   1   2   6  24 120
+> prod(1:5)
+[1] 120
+```
 
 ## R 包
 
