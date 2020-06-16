@@ -6,6 +6,7 @@
     - [print](#print)
     - [cat](#cat)
     - [sink](#sink)
+    - [save](#save)
   - [键盘输入](#键盘输入)
   - [文件读写](#文件读写)
     - [常见格式](#常见格式)
@@ -13,6 +14,10 @@
   - [CSV](#csv)
     - [read.csv](#readcsv)
     - [readr.read_csv](#readrread_csv)
+    - [从字符串读取数据](#从字符串读取数据)
+    - [编码设置](#编码设置)
+    - [缺失值](#缺失值)
+    - [列类型设置](#列类型设置)
 
 2020-05-14, 10:58
 *** *
@@ -22,6 +27,8 @@
 `scan()`, `readline()`, `print()` 和 `cat()` 函数用于控制台 IO。
 
 ### scan
+
+`scan()` 可以从控制台或文件读取数值向量。
 
 ```r
 scan(file = "", what = double(), nmax = -1, n = -1, sep = "",
@@ -44,8 +51,6 @@ scan(file = "", what = double(), nmax = -1, n = -1, sep = "",
 - what
 
 `what` 指定读取的数据类型，支持类型有 `logical`, `integer`, `numeric`, `complex`, `character`, `raw` 以及 `list`。
-
-如果 `what` 为
 
 `scan()` 从控制台或文件读取一个向量或 list。
 
@@ -127,6 +132,36 @@ Read 4 items
 
 返回的为 `double` 类型的向量。
 
+输出输入：
+
+```r
+cat(1:12, "\n", file="d:/work/x.txt")
+x <- scan("d:/work/x.txt")
+```
+
+如果没有给出文件参数，则从命令读入数据。可以在一行用空格隔开多个数据，也可以多行输入直到空行结束输入。
+
+使用该方法可以读入矩阵，假设文件 `mat.txt` 包含如下矩阵：
+
+```txt
+3  4  2
+5 12 10
+7  8  6
+1  9 11
+```
+
+可以先把文件读入到向量，再使用 `matrix()` 函数转换为矩阵。注意使用 `byrow=TRUE` 选项，同时指定 `ncol` 选项。例如：
+
+```r
+M <- matrix(scan("mat.txt", quiet=TRUE), ncol=3, byrow=TRUE)
+```
+
+`scan()` 中的 `quite=TRUE` 使得读入时不自动显示读入的数值数目。
+
+上面读入数值矩阵的方法在数据量较大时可以使用。
+
+`read_table()` 和 `readr::read_table()` 也可以读入这样的数据，但是会保存为数据框而不是矩阵，而且 `read_table()` 在读取大规模矩阵时效率很低。
+
 ### print
 
 `print()` 函数显示某个变量或表达式的值，例如：
@@ -149,7 +184,7 @@ Read 4 items
 
 ### cat
 
-用 `cat()` 把字符串、变量、表达式连接起来显示，其中变量和表达式的类型一般是变量或向量，也可以是矩阵、列表等复杂数据。例如：
+用 `cat()` 把字符串、变量、表达式连接起来显示，其中变量和表达式一般是标量或向量，不能为矩阵、列表等复杂数据。例如：
 
 ```r
 > x <- 1.234
@@ -166,9 +201,18 @@ sin(pi/2) = 1
 
 `cat` 的最后一项 `\n` 用于换行。
 
+`cat()` 默认显示在命令行窗口，要写入文件，可以在 `cat()` 中添加 `file=` 选项，如果已经文件，默认覆盖文件，否则在 `cat()` 中使用 `append=TRUE` 选项以追加内容。例如：
+
+```r
+cat("=== 结果文件 ===\n", file="res.txt")
+cat("x =", x, "\n", file="res.txt", append=TRUE)
+```
+
 ### sink
 
-`sink()` 可用于收集控制台输出，在 R 命令行中运行过的命令会被保存在工作文件夹的 `.Rhistory` 文件中。而使用 `sink()` 函数可以保存执行命令输出的内容。
+`sink()` 可用于收集控制台运行结果。
+
+在 R 命令行中运行过的命令会被保存在工作文件夹的 `.Rhistory` 文件中。而使用 `sink()` 函数可以保存执行命令输出的内容。
 
 `sink()` 打开一个文本，运行结束后再次调用 `sink()` 关闭文件：
 
@@ -181,6 +225,56 @@ sink()
 ```
 
 `sink()` 用作输出记录，主要用在测试里，正常的输出应该使用 `cat()`、`write.table()`, `write.csv()` 等函数。
+
+设置 `split=TRUE` 可以在写入文件时，同时在控制台输出：
+
+```r
+sink("allres.txt", split=TRUE)
+```
+
+### save
+
+在 R 命令行中定义的变量、函数会保存在工作空间中， 并在退出 R 会话时可以保存到硬盘文件中。 用 `save()` 命令可以把指定的若干个变量（直接用名字，不需要表示成字符串） 保存到用 `file=` 指定的文件中， 随后可以用 `load()` 命令恢复到工作空间中。
+
+虽然允许保存多个变量到同一文件中， 但应该尽可能仅保存一个变量， 而且使用变量名作为文件名。 用 `save()` 保存的R特殊格式的文件是通用的， 不依赖于硬件和操作系统。 如
+
+```r
+save(scores, file="scores.RData")
+load("scores.RData")
+```
+
+保存多个变量，如：
+
+```r
+save(x, zeta, file="myvars20200315.RData")
+```
+
+或：
+
+```r
+save(x, zeta, file="myvars20200315.RData")
+```
+
+对数据框，可以用 `write.csv()` 或 `readr::write_csv()` 将其保存为 CSV 文本文件。比如：
+
+```r
+da <- tibble("name"=c("李明", "刘颖", "张浩"),
+                 "age"=c(15, 17, 16))
+write_csv(da, path="mydata.csv")
+```
+
+生成的 mydata.csv 文件内容如下：
+
+```csv
+name,age
+李明,15
+刘颖,17
+张浩,16
+```
+
+不过，在 Windows 操作系统中，默认编码是 GBK编码，而用 `write_csv()` 生成的 CSV 文件是 UTF-8 编码，而 MS Office 不能自动识别这样的CSV文件，可以改用 `write_csv_excel()` 函数。
+
+R 基本的 `write.csv()` 函数不存在该问题。
 
 ## 键盘输入
 
@@ -293,6 +387,24 @@ a_table <- read.table("io/input.csv", header = TRUE, sep = ",")
 
 ## CSV
 
+对文本格式的表格数据，可以使用 R 自带的 `read.csv()`, `read.table()`, `read.delim()` 和 `read.fwf()` 等函数读取，但是建议使用 readr 包的 `read_csv()`, `read_table2()`, `read_delim()` 和 `read_fwf()` 函数读取，存储为 tibble 类型。tibble 是数据框的一个变种，改善了数据框一些不合适的设计。readr 读取速度比 `read.csv()` 等函数快得多，速度可以相差十倍，不自动就爱那个字符型列转换为因子，不自动修改变量名为合法变量名，不设置行名。
+
+CSV 文件用逗号分隔开同一行的数据，一般第一行是各列的列名（变量名）。对于数值型数据，只要表示成数值常量形式即可。 对于字符型数据，可以用双撇号包围起来，也可以不用撇号包围。 但是，如果数据项本身包含逗号，就需要用双引号包围。 例如，下面是一个名为 test.csv 的文件内容， 其中演示了内容中有逗号、有双撇号的情况。
+
+```csv
+id,words
+1,"PhD"
+2,Master's degree
+3,"Bond,James"
+4,"A ""special"" gift"
+```
+
+读取数据：
+
+```r
+d <- read_csv("testcsv.csv")
+```
+
 ### read.csv
 
 读取 csv:
@@ -307,3 +419,152 @@ print(data)
 `read.csv()` 的一个改进版本是 `readr`包的 `read_csv()` 函数，此函数读入较大表格速度要快很多，而且读入的转换设置更倾向于不做不必要的转换。
 
 ### readr.read_csv
+
+`skip=` 选项用于跳过开头的若干行。当数据不包含列明，需指定 `col_names=FALSE`，变量名自动命名为 `X1`, `X2`...，也可以使用 `col_names=` 指定各列的名称，例如：
+
+```r
+> d.small <- read_csv("John, 33, 95
++                     Kim, 21, 64
++                     Sandy, 49, 100", col_names=c("name", "x", "y"))
+> d.small
+# A tibble: 3 x 3
+  name      x     y
+  <chr> <dbl> <dbl>
+1 John     33    95
+2 Kim      21    64
+3 Sandy    49   100
+```
+
+### 从字符串读取数据
+
+`read_csv()` 可以从字符串读取数据库。例如：
+
+```r
+> d.small <- read_csv("name,x,y
++                     John, 33, 95
++                     Kim, 21, 64
++                     Sandy, 49, 100")
+> d.small
+# A tibble: 3 x 3
+  name      x     y
+  <chr> <dbl> <dbl>
+1 John     33    95
+2 Kim      21    64
+3 Sandy    49   100
+```
+
+### 编码设置
+
+CSV是文本文件，对中文有编码问题。 readr包的默认编码是UTF-8。 例如，文件bp.csv 以GBK编码（有时称为GB18030编码， 这是中文Windows所用的中文编码）保存了如下内容：
+
+```csv
+序号,收缩压
+1,145
+5,110
+6, 未测
+9,150
+10, 拒绝
+15,115
+```
+
+直接读取：
+
+```r
+> d <- read_csv("src/data/bp.csv")
+Parsed with column specification:
+cols(
+  `<d0><f2><U+00BA><c5>` = col_double(),
+  `<ca><d5><cb><f5><U+0479>` = col_character()
+)
+> d
+Error in nchar(x[is_na], type = "width") : 
+  invalid multibyte string, element 1
+```
+
+设置编码读取：
+
+```r
+> d <- read_csv("src/data/bp.csv", locale=locale(encoding = "GBK"))
+Parsed with column specification:
+cols(
+  `<U+5E8F><U+53F7>` = col_double(),
+  `<U+6536><U+7F29><U+538B>` = col_character()
+)
+> d
+# A tibble: 6 x 2
+  `序号` `收缩压`
+   <dbl> <chr>
+1      1 145  
+2      5 110  
+3      6 未测
+4      9 150  
+5     10 拒绝
+6     15 115
+```
+
+### 缺失值
+
+`read_csv` 将空缺的值读入为缺失值，将 "NA" 也读入为缺失值。可以用 `na=` 选项修改默认设置。也可以将带缺失值的列原样读入，再进行转换。
+
+比如，对前面的 `bp.csv` 文件，先将血压按字符型读入，再增加一列转换为数值型的列，非数值转换为 NA：
+
+```r
+> d <- read_csv("src/data/bp.csv", locale = locale(encoding = "GBK"))
+> d[["收缩压数值"]] <- as.numeric(d[["收缩压"]])
+> d
+# A tibble: 6 x 3
+  `序号` `收缩压` `收缩压数值`
+   <dbl> <chr>           <dbl>
+1      1 145               145
+2      5 110               110
+3      6 未测               NA
+4      9 150               150
+5     10 拒绝               NA
+6     15 115               115
+```
+
+### 列类型设置
+
+对每列的类型，`readr` 使用前 1000 行猜测合理的类型，并在读取后显示猜测的每列类型。
+
+但是有可能类型改变发生在 1000 行之后。 `col_types` 选项可以指定每一列的类型：
+
+- `col_double()`
+- `col_integer()`
+- `col_character()`
+- `col_factor()`
+- `col_date()`
+- `col_datetime`
+
+`cols()` 函数可以用来设置各列类型， `.default` 参数指定缺省类型。 对因子，需要在 `col_factor()` 中用 `lelvels=` 指定因子水平。
+
+可以使用 `readr` 猜测的类型作为 `col_types` 的输入， 这样当数据变化时不会因为偶尔猜测错误而使得程序出错。如
+
+```r
+> d <- read_csv("src/data/bp.csv", locale = locale(encoding = "GBK"),
++               col_types = cols(
++                   '序号'=col_integer(),
++                   '收缩压'=col_character()
++               ))
+> d
+# A tibble: 6 x 2
+  `序号` `收缩压`
+   <dbl> <chr>
+1      1 145  
+2      5 110  
+3      6 未测
+4      9 150  
+5     10 拒绝
+6     15 115  
+```
+
+当猜测的文件类型有问题的时候，可以先将所有列读取为字符类型，然后用 `type_convert()` 函数转换，如：
+
+```r
+d <- read_csv("filename.csv",
+              col_types=cols(.default = col_character()))
+d <- type_convert(d)
+```
+
+对特大文件可以先少读取一些行，用 `nmax=` 设置最大读入行。调试成功后再读入整个文件。
+

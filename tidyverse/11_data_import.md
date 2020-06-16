@@ -1,7 +1,7 @@
 # Data import
 
 - [Data import](#data-import)
-  - [简介](#%e7%ae%80%e4%bb%8b)
+  - [简介](#简介)
 
 ## 简介
 
@@ -17,4 +17,3 @@ readr 的大部分函数将纯文本文件读取为数据框：
 - `read_csv2()` 读取分号分隔的文件
 - `read_tsv()` 读取 tab 分隔文件
 - `read_delim()` 读取指定分隔符分隔的文件
-

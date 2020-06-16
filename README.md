@@ -31,6 +31,7 @@
 - [Advaned R](https://adv-r.hadley.nz/)
 - [ggplot2: Element Graphics for Data Analysis](https://ggplot2-book.org/)
 - [Modern Statistics for Modern Biology](https://www.huber.embl.de/msmb/index.html)
+- [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
 
 R 的统计功能在生物学中的应用。
 

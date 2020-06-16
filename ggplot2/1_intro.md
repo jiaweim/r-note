@@ -2,12 +2,11 @@
 
 - [Introduction](#introduction)
   - [简介](#简介)
-  - [ggplot2 的图形语法](#ggplot2-的图形语法)
     - [语法模板](#语法模板)
   - [映射](#映射)
   - [设置](#设置)
   - [几何对象](#几何对象)
-  - [Global vs. Local](#global-vs-local)
+  - [全局变量和局部变量](#全局变量和局部变量)
   - [导出图片](#导出图片)
 
 2020-05-29, 21:44
@@ -17,29 +16,29 @@
 
 ggplot2 是 RStudio 首席科学家 Hadley Wickham 在 2005 年读博期间的作品。
 
-## ggplot2 的图形语法
-
 ggplot2 的 "gg" 表示 grammar of graphics.
 
 ![grammar](images/2020-05-29-21-39-52.png)
 
 `ggplot()` 包括 9 个部分：
 
-- 数据（数据框）
-- 映射，mapping
-- 几何对象，geom
-- 统计变化，stats
-- 标度，scale
-- 坐标系，coord
-- 分面，facet
-- 主题，theme
-- 存储和输出，output
+| 组件       | 说明    |
+| ---------- | ------- |
+| 数据       | 数据框  |
+| 映射       | mapping |
+| 几何对象   | geom    |
+| 统计变化   | stats   |
+| 标度       | scale   |
+| 坐标系     | coord   |
+| 分面       | facet   |
+| 主题       | theme   |
+| 存储和输出 | output  |
 
 前三个是必须的。
 
-Hadley Wickham 将其解释为：一张统计图行是从数据到集合对象（geometric object, geom）的图形属性（aesthetic attribute）的映射。
+一张统计图是从数据到几何对象（geometric object, geom）的图形属性（aesthetic attribute, aes）的映射。
 
-此外，图形中还可能包含数据的统计变化（statistical transformation, stats），最后绘制在某个特定的坐标系中，而分面（facet）用来生成数据不同子集的图形。
+此外，图形中还可能包含数据的统计变换（statistical transformation, stats），最后绘制在特定的坐标系中，而分面（facet）用来生成数据不同子集的图形。
 
 ### 语法模板
 
@@ -68,23 +67,23 @@ tibble [234 x 11] (S3: tbl_df/tbl/data.frame)
 
 mpg 数据包含 234 行 11 列。如下所示：
 
-|序号|变量|含义|
-|---|---|---|
-|1|manufacturer|生产厂家|
-|2|model|类型|
-|3|displ|发动机排量，升|
-|4|year|生产年份|
-|5|cyl|气缸数量|
-|6|trans|传输类型|
-|7|drv|驱动类型(f =前轮驱动，r =后轮驱动，4 = 4wd)|
-|8|cty|每加仑城市里程|
-|9|hwy|每加仑高速公路英里|
-|10|fl|汽油种类|
-|11|class|类型|
+| 序号 | 变量         | 含义                                        |
+| ---- | ------------ | ------------------------------------------- |
+| 1    | manufacturer | 生产厂家                                    |
+| 2    | model        | 类型                                        |
+| 3    | displ        | 发动机排量，升                              |
+| 4    | year         | 生产年份                                    |
+| 5    | cyl          | 气缸数量                                    |
+| 6    | trans        | 传输类型                                    |
+| 7    | drv          | 驱动类型(f =前轮驱动，r =后轮驱动，4 = 4wd) |
+| 8    | cty          | 每加仑城市里程                              |
+| 9    | hwy          | 每加仑高速公路英里                          |
+| 10   | fl           | 汽油种类                                    |
+| 11   | class        | 类型                                        |
 
 下面就一个问题就行分析：是否汽车的排量越大，油耗越大？
 
-就该问题，需要 mpg 数据集中的三个变量：
+就该问题，需要 mpg 数据集的三个变量：
 
 - displ, 发动机排量
 - hwy, 每加仑英里数，即油耗
@@ -118,7 +117,7 @@ mpg 数据包含 234 行 11 列。如下所示：
 - `data=mpg` 指定用于画图的数据
 - `aes()` 表示数据和图形属性之间的映射
 
-`aes(x=displ, y=hwy)` 意思是变量 `displ` 映射为 x 轴坐标，变量 `hyw` 映射为 y 轴坐标。
+`aes(x=displ, y=hwy)` 意思是变量 `displ` 映射为 x 轴坐标，变量 `hwy` 映射为 y 轴坐标。
 
 另外，`aes()` 除了映射坐标，还可以将数值映射为颜色、形状、透明度等等图形属性。
 
@@ -126,36 +125,36 @@ mpg 数据包含 234 行 11 列。如下所示：
 - `+` 表示添加图层
 
 ```r
-> ggplot(mpg, aes(x=displ, y=hwy)) + geom_point()
+ggplot(mpg, aes(x=displ, y=hwy)) + geom_point()
 ```
 
 ![point](images/2020-05-31-08-51-18.png)
 
-下面，我们在 `aes()` 再增加一个映射，将 mpg 的 `class` 映射为颜色，`color=class`。不同汽车类型，用不同颜色的数据点表示：
+下面，我们在 `aes()` 中再增加一个映射，将 mpg 的 `class` 映射为颜色，`color=class`。这样不同汽车类型，用不同颜色的数据点表示：
 
 ```r
-> ggplot(mpg, aes(x=displ, y=hwy, color=class)) + geom_point()
+ggplot(mpg, aes(x=displ, y=hwy, color=class)) + geom_point()
 ```
 
 ![point](images/2020-05-31-08-53-28.png)
 
-再比如，将 `class` 映射为数据点大小：
+还可以将 `class` 映射为数据点大小：
 
 ```r
-> ggplot(mpg, aes(x=displ, y=hwy, size=class)) + geom_point()
+ggplot(mpg, aes(x=displ, y=hwy, size=class)) + geom_point()
 ```
 
 ![point size](images/2020-05-31-09-02-12.png)
 
-将 `class` 映射为形状：
+- 将 `class` 映射为形状
 
 ```r
-> ggplot(mpg, aes(x=displ, y=hwy, shape=class)) + geom_point()
+ggplot(mpg, aes(x=displ, y=hwy, shape=class)) + geom_point()
 ```
 
 ![point shape](images/2020-05-31-09-03-30.png)
 
-将 `class` 映射为透明度：
+- 将 `class` 映射为透明度
 
 ```r
 ggplot(mpg, aes(x=displ, y=hwy, alpha=class)) + geom_point()
@@ -165,7 +164,7 @@ ggplot(mpg, aes(x=displ, y=hwy, alpha=class)) + geom_point()
 
 ## 设置
 
-例如，将图形的数据点设置为蓝色：
+想把图中的数据点设置为某个颜色，例如将图形的数据点设置为蓝色：
 
 ```r
 ggplot(mpg, aes(x=displ, y=hwy)) + geom_point(color="blue")
@@ -173,18 +172,29 @@ ggplot(mpg, aes(x=displ, y=hwy)) + geom_point(color="blue")
 
 ![color](images/2020-05-31-09-05-49.png)
 
+那么下面两种语法有何异同：
+
+![color](images/2020-06-15-15-08-41.png)
+
+说明：
+
+- 左侧的图形在 `aes()` 中指定，即将 `color` 映射为 "blue"
+- 右侧的图形 `color="blue"` 指定在 `geom_point` 中，实现设置颜色
+
+由于 "blue" 只有一个值，所以对左侧图形，所有数据点映射为默认的第一个颜色，红色。
+
 ## 几何对象
 
 `geom_point()` 画散点图，`geom_smooth()` 可以绘制平滑曲线。例如：
 
 ```r
-> p2 <- ggplot(data=mpg, aes(x=displ, y=hwy))+geom_smooth()
-> p2
+p2 <- ggplot(data=mpg, aes(x=displ, y=hwy))+geom_smooth()
+p2
 ```
 
 ![smooth](images/2020-05-31-09-17-40.png)
 
-散点图加平滑曲线：
+- 散点图加平滑曲线
 
 ```r
 p3 <- ggplot(data=mpg, aes(x=displ, y=hwy)) + geom_point() + geom_smooth()
@@ -193,13 +203,13 @@ p3
 
 ![point+smooth](images/2020-05-31-09-19-07.png)
 
-## Global vs. Local
+## 全局变量和局部变量
 
 例：
 
 ```r
 ggplot(mpg, aes(x=displ, y=hwy, color=class)) +
-    geom_point(aes(x=displ, y=hwy, color=class))
+    geom_point()
 ```
 
 ![point](images/2020-05-31-09-21-47.png)
@@ -215,7 +225,7 @@ ggplot(mpg) +
 
 这两段代码的效果完全一样，不过代码的含义却不同。
 
-如果将映射关系 `aes()` 放在 `ggplot()` 里，此时 `x=displ`, `y=hwy`, `color=class` 为全局变量。
+如果映射关系 `aes()` 放在 `ggplot()` 里，此时 `x=displ`, `y=hwy`, `color=class` 为全局变量。
 
 如果将映射关系放在 `geom_point()` 例，就是局部变量。
 
@@ -258,7 +268,7 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 使用 `ggsave()` 将图片保存为所需格式：
 
 ```r
-p <- ggplot(mpg, aes(x = displ, y = hwy)) + 
+p <- ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_smooth(method = lm) +
   geom_point(aes(color = class)) +
   ggtitle("This is my first plot")
