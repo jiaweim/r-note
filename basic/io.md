@@ -12,12 +12,13 @@
     - [常见格式](#常见格式)
   - [读取带分隔符的文本文件](#读取带分隔符的文本文件)
   - [CSV](#csv)
-    - [read.csv](#readcsv)
+    - [`read.csv`](#readcsv)
     - [readr.read_csv](#readrread_csv)
     - [从字符串读取数据](#从字符串读取数据)
     - [编码设置](#编码设置)
     - [缺失值](#缺失值)
     - [列类型设置](#列类型设置)
+  - [xlsx](#xlsx)
 
 2020-05-14, 10:58
 *** *
@@ -385,6 +386,8 @@ read.delim2(file, header = TRUE, sep = "\t", quote = "\"",
 a_table <- read.table("io/input.csv", header = TRUE, sep = ",")
 ```
 
+`read.csv` 对 `read.table`  进行了包装，从而更便于读取 CSV 文件。
+
 ## CSV
 
 对文本格式的表格数据，可以使用 R 自带的 `read.csv()`, `read.table()`, `read.delim()` 和 `read.fwf()` 等函数读取，但是建议使用 readr 包的 `read_csv()`, `read_table2()`, `read_delim()` 和 `read_fwf()` 函数读取，存储为 tibble 类型。tibble 是数据框的一个变种，改善了数据框一些不合适的设计。readr 读取速度比 `read.csv()` 等函数快得多，速度可以相差十倍，不自动就爱那个字符型列转换为因子，不自动修改变量名为合法变量名，不设置行名。
@@ -405,7 +408,7 @@ id,words
 d <- read_csv("testcsv.csv")
 ```
 
-### read.csv
+### `read.csv`
 
 读取 csv:
 
@@ -415,6 +418,50 @@ print(data)
 ```
 
 `read.csv` 返回的是 data frame 对象，
+
+如果文件没有标题，设置不读取标题：
+
+```r
+data <- read.csv('datafile.csv', header = FALSE)
+```
+
+此时默认标题为 `V1`, `V2` 等。可以使用如下方式重命名标题：
+
+```r
+names(data) <- c('Column1', 'Column2', 'Column3')
+```
+
+还可以使用 `sep` 设置分隔符，例如：
+
+```r
+data <- read.csv('datafile.csv', sep = '\t')
+```
+
+`read.csv` 默认将字符串存储为 factor。假如你想用 `read.csv` 读取下面的文件：
+
+```csv
+'First','Last','Sex','Number'
+'Currer','Bell','F',2
+'Dr.','Seuss','M',49
+'','Student',NA,21
+```
+
+返回的 frame 默认以 factor 存储 `First` 和 `Last`，虽然此时存储为字符串更合适。设置 `stringsAsFactors = FALSE` 可以避免字符串存储为 factor。如果某些列需要存储为 factor，可以再单独转换：
+
+```r
+data <- read.csv('datafile.csv', stringsAsFactors = FALSE)
+
+# Convert to factor
+data$Sex <- factor(data$Sex)
+str(data)
+#> 'data.frame': 3 obs. of 4 variables:
+#> $ First : chr 'Currer' 'Dr.' ''
+#> $ Last : chr 'Bell' 'Seuss' 'Student'
+#> $ Sex : Factor w/ 2 levels 'F','M': 1 2 NA
+#> $ Number: int 2 49 21
+```
+
+当然，也可以采用默认的 factor，然后将 factor 转换为字符串。
 
 `read.csv()` 的一个改进版本是 `readr`包的 `read_csv()` 函数，此函数读入较大表格速度要快很多，而且读入的转换设置更倾向于不做不必要的转换。
 
@@ -477,7 +524,7 @@ cols(
   `<ca><d5><cb><f5><U+0479>` = col_character()
 )
 > d
-Error in nchar(x[is_na], type = "width") : 
+Error in nchar(x[is_na], type = "width") :
   invalid multibyte string, element 1
 ```
 
@@ -567,4 +614,34 @@ d <- type_convert(d)
 ```
 
 对特大文件可以先少读取一些行，用 `nmax=` 设置最大读入行。调试成功后再读入整个文件。
+
+## xlsx
+
+`readxl` 包的 `read_excel()` 可用于读取 `.xls` 和 `.xlsx` 文件。
+
+```r
+# Only need to install once
+install.packages('readxl')
+
+library(readxl)
+data <- read_excel('datafile.xlsx', 1)
+```
+
+可以通过名称或索引指定读取的 sheet：
+
+```r
+data <- read_excel('datafile.xls', sheet = 2)
+
+data <- read_excel('datafile.xls', sheet = 'Revenues')
+```
+
+`read_excel()` 使用第一行作为 column 名称。如果不希望如此，可以设置 `col_names=FALSE`。此时 columns 默认名称为 `X1`, `X2` 等。
+
+另外，`read_excel()` 会自动推断每列的数据类型，也可以使用 `col_types` 参数指定类型。将特定列的类型指定为 `'blank'` 则删除该列：
+
+```r
+# Drop the first column, and specify the types of the next three columns
+data <- read_excel('datafile.xls',
+                   col_types = c('blank', 'text', 'date', 'numeric'))
+```
 

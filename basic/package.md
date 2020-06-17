@@ -4,6 +4,7 @@
   - [函数](#函数)
   - [简介](#简介)
   - [安装包](#安装包)
+  - [更新包](#更新包)
   - [GitHub 和 BioConductor](#github-和-bioconductor)
   - [迁移扩展包](#迁移扩展包)
 
@@ -62,6 +63,18 @@ install.packages("sos")
 print(.libPaths())
 ## [1] "D:/R/R-3.3.1/library"
 install.packages("sos", lib=.libPaths()[1])
+```
+
+## 更新包
+
+```r
+update.packages()
+```
+
+对每个可更新包，会出现一个弹窗询问是否更新。如果不需要弹窗，直接更新，可以设置：
+
+```r
+update.packages(ask = FALSE)
 ```
 
 ## GitHub 和 BioConductor
