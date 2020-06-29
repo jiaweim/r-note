@@ -24,11 +24,13 @@
 ## Reference
 
 - [x] [An Introduction to R](https://cran.r-project.org/doc/manuals/R-intro.html)
+- [ ] [r-statistics.co](http://r-statistics.co/)
 - [tutorials point 教程](https://www.tutorialspoint.com/r/index.htm)
 - [DataCamp R 教程](https://www.datacamp.com/courses/free-introduction-to-r)
 - [Quick-R](https://www.statmethods.net/index.html)
 - [R for Data Science](https://r4ds.had.co.nz/)
 - [Advaned R](https://adv-r.hadley.nz/)
+- [R Packages](https://r-pkgs.org/)
 - [ggplot2: Element Graphics for Data Analysis](https://ggplot2-book.org/)
 - [Modern Statistics for Modern Biology](https://www.huber.embl.de/msmb/index.html)
 - [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
