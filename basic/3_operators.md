@@ -17,24 +17,47 @@
 | -        | subtraction    |
 | *        | multiplication |
 | /        | division       |
-| ^ or **  | exponentiation |
+| ^ or **  | 乘方           |
 | %/%      | 整除           |
 | %%       | 余数           |
 
 ## 逻辑运算符
 
-| Operator  | Description              |
-| --------- | ------------------------ |
-| <         | 小于                     |
-| <=        | 小于等于                 |
-| >         | greater than             |
-| >=        | greater than or equal to |
-| ==        | exactly equal to         |
-| !=        | not equal to             |
-| %in%      | 属于                     |
-| xor(x, y) | x 与 y 的异或运算        |
-|&&|短路与|
-|`||`|短路或|
+| Operator  | Description                      |
+| --------- | -------------------------------- |
+| <         | 小于                             |
+| <=        | 小于等于                         |
+| >         | greater than                     |
+| >=        | greater than or equal to         |
+| ==        | exactly equal to                 |
+| !=        | not equal to                     |
+| %in%      | 属于                             |
+| xor(x, y) | 异或，有缺失值参与运算时为缺失值 |
+| &         | 与                               |
+| `|`       | 或                               |
+| `!`       | 非                               |
+| &&        | 短路与，仅对标量                 |
+| `||`      | 短路或，仅对标量                 |
+
+逻辑向量与逻辑标量之间，以及逻辑向量逻辑向量之间的逻辑运算，遵循一般R向量间运算规则。
+
+在右运算符缺失时，如果左运算符能够确定真假，则可以得到非 NA 结果。例如：
+
+```r
+> TRUE | NA
+[1] TRUE
+> FALSE | NA
+[1] NA
+```
+
+不能确定结果时返回 `NA`，例如：
+
+```r
+> TRUE & NA
+[1] NA
+> FALSE | NA
+[1] NA
+```
 
 `%in%` 是比较特殊的比较， `x %in% y` 将 y 看作集合，判断 x 中的元素是否在 y 中。例如：
 
@@ -55,6 +78,8 @@
 > match(c(1, 3), c(2, 3, 4, 3))
 [1] NA  2
 ```
+
+如果没有找到，返回 `NA`。
 
 ## 数据类型
 

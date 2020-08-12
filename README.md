@@ -15,6 +15,7 @@
 - [工作环境](basic/environment.md)
 - [R 内置函数](basic/function.md)
 - [io](basic/io.md)
+- [R 绘图基础](plot/0_plot_toc.md)
 - [ggplot](ggplot2/0_ggplot2_toc.md)
 
 ## R 工具
@@ -23,8 +24,8 @@
 
 ## Reference
 
-- [x] [An Introduction to R](https://cran.r-project.org/doc/manuals/R-intro.html)
-- [ ] [r-statistics.co](http://r-statistics.co/)
+- [An Introduction to R](https://cran.r-project.org/doc/manuals/R-intro.html)
+- [r-statistics.co](http://r-statistics.co/)
 - [tutorials point 教程](https://www.tutorialspoint.com/r/index.htm)
 - [DataCamp R 教程](https://www.datacamp.com/courses/free-introduction-to-r)
 - [Quick-R](https://www.statmethods.net/index.html)
