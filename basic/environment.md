@@ -5,6 +5,7 @@
   - [查看工作空间 - ls](#查看工作空间---ls)
   - [ls.str](#lsstr)
   - [清理工作空间 - remove](#清理工作空间---remove)
+  - [attach](#attach)
 
 2020-05-14, 11:39
 ***
@@ -210,3 +211,6 @@ sandbox <- function(){
 Called from: sandbox()
 Browse[1]> 
 提示符变成了“Browser[n]”，其中n代表层次序号。 在这样的browser命令行中随意定义变量， 定义的变量不会保存到工作空间中。 用“Q”命令可以退出这个沙盘环境， 接连回车也可以退出。
+
+## attach
+

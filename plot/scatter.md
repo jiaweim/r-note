@@ -10,6 +10,22 @@
 
 使用 `plot()` 函数绘制散点图。
 
+```r
+plot(x, y = NULL, type = "p",  xlim = NULL, ylim = NULL,
+     log = "", main = NULL, sub = NULL, xlab = NULL, ylab = NULL,
+     ann = par("ann"), axes = TRUE, frame.plot = axes,
+     panel.first = NULL, panel.last = NULL, asp = NA,
+     xgap.axis = NA, ygap.axis = NA,
+     ...)
+```
+
+|参数|说明|
+|---|---|
+|x|x 坐标值|
+|y|y 坐标值|
+|xlab|x 轴标题|
+|ylab|y 轴标题|
+
 以 d.class 数据为例，从 class.csv 读入数据：
 
 ```r
