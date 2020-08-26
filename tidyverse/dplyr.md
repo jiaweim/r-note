@@ -5,11 +5,22 @@
   - [mutate](#mutate)
   - [管道 %>%](#管道-)
   - [select](#select)
+    - [范围选择](#范围选择)
+    - [去除列](#去除列)
+    - [通过变量指定列](#通过变量指定列)
+    - [模式选择](#模式选择)
   - [filter](#filter)
   - [summarise 统计](#summarise-统计)
   - [group_by 分组](#group_by-分组)
   - [arrange 排序](#arrange-排序)
   - [left_join](#left_join)
+  - [拆分列](#拆分列)
+    - [扁平化](#扁平化)
+    - [extract](#extract)
+  - [合并列](#合并列)
+  - [合并行](#合并行)
+  - [宽表转换为长表](#宽表转换为长表)
+    - [列名中提取数值](#列名中提取数值)
   - [dplyr 新版功能](#dplyr-新版功能)
     - [summarise 升级](#summarise-升级)
       - [range](#range)
@@ -163,74 +174,121 @@ morley %>% filter(Expt == 1)
 
 ## select
 
-`select()` 用于选择数据库的列。
-
-常规语法选择 `name` 列：
+`select()` 用于选择数据框的列。
 
 ```r
-> df["name"]
-   name
-1 Alice
-2 Alice
-3   Bob
-4   Bob
-5 Carol
-6 Carol
+> d.class <- read_csv("src/data/class.csv")
+Parsed with column specification:
+cols(
+  name = col_character(),
+  sex = col_character(),
+  age = col_double(),
+  height = col_double(),
+  weight = col_double()
+)
+> knitr::kable(d.class)
+
+|name    |sex | age| height| weight|
+|:-------|:---|---:|------:|------:|
+|Alice   |F   |  13|   56.5|   84.0|
+|Becka   |F   |  13|   65.3|   98.0|
+|Gail    |F   |  14|   64.3|   90.0|
+|Karen   |F   |  12|   56.3|   77.0|
+|Kathy   |F   |  12|   59.8|   84.5|
+|Mary    |F   |  15|   66.5|  112.0|
+|Sandy   |F   |  11|   51.3|   50.5|
+|Sharon  |F   |  15|   62.5|  112.5|
+|Tammy   |F   |  14|   62.8|  102.5|
+|Alfred  |M   |  14|   69.0|  112.5|
+|Duke    |M   |  14|   63.5|  102.5|
+|Guido   |M   |  15|   67.0|  133.0|
+|James   |M   |  12|   57.3|   83.0|
+|Jeffrey |M   |  13|   62.5|   84.0|
+|John    |M   |  12|   59.0|   99.5|
+|Philip  |M   |  16|   72.0|  150.0|
+|Robert  |M   |  12|   64.8|  128.0|
+|Thomas  |M   |  11|   57.5|   85.0|
+|William |M   |  15|   66.5|  112.0|
+> d.class %>%
++   select(name, age) %>%
++   head(n=3) %>%
++   knitr::kable()
+
+|name  | age|
+|:-----|---:|
+|Alice |  13|
+|Becka |  13|
+|Gail  |  14|
 ```
 
-`select()` 语法：
+### 范围选择
+
+使用冒号可以按范围选择，例如选择 "age" 到 "weight" 的所有列：
 
 ```r
-> df %>% select(name)
-   name
-1 Alice
-2 Alice
-3   Bob
-4   Bob
-5 Carol
-6 Carol
+> d.class %>%
++   select(age:weight) %>%
++   head(n=3) %>%
++   knitr::kable()
+
+| age| height| weight|
+|---:|------:|------:|
+|  13|   56.5|     84|
+|  13|   65.3|     98|
+|  14|   64.3|     90|
 ```
 
-选择多个列：
+### 去除列
+
+参数说，前面写符号表示去除该列，保留余下的列
 
 ```r
-> df <- df %>% mutate(score=score2020)
-> df
-   name    type score
-1 Alice english  80.2
-2 Alice    math  90.5
-3   Bob english  92.2
-4   Bob    math  90.8
-5 Carol english  82.5
-6 Carol    math  84.6
-> df %>% select(name, score) # 后面多添加一个列名称即可
-   name score
-1 Alice  80.2
-2 Alice  90.5
-3   Bob  92.2
-4   Bob  90.8
-5 Carol  82.5
-6 Carol  84.6
+> d.class %>%
++   select(-name, -age) %>%
++   head(n=3) %>%
++   knitr::kable()
+
+|sex | height| weight|
+|:---|------:|------:|
+|F   |   56.5|     84|
+|F   |   65.3|     98|
+|F   |   64.3|     90|
 ```
 
-如果只是不想要某一列，在变量前面加 `-`，例如：
+### 通过变量指定列
+
+如果要选择的变量名已经保存为一个字符型向量，可以用 `one_of()` 函数引入，例如：
 
 ```r
-> df %>% select(-type)
-   name score
-1 Alice  80.2
-2 Alice  90.5
-3   Bob  92.2
-4   Bob  90.8
-5 Carol  82.5
-6 Carol  84.6
+> vars <- c("name", "sex")
+> d.class %>%
++   select(one_of(vars)) %>%
++   head(n=3) %>%
++   knitr::kable()
+
+|name  |sex |
+|:-----|:---|
+|Alice |F   |
+|Becka |F   |
+|Gail  |F   |
 ```
 
-效果和上面一样。
+### 模式选择
+
+`select()` 函数有若干个配套函数可以按名字的模式选择列。例如：
+
+- `starts_with("se")`，选择名字以 `se` 开头的变量列；
+- `ends_with("ght")`，选择以 "ght" 结尾的变量列；
+- `contains("no")`，选择名字中含有子串 "no" 变量列；
+- `matches("^[[:alpha:]]+[[:digit:]]+$")`，选择列名匹配某个正则表达式模式的变量列，这里匹配前一部分是字母，后一部分是数字的变量名。
+- `num_range("x", 1:3)`，选择 x1, x2, x3
+- `everything()`，指代所有选择的变量，这可以用来指定的变量次序提前，其它变量排在后面。
 
 ## filter
 
-`select` 用于选择列，而 `filter` 用于筛选行。比如，把成绩高于 90 分的同学筛出来：
+数据框的任何子集仍为数据框，即使只有一行而且都是数值也是如此。行子集可以用行下标选取，例如 `d.class[8:12,]`。函数 `head()` 取出数据框的前面若干行，`tail()` 取出数据框的最后若干行。
+
+dplyr 的 `filter()` 函数可以按条件选出符合条件的行组成的子集。比如，把成绩高于 90 分的同学筛出来：
 
 ```r
 > df %>% filter(score >= 90)
@@ -249,6 +307,20 @@ morley %>% filter(Expt == 1)
 ```
 
 这些操作都是返回一个新数据框，不影响原数据框。
+
+筛选 class 数据集中不大于 13 岁的女生：
+
+```r
+> d.class %>% filter(sex=='F', age<=13) %>% knitr::kable()
+
+|name  |sex | age| height| weight|
+|:-----|:---|---:|------:|------:|
+|Alice |F   |  13|   56.5|   84.0|
+|Becka |F   |  13|   65.3|   98.0|
+|Karen |F   |  12|   56.3|   77.0|
+|Kathy |F   |  12|   59.8|   84.5|
+|Sandy |F   |  11|   51.3|   50.5|
+```
 
 ## summarise 统计
 
@@ -414,6 +486,329 @@ morley %>% filter(Expt == 1)
 ```
 
 `right_join` 以右侧的数据框为参考，右侧没有 `Carol`，所以左侧数据框的 `Carol` 也丢掉。
+
+## 拆分列
+
+有时应该放在不同列的数据用分隔符分隔后放在同一列中了。 比如，下面数据集中“succ/total”列存放了用“/”分隔开的成功数与试验数：
+
+```r
+> d.sep <- read_csv(
++   "testid, succ/total
++ 1, 1/10
++ 2, 3/5
++ 3, 2/8
++ ")
+> knitr::kable(d.sep)
+
+| testid|succ/total |
+|------:|:----------|
+|      1|1/10       |
+|      2|3/5        |
+|      3|2/8        |
+```
+
+用 tidyr::separate() 可以将这样的列拆分为各自的变量列。例如：
+
+```r
+> d.sep %>%
++   separate("succ/total", into = c("succ", "total"),
++            sep = "/", convert = TRUE) %>% knitr::kable()
+
+
+| testid| succ| total|
+|------:|----:|-----:|
+|      1|    1|    10|
+|      2|    3|     5|
+|      3|    2|     8|
+```
+
+参数说明：
+
+- `into` 指定拆分后新的变量名
+- `sep` 指定分隔符，还可以指定取子串的字符位置，按位置拆分各个子串
+- `convert=TRUE` 要求自动将分隔后的值转换为适当的类型
+- `extra` 指定拆分后有多余内容的处理方法
+- `fill` 指定有不足内容时的处理方法
+
+### 扁平化
+
+再来个更复杂的例子：
+
+```r
+> library(tidyverse)
+> dbpa <- read_csv(
++   "var,avg
++   male:systolicbp,118
++   male:diastolicbp,85
++   female:systolicbp,115
++   female:diastolicbp,83"
++ )
+> knitr::kable(dbpa)
+
+|var                | avg|
+|:------------------|---:|
+|male:systolicbp    | 118|
+|male:diastolicbp   |  85|
+|female:systolicbp  | 115|
+|female:diastolicbp |  83|
+```
+
+用 `separate()` 函数将变量名和性别分开：
+
+```r
+> dbpa2 <- dbpa %>%
++   separate(var, into = c("sex", "var"), sep = ":")
+> knitr::kable(dbpa2)
+
+
+|sex    |var         | avg|
+|:------|:-----------|---:|
+|male   |systolicbp  | 118|
+|male   |diastolicbp |  85|
+|female |systolicbp  | 115|
+|female |diastolicbp |  83|
+```
+
+实际上，可能还需要将收缩压（systolicbp）和舒张压（diastolicbp）分为两列。此时需要用 `pivot_wider()` 函数：
+
+```r
+> dbpa3 <- dbpa2 %>%
++   pivot_wider(names_from = "var", values_from="avg")
+> knitr::kable(dbpa3)
+
+|sex    | systolicbp| diastolicbp|
+|:------|----------:|-----------:|
+|male   |        118|          85|
+|female |        115|          83|
+```
+
+### extract
+
+`extract()` 可以按照正则表达式从指定列中拆分出和正则表达式捕获组对应的一列或多列。例如，下面数据中的 design 的 factor 水平 AA, AB, BA, BB 实际上是两个因子的组合，可以将其拆分出来：
+
+```r
+> dexp <- tibble(
++   design = c("AA", "AB", "BA", "BB"),
++   response = c(120, 110, 105, 95)
++ )
+> knitr::kable(dexp)
+
+|design | response|
+|:------|--------:|
+|AA     |      120|
+|AB     |      110|
+|BA     |      105|
+|BB     |       95|
+```
+
+使用 `extract()` 拆分：
+
+```r
+> dexp %>%
++   extract(design,
++           into = c("fac1", "fac2"),
++           regex = "(.)(.)") %>%
++   knitr::kable()
+
+|fac1 |fac2 | response|
+|:----|:----|--------:|
+|A    |A    |      120|
+|A    |B    |      110|
+|B    |A    |      105|
+|B    |B    |       95|
+```
+
+## 合并列
+
+`tidyr::unite()` 可以将同一行的两列或多列的内容合并成一列。 这是`separate()` 的反向操作， 如：
+
+```r
+> d.sep <- read_csv(
++   "testid, succ/total
++ 1, 1/10
++ 2, 3/5
++ 3, 2/8
++ ")
+> d.sep %>%
++   separate("succ/total", into = c("succ", "total"),
++            sep="/", convert = TRUE) %>%
++   unite(ratio, succ, total, sep = ":") %>%
++   knitr::kable()
+
+| testid|ratio |
+|------:|:-----|
+|      1|1:10  |
+|      2|3:5   |
+|      3|2:8   |
+```
+
+`unite` 参数说明：
+
+- 第一个参数是要修改的数据框，这里用管道符传递进来
+- 第二个参数是合并后的变量名（ratio 变量）
+- 其它参数是要合并的变量名
+- `sep` 指定分隔符
+
+## 合并行
+
+矩阵或数据框可以使用 `rbind` 纵向合并列。dplyr 包的 `bind_rows()` 函数可以纵向合并两个或多个数据框。要求具有相同的变量集合，变量次序可以不同。
+
+比如，有如下两个分开男生、女生的数据框：
+
+```r
+> d.class <- read_csv("src/data/class.csv")
+Parsed with column specification:
+cols(
+  name = col_character(),
+  sex = col_character(),
+  age = col_double(),
+  height = col_double(),
+  weight = col_double()
+)
+> knitr::kable(d.class)
+
+|name    |sex | age| height| weight|
+|:-------|:---|---:|------:|------:|
+|Alice   |F   |  13|   56.5|   84.0|
+|Becka   |F   |  13|   65.3|   98.0|
+|Gail    |F   |  14|   64.3|   90.0|
+|Karen   |F   |  12|   56.3|   77.0|
+|Kathy   |F   |  12|   59.8|   84.5|
+|Mary    |F   |  15|   66.5|  112.0|
+|Sandy   |F   |  11|   51.3|   50.5|
+|Sharon  |F   |  15|   62.5|  112.5|
+|Tammy   |F   |  14|   62.8|  102.5|
+|Alfred  |M   |  14|   69.0|  112.5|
+|Duke    |M   |  14|   63.5|  102.5|
+|Guido   |M   |  15|   67.0|  133.0|
+|James   |M   |  12|   57.3|   83.0|
+|Jeffrey |M   |  13|   62.5|   84.0|
+|John    |M   |  12|   59.0|   99.5|
+|Philip  |M   |  16|   72.0|  150.0|
+|Robert  |M   |  12|   64.8|  128.0|
+|Thomas  |M   |  11|   57.5|   85.0|
+|William |M   |  15|   66.5|  112.0|
+
+> d3.class <- d.class %>%
++   select(name, sex, age) %>%
++   filter(sex=="M")
+> d4.class <- d.class %>%
++   select(name, sex, age) %>%
++   filter(sex=="F")
+> # 合并
+> d3.class %>%
++   bind_rows(d4.class) %>%
++   knitr::kable()
+
+|name    |sex | age|
+|:-------|:---|---:|
+|Alfred  |M   |  14|
+|Duke    |M   |  14|
+|Guido   |M   |  15|
+|James   |M   |  12|
+|Jeffrey |M   |  13|
+|John    |M   |  12|
+|Philip  |M   |  16|
+|Robert  |M   |  12|
+|Thomas  |M   |  11|
+|William |M   |  15|
+|Alice   |F   |  13|
+|Becka   |F   |  13|
+|Gail    |F   |  14|
+|Karen   |F   |  12|
+|Kathy   |F   |  12|
+|Mary    |F   |  15|
+|Sandy   |F   |  11|
+|Sharon  |F   |  15|
+|Tammy   |F   |  14|
+```
+
+## 宽表转换为长表
+
+`pivot_longer()` 可以将横向的多次观测堆叠在一列中。例如，对如下数据：
+
+```r
+> dwide <- read_csv(
++   "subject,1,2,3,4
++ 1,1,NA,NA,NA
++ 2,NA,7,NA,4
++ 3,5,10,NA,NA
++ 4,NA,NA,9,NA"
++ )
+> knitr::kable(dwide)
+
+
+| subject|  1|  2|  3|  4|
+|-------:|--:|--:|--:|--:|
+|       1|  1| NA| NA| NA|
+|       2| NA|  7| NA|  4|
+|       3|  5| 10| NA| NA|
+|       4| NA| NA|  9| NA|
+```
+
+subject 是受试者编号，每次受试者有4次随访，NA表示缺失。数据分析和绘图用的函数一般不能直接使用这样的数据，一般需要将测试值作为变量名，将4次测量合并在一列中，将随访序号单独放在一列中。用 `pivot_longer()` 函数实现：
+
+```r
+> dwide %>%
++   pivot_longer(`1`:`4`,
++                names_to="time",
++                values_to="response") %>%
++   knitr::kable()
+
+| subject|time | response|
+|-------:|:----|--------:|
+|       1|1    |        1|
+|       1|2    |       NA|
+|       1|3    |       NA|
+|       1|4    |       NA|
+|       2|1    |       NA|
+|       2|2    |        7|
+|       2|3    |       NA|
+|       2|4    |        4|
+|       3|1    |        5|
+|       3|2    |       10|
+|       3|3    |       NA|
+|       3|4    |       NA|
+|       4|1    |       NA|
+|       4|2    |       NA|
+|       4|3    |        9|
+|       4|4    |       NA|
+```
+
+参数说明：
+
+- `names_to` 指定一个新变量名，将原来的列标题转换为该变量的值
+- `values_to` 指定一个新变量名，将原来的各个列对应的测量值保存在该变量名的列中。
+
+由于原来的变量名不是合法 R 变量名，所以在 `pivot_longer()` 中用反单撇号保护，并用冒号表示变量范围，也可以仿照 `select()` 函数中指定变量名的方法将 `1`:`4` 写成：
+
+- `c("1", "2", "3", "4")`
+- `-subject`
+- `cols=one_of(vars)`, 其中 `vars` 是保存了 1 到 4 的字符串的字符型向量。
+
+如果转换结果中不希望保留 NA 值，可以添加 `values_drop_na=TRUE`:
+
+```r
+> dwide %>%
++   pivot_longer(`1`:`4`,
++                names_to="time",
++                values_to="response",
++                values_drop_na=TRUE) %>%
++   knitr::kable()
+
+| subject|time | response|
+|-------:|:----|--------:|
+|       1|1    |        1|
+|       2|2    |        7|
+|       2|4    |        4|
+|       3|1    |        5|
+|       3|2    |       10|
+|       4|3    |        9|
+```
+
+### 列名中提取数值
+
+有时要合并的列明中带有数值，需要将这些数值部分提取处理，
 
 ## dplyr 新版功能
 

@@ -10,6 +10,7 @@
 - [数据类型](type.md)
 - [集合类型](collect.md)
   - [向量](collect_vector.md)
+  - [因子](data_factor.md)
   - [列表](collect_list.md)
 - [向量](data_vector.md)
 - [字符串](string.md)

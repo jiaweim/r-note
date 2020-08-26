@@ -22,27 +22,35 @@ ggplot2 的 "gg" 表示 grammar of graphics.
 
 `ggplot()` 包括 9 个部分：
 
-| 组件       | 说明    |
-| ---------- | ------- |
-| 数据       | 数据框  |
-| 映射       | mapping |
-| 几何对象   | geom    |
-| 统计变化   | stats   |
-| 标度       | scale   |
-| 坐标系     | coord   |
-| 分面       | facet   |
-| 主题       | theme   |
-| 存储和输出 | output  |
+| 编号 | 组件       | 说明    |
+| ---- | ---------- | ------- |
+| 1    | 数据       | 数据框  |
+| 2    | 映射       | mapping |
+| 3    | 几何对象   | geom    |
+| 4    | 统计变化   | stats   |
+| 5    | 标度       | scale   |
+| 6    | 坐标系     | coord   |
+| 7    | 分面       | facet   |
+| 8    | 主题       | theme   |
+| 9    | 存储和输出 | output  |
 
 前三个是必须的。
 
-一张统计图是从数据到几何对象（geometric object, geom）的图形属性（aesthetic attribute, aes）的映射。
+一张统计图是从数据到几何对象（点、线）的美学属性（颜色、形状、大小）的映射。
 
-此外，图形中还可能包含数据的统计变换（statistical transformation, stats），最后绘制在特定的坐标系中，而分面（facet）用来生成数据不同子集的图形。
+此外，图形中还可能包含数据的统计变换（statistical transformation, stats），最后绘制在特定的坐标系中，而分面（facet）可用来生成数据不同子集的图形。
 
 ### 语法模板
 
 ![grammar](images/2020-05-29-21-45-34.png)
+
+ggplot 作图的一般步骤：
+
+- 准备数据，一般为数据框
+- 将数据输入到 ggplot() 函数中，并指定参与作图的每个变量分别映射到哪些图形特性
+- 选择一个合适的图形类型
+- 设定适当的坐标系统
+- 设定标题和图例位置等
 
 ## 映射
 

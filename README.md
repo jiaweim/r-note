@@ -4,6 +4,9 @@
   - [R 学习笔记](#r-学习笔记)
   - [R 工具](#r-工具)
   - [Reference](#reference)
+    - [基础教程](#基础教程)
+    - [可视化](#可视化)
+    - [数据分析](#数据分析)
 
 2020-05-12, 20:15
 ***
@@ -24,6 +27,8 @@
 
 ## Reference
 
+### 基础教程
+
 - [An Introduction to R](https://cran.r-project.org/doc/manuals/R-intro.html)
 - [r-statistics.co](http://r-statistics.co/)
 - [tutorials point 教程](https://www.tutorialspoint.com/r/index.htm)
@@ -32,9 +37,17 @@
 - [R for Data Science](https://r4ds.had.co.nz/)
 - [Advaned R](https://adv-r.hadley.nz/)
 - [R Packages](https://r-pkgs.org/)
-- [ggplot2: Element Graphics for Data Analysis](https://ggplot2-book.org/)
 - [Modern Statistics for Modern Biology](https://www.huber.embl.de/msmb/index.html)
+
+### 可视化
+
 - [Fundamentals of Data Visualization](https://serialmentor.com/dataviz/)
+- [R Graphics Cookbook](http://www.cookbook-r.com/Graphs/)
+- [ggplot2: Element Graphics for Data Analysis](https://ggplot2-book.org/)
+- [R Graph Gallery](https://www.r-graph-gallery.com/)
+- [R 绘图包总结](https://cran.r-project.org/web/views/Graphics.html)
+
+### 数据分析
 
 R 的统计功能在生物学中的应用。
 

@@ -2,6 +2,9 @@
 
 - [因子类型](#因子类型)
   - [简介](#简介)
+  - [创建factor](#创建factor)
+    - [类型转换](#类型转换)
+    - [levels](#levels)
   - [factor 实例](#factor-实例)
   - [table 函数](#table-函数)
   - [tapply](#tapply)
@@ -17,6 +20,10 @@
 
 R 提供了有序和无序因子，有序因子代表有序度量，如打分、疾病严重程度等。
 
+## 创建factor
+
+用 `factor()` 函数把字符型向量转换为因子，如：
+
 ```r
 > f <- factor(c("a", "b", "c"))
 > f
@@ -26,7 +33,7 @@ Levels: a b c
 [1] "factor"
 ```
 
-用 `factor()` 函数把字符型向量转换为因子，如：
+更复杂一点：
 
 ```r
 > x <- c("Male", "Female", "Male", "Male", "Female")
@@ -50,7 +57,7 @@ $class
 - 因子的 class 属性为 `factor`。
 - `levels` 属性对应可选值，可以通过 `levels()` 函数访问。
 
-`levels` 可以看作映射，把整数值 1, 2, ... 映射到 level 值。这样可以节省内存。
+### 类型转换
 
 `read.csv()` 函数默认会把输入文件的字符型列自动转换成因子，这对于性别、职业、地名类型的类很合适，不过对姓名、日期、详细地址这样的列就不合适了。所以在使用 `read.csv()` 时经常会加选项 `stringsAsFactors=FALSE` 禁止这样的自动转换，也可以用 `colClasses` 选项逐个指定每个列的类型。
 
@@ -68,14 +75,16 @@ $class
 [1] "Male"   "Female" "Male"   "Male"   "Female"
 ```
 
-`factor()` 函数签名：
+### levels
+
+`factor` 的 `levels` 可以看作映射，把整数值 1, 2, ... 映射到 level 值。这样可以节省内存。`factor()` 函数签名：
 
 ```r
 factor(x, levels = sort(unique(x), na.last = TRUE),
        labels, exclude = NA, ordered = FALSE)
 ```
 
-`levels` 指定各等级的标签，默认使用各等级对应字符串。
+`levels` 指定各等级的标签，默认使用各等级对应字符串。因为向量可能没有包含所有的水平，所有有时候有必要使用 `levels` 指定所有的水平值。
 
 如果指定了 `levels`，则当自变量 `x` 的某个元素等于第 `j` 个等级值时，其因子对应整数 `j`，如果该元素值没有在 `levels` 中出现，其因子为 NA。
 
