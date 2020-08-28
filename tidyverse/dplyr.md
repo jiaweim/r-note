@@ -61,7 +61,89 @@ tidy 的基本思想：
 
 ## mutate
 
-例如：
+`mutate()` 为数据框计算新变量，返回包含新变量及原变量的新数据框。例如：
+
+```r
+> d.class <- read_csv("src/data/class.csv")
+Parsed with column specification:
+cols(
+  name = col_character(),
+  sex = col_character(),
+  age = col_double(),
+  height = col_double(),
+  weight = col_double()
+)
+> print(knitr::kable(d.class))
+
+|name    |sex | age| height| weight|
+|:-------|:---|---:|------:|------:|
+|Alice   |F   |  13|   56.5|   84.0|
+|Becka   |F   |  13|   65.3|   98.0|
+|Gail    |F   |  14|   64.3|   90.0|
+|Karen   |F   |  12|   56.3|   77.0|
+|Kathy   |F   |  12|   59.8|   84.5|
+|Mary    |F   |  15|   66.5|  112.0|
+|Sandy   |F   |  11|   51.3|   50.5|
+|Sharon  |F   |  15|   62.5|  112.5|
+|Tammy   |F   |  14|   62.8|  102.5|
+|Alfred  |M   |  14|   69.0|  112.5|
+|Duke    |M   |  14|   63.5|  102.5|
+|Guido   |M   |  15|   67.0|  133.0|
+|James   |M   |  12|   57.3|   83.0|
+|Jeffrey |M   |  13|   62.5|   84.0|
+|John    |M   |  12|   59.0|   99.5|
+|Philip  |M   |  16|   72.0|  150.0|
+|Robert  |M   |  12|   64.8|  128.0|
+|Thomas  |M   |  11|   57.5|   85.0|
+|William |M   |  15|   66.5|  112.0|
+> d2 <- d.class %>%
++   mutate(
++     rwh=weight/height,
++     sexc=ifelse(sex=='F', "女", "男")
++   ) %>%
++   head(n=3)
+> print(knitr::kable(d2))
+
+
+|name  |sex | age| height| weight|      rwh|sexc |
+|:-----|:---|---:|------:|------:|--------:|:----|
+|Alice |F   |  13|   56.5|     84| 1.486726|女   |
+|Becka |F   |  13|   65.3|     98| 1.500766|女   |
+|Gail  |F   |  14|   64.3|     90| 1.399689|女   |
+```
+
+`mutate` 中指定新添加的变量：
+
+- `rwh` 为 weight 和 height 的比例值
+- `sexc` 为中文性别
+
+用 `mutate()` 计算新变量时如果计算比较复杂，可以用多个语句组成复合语句。例如：
+
+```r
+> d.class %>%
++   mutate(sexc = {
++     x <- rep('男', length(sex))# 创建和 sex 等长向量，全部赋值为 “男”
++     x[sex == "F"] <- "女" # 将 x 中 sex 为 "F" 的重新赋值为 “女”
++     x
++   }) %>%
++   head(n = 10) %>%
++   knitr::kable()
+
+|name   |sex | age| height| weight|sexc |
+|:------|:---|---:|------:|------:|:----|
+|Alice  |F   |  13|   56.5|   84.0|女   |
+|Becka  |F   |  13|   65.3|   98.0|女   |
+|Gail   |F   |  14|   64.3|   90.0|女   |
+|Karen  |F   |  12|   56.3|   77.0|女   |
+|Kathy  |F   |  12|   59.8|   84.5|女   |
+|Mary   |F   |  15|   66.5|  112.0|女   |
+|Sandy  |F   |  11|   51.3|   50.5|女   |
+|Sharon |F   |  15|   62.5|  112.5|女   |
+|Tammy  |F   |  14|   62.8|  102.5|女   |
+|Alfred |M   |  14|   69.0|  112.5|男   |
+```
+
+应当注意，`mutate()` 操作是生成包含新数据的新表格，原表格没有作任何修改。
 
 ```r
 > df <- data.frame(

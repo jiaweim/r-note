@@ -4,6 +4,9 @@
   - [简介](#简介)
   - [R barplot](#r-barplot)
   - [ggplot](#ggplot)
+  - [数据变换](#数据变换)
+  - [颜色映射](#颜色映射)
+  - [分段与并列条形图](#分段与并列条形图)
   - [Grouping Bars](#grouping-bars)
   - [Count Bar](#count-bar)
   - [Color](#color)
@@ -57,6 +60,8 @@ barplot(table(mtcars$cyl))
 ```
 
 ## ggplot
+
+有些 `geom_xxx()` 函数直接按照数据值作图， 如 `geom_point()`、`geom_line()`， 而 `geom_smooth()` 这样的函数则会按照某种算法计算并对计算结果作图。`geom_xxx()` 都有默认的 `stat_xxx()` 函数用来计算，也可以人为指定不同的统计规则。
 
 ggplot2 有两种条形图：`geom_bar()` 和 `geom_col()`:
 
@@ -140,6 +145,125 @@ print(p)
 
 ![bar](images/2020-06-17-09-20-31.png)
 
+## 数据变换
+
+下面使用 socviz 包中的 gss_sm 数据集作图。
+
+`geom_bar()` 可以对一个分类变量自动统计频数，并作频数条形图。比如 `gss_sm` 数据集的 biregion 变量作频数条形图：
+
+```r
+library(tidyverse)
+library(socviz)
+
+p <- ggplot(
+  data = gss_sm,
+  mapping = aes(x = bigregion)
+)
+
+gp <- p+geom_bar()
+print(gp)
+```
+
+![bar](images/2020-08-26-22-01-18.png)
+
+结果是每个大区的受访人数的条形图。图形中 x 映射是用户指定的，而 y 轴则是自动计算的频数。生成新变量 count 和 prop。`geom_bar()` 默认使用 count (频数)。
+
+虽然ggplot2能够自动统计频数，但最好还是预先统计好频数，仅用ggplot2绘图。 所以，上例可以用tidyverse的count和ggplot2的 `geom_col` 改写成：
+
+```r
+library(tidyverse)
+library(socviz)
+
+df1 <- gss_sm %>%
+  select(bigregion) %>%
+  count(bigregion) %>%
+  mutate(ratio = n / sum(n))
+
+p <- ggplot(
+  data = df1,
+  mapping = aes(x = bigregion, y = n)
+)
+gp <- p + geom_col() +
+  labs(y = "Count")
+print(gp)
+```
+
+![col](images/2020-08-27-08-17-50.png)
+
+```r
+p <- ggplot(
+  data = df1,
+  mapping = aes(x = bigregion, y = ratio)
+)
+print(p + geom_col() + labs(y = "Ratio"))
+```
+
+![bar](images/2020-08-27-08-19-40.png)
+
+## 颜色映射
+
+下面以 gss_sm 数据集中的 religion 变量的频数作条形图，并给不同的条形自动分配不同的颜色，指定 `fill=religion` 即可：
+
+```r
+library(tidyverse)
+library(socviz)
+
+df2 <- gss_sm %>%
+  select(religion) %>%
+  count(religion)
+
+p <- ggplot(
+  data = df2,
+  mapping = aes(
+    x = religion,
+    y = n,
+    fill = religion
+  )
+)
+
+print(p + geom_col() + labs(y = "Count"))
+```
+
+![bar](images/2020-08-27-08-29-25.png)
+
+因为将 religion 同时映射到 x 与 fill，所以对应的 fill 在图形右侧出现了图例，这是多余的。调用 `guides(fill = FALSE)` 可以认为指定不做关于填充色的图例：
+
+```r
+> df2 <- gss_sm %>%
++   select(religion) %>%
++   count(religion)
+>
+> p <- ggplot(
++   data = df2,
++   mapping = aes(
++     x = religion,
++     y = n,
++     fill = religion
++   )
++ )
+>
+> p + geom_col() +
++   guides(fill = FALSE) +
++   labs(y = "Count")
+```
+
+![bar](images/2020-08-27-09-58-24.png)
+
+从可视化理论的角度看，上图中的颜色是多余的。
+
+## 分段与并列条形图
+
+两个分类变量的交叉频数分布可以用分段条形图或者并列条形图表示。对相同 x 位置的多个 bars，有多种处理方式：
+
+|函数|参数|说明|
+|---|----|---|
+|`position_stack()`|'stack'|默认值，即堆叠在一起|
+|`position_dodge()`|'dodge'|水平排列|
+|`position_dodge2()`|'dodge2'|用于箱线图的特殊 dodge|
+|`position_fill()`|'fill'|堆叠后归一化高度，使得每个总高度相同|
+
+例如，对 gss_sm 数据集，按照 bigregion 分组，每组再按照 re
+
 ## Grouping Bars
 
 将一个分类变量映射到 `fill`，并设置 `geom_col(position='dodge')`，可以创建分组 bar。
@@ -162,15 +286,6 @@ p <- ggplot(cabbage_exp, aes(x = Date, y = Weight, fill = Cultivar)) +
   geom_col(position = "dodge")
 print(p)
 ```
-
-对相同 x 位置的多个 bars，有多种处理方式：
-
-|函数|参数|说明|
-|---|----|---|
-|`position_stack()`|'stack'|默认值，即堆叠在一起|
-|`position_dodge()`|'dodge'|水平排列|
-|`position_dodge2()`|'dodge2'|用于箱线图的特殊 dodge|
-|`position_fill()`|'fill'|堆叠后归一化高度，使得每个总高度相同|
 
 ![group bar](images/2020-06-17-10-06-52.png)
 

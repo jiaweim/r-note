@@ -1,15 +1,29 @@
 library(tidyverse)
 
 data <- read_csv("Z:\\MaoJiawei\\dataset\\results\\delta_histogram.csv")
-knitr::kable(data)
 
-plot_data <- data %>% 
+plot_data <- data %>%
   pivot_longer(c("IGD-O", "SEQUEST"),
-               names_to="Search Engine",
-               values_to="# GPSM")
+    names_to = "Search Engine",
+    values_to = "# GPSM"
+  )
 knitr::kable(plot_data)
 
-#   
-# 
-# gplot <- ggplot(data=data, mapping = aes(x='Delta Name', y=))
-# print(data)
+
+gplot <- ggplot(
+  data = plot_data,
+  mapping = aes(
+    x = `Delta Name`,
+    y = `# GPSM`,
+    fill = `Search Engine`
+  )
+)
+
+gp <- gplot + 
+  geom_col(position = "dodge") + 
+  coord_flip() + 
+  labs(x = "") + 
+  theme_light()+
+  theme(legend.position = "none")
+
+print(gp)
