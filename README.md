@@ -1,7 +1,7 @@
-# R
+# R 学习笔记
 
-- [R](#r)
-  - [R 学习笔记](#r-学习笔记)
+- [R 学习笔记](#r-学习笔记)
+  - [R 基础](#r-基础)
   - [R 工具](#r-工具)
   - [Reference](#reference)
     - [基础教程](#基础教程)
@@ -11,7 +11,7 @@
 2020-05-12, 20:15
 ***
 
-## R 学习笔记
+## R 基础
 
 - [数据结构](basic/data.md)
   - [向量](basic/data_vector.md)
@@ -34,7 +34,6 @@
 - [tutorials point 教程](https://www.tutorialspoint.com/r/index.htm)
 - [DataCamp R 教程](https://www.datacamp.com/courses/free-introduction-to-r)
 - [Quick-R](https://www.statmethods.net/index.html)
-- [R for Data Science](https://r4ds.had.co.nz/)
 - [Advaned R](https://adv-r.hadley.nz/)
 - [R Packages](https://r-pkgs.org/)
 - [Modern Statistics for Modern Biology](https://www.huber.embl.de/msmb/index.html)
@@ -51,6 +50,7 @@
 
 R 的统计功能在生物学中的应用。
 
+- [R for Data Science](https://r4ds.had.co.nz/)
 - [x] [R language for programmers](https://www.johndcook.com/blog/r_language_for_programmers/)
 - [R 语言教程](http://www.math.pku.edu.cn/teachers/lidf/docs/Rbook/html/_Rbook/index.html)
 - [GitHub 整合资源](https://github.com/ujjwalkarn/DataScienceR)

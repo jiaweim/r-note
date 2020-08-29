@@ -12,7 +12,6 @@
   - [在 geom 中映射变量](#在-geom-中映射变量)
   - [映射形状](#映射形状)
   - [连续变量的颜色映射](#连续变量的颜色映射)
-  - [保存图像](#保存图像)
 
 2020-06-16, 21:10
 ***
@@ -365,48 +364,3 @@ print(pp)
 ![scatter](images/2020-08-26-15-27-06.png)
 
 这里，不同散点的颜色是连续变化的，右侧的图例仅显示有限的一些代表值。
-
-## 保存图像
-
-如果使用 Rmarkdown 制作图文，图像会自动进入编译的结果（PDF, Word, HTML）中，图像大小、输出大小可以用 Rmarkdown 的设置调整。
-
-将最近生成的图形保存为 PNG 格式：
-
-```r
-p <- ggplot(
-  data = filter(gapminder, year == 2007),
-  mapping = aes(
-    x = gdpPercap,
-    y = lifeExp,
-    color = log(pop)
-  )
-)
-
-pp <- p + geom_point() +
-  geom_smooth(method = "loess") +
-  scale_x_log10(labels = scales::dollar)
-
-ggsave(filename = "scatter.png")
-```
-
-保存为 PDF：
-
-```r
-ggsave(filename="文件名.pdf")
-```
-
-也可以将制作的图形保存在变量中，然后使用 `plot=` 参数指定需要保存的图形：
-
-```r
-ggout01 <- p + geom_point()
-ggsave(filename="文件名.pdf", plot=ggout01)
-```
-
-在 `ggsave()` 中可以用 `scale=` 指定放大比例，用 `height=` 指定高度，用 `width=` 指定宽度，用 `units=` 指定高度和宽度的单位。例如：
-
-```r
-ggsave(filename="文件名.pdf", plot=ggout01,
-       height=12, width=8, units="cm")
-```
-
-可选单位有 in, cm, mm。

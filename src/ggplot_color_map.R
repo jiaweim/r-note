@@ -21,9 +21,13 @@ ggplot(d1, aes(x = cond, y = yval, fill = cond)) +
 
 ggplot(d2, aes(x = cond1, y = yval)) +
   geom_bar(aes(fill = cond2),
-    stat = "identity",
-    color = "black",
-    position = position_dodge()
+           stat = "identity",
+           color = "black",
+           position = position_dodge()
   )
+
+ggplot(d2, aes(x = cond1, y = yval)) +
+  geom_line(aes(colour = cond2, group = cond2)) + # color, group boton depend on cond2
+  geom_point(aes(colour = cond2), size = 3) # colour depends on cond2
 
 
