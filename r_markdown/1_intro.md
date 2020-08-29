@@ -5,9 +5,13 @@
   - [安装](#安装)
   - [Markdown 基础](#markdown-基础)
     - [R 代码块](#r-代码块)
-    - [inline R Code](#inline-r-code)
+    - [内嵌 R 代码](#内嵌-r-代码)
     - [公式](#公式)
     - [插入图片](#插入图片)
+    - [表格](#表格)
+  - [RMarkdown 文件结构](#rmarkdown-文件结构)
+  - [参数](#参数)
+    - [参数引用](#参数引用)
   - [渲染输出](#渲染输出)
     - [输出格式](#输出格式)
     - [输出目录](#输出目录)
@@ -48,9 +52,9 @@ Markdown 是一种简单的标记语言。如下所示，左侧为 Markdown 语�
 
 ![code chunk](images/2020-05-15-15-50-16.png)
 
-### inline R Code
+### 内嵌 R 代码
 
-甚至可以插入单行表达式，以 `r` 识别，例如：
+单行表达式，以 `r` 识别，例如：
 
 ![inline](images/2020-05-15-15-51-24.png)
 
@@ -82,9 +86,9 @@ knitr::include_graphics("images/R_logo.png")
 
 ## 参数
 
-R Markdown 可以包含一个 metadata 部分，用于包含标题、作者、日期以及自定义输出选项等。
+R Markdown 可以包含一个 metadata 部分，用于设置标题、作者、日期以及输出格式等。
 
-例如，下面的 metadata 在 `.Rmd` 顶部添加 TOC，并且选择 HTML 作为输出：
+例如，下面的 metadata 在 `.Rmd` 顶部添加 TOC，并且输出 HTML 格式：
 
 ```rmd
 ---
@@ -96,7 +100,9 @@ output:
 ---
 ```
 
-metadata 中还可以包含 `params:` 字段，在其中可以一列值，可以在文件中引用这些值。例如：
+### 参数引用
+
+metadata 中可以包含 `params:` 字段，在其中列入一些值，然后在后面文件内容中可以引用这些值。例如：
 
 ![metadata](images/2020-05-15-16-01-42.png)
 
