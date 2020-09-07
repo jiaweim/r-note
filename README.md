@@ -3,7 +3,7 @@
 - [R 学习笔记](#r-学习笔记)
   - [R 基础](#r-基础)
   - [R 工具](#r-工具)
-  - [Reference](#reference)
+  - [参考](#参考)
     - [基础教程](#基础教程)
     - [可视化](#可视化)
     - [数据分析](#数据分析)
@@ -20,12 +20,13 @@
 - [io](basic/io.md)
 - [R 绘图基础](plot/0_plot_toc.md)
 - [ggplot](ggplot2/0_ggplot2_toc.md)
+- [dplyr](dplyr/0_dplyr_toc.md)
 
 ## R 工具
 
 - [R Markdown](r_markdown/1_intro.md)
 
-## Reference
+## 参考
 
 ### 基础教程
 
@@ -37,6 +38,7 @@
 - [Advaned R](https://adv-r.hadley.nz/)
 - [R Packages](https://r-pkgs.org/)
 - [Modern Statistics for Modern Biology](https://www.huber.embl.de/msmb/index.html)
+- [R 中文文档](https://github.com/dingguohui)
 
 ### 可视化
 

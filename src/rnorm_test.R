@@ -1,0 +1,1 @@
+rnorm(n = 5, mean = 0, sd = 1)

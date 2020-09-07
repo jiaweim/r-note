@@ -6,6 +6,8 @@
   - [安装包](#安装包)
     - [选择安装路径](#选择安装路径)
   - [更新包](#更新包)
+  - [安装老版本的包](#安装老版本的包)
+    - [devtools](#devtools)
   - [GitHub 和 BioConductor](#github-和-bioconductor)
   - [载入包](#载入包)
   - [迁移扩展包](#迁移扩展包)
@@ -83,6 +85,18 @@ update.packages()
 
 ```r
 update.packages(ask = FALSE)
+```
+
+## 安装老版本的包
+
+基于兼容或者其它一些原因，可能需要安装老版本的包。实现方式有多种。
+
+### devtools
+
+可以使用 `devtools` 实现该功能：
+
+```
+
 ```
 
 ## GitHub 和 BioConductor

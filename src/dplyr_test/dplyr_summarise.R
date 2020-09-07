@@ -1,7 +1,7 @@
 library(tidyverse)
 
-d.cancer <- read_csv("src/data/cancer.csv",
-  locale = locale(encoding = "GBK")
+d.cancer <- read_csv("../data/cancer.csv",
+                     locale = locale(encoding = "GBK")
 )
 
 knitr::kable(d.cancer)

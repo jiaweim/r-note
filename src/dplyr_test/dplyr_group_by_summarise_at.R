@@ -1,6 +1,6 @@
 library(tidyverse)
 
-d.cancer <- read_csv("src/data/cancer.csv")
+d.cancer <- read_csv("../data/cancer.csv")
 d.cancer %>%
   group_by(sex) %>%
   summarise_at(

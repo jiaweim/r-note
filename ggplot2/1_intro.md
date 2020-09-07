@@ -1,10 +1,13 @@
-# Introduction
+# 快速入门
 
-- [Introduction](#introduction)
+- [快速入门](#快速入门)
   - [简介](#简介)
     - [语法模板](#语法模板)
+    - [ggplot](#ggplot)
+    - [aes](#aes)
+  - [演示数据](#演示数据)
   - [映射](#映射)
-  - [设置](#设置)
+  - [映射 vs. 设置](#映射-vs-设置)
   - [几何对象](#几何对象)
   - [全局变量和局部变量](#全局变量和局部变量)
   - [导出图片](#导出图片)
@@ -52,12 +55,60 @@ ggplot 作图的一般步骤：
 - 设定适当的坐标系统
 - 设定标题和图例位置等
 
-## 映射
+### ggplot
 
-以 ggplot2 内置的 mpg 数据演示。
+`ggplot()` 函数用于创建 ggplot 对象。
 
 ```r
-> library(tidyverse)
+ggplot(data = NULL, mapping = aes(), ...)
+```
+
+参数：
+
+1. data
+
+用于绘图的默认数据集。如果不是 `data.frame` 类型，则默认使用 `fortify()` 转换为该类型。如果不指定数据集，则在后续添加图层时，需要逐一指定数据。
+
+2. mapping
+
+用于绘图的默认美学映射。如果不指定，则在后续添加图层时需要指定。
+
+`ggplot()`用于构造初始的绘图对象，后面总会跟着 `+` 添加组件。
+
+下面是调用 `ggplot()` 的常见三种方式：
+
+- `ggplot(df, aes(x, y, other aesthetics))`
+
+如果所有图层使用相同的数据和美学特征，则推荐使用该方法。
+
+- `ggplot(df)`
+
+指定了默认数据，但是没有指定映射关系。适合于不同图层采用不同美学映射的绘图。
+
+- `ggplot()`
+
+只是初始化了一个框架，适合于使用多种数据构建复杂图形。
+
+### aes
+
+美学映射描述如何将数据映射到几何图形的视觉属性（如颜色、形状、大小等）。在 `ggplot()` 和图层中都可以指定美学映射。
+
+```r
+aes(x, y, ...)
+```
+
+参数：
+
+`x, y, ...`，参数为键值对的格式，`aesthetic = variable`，将变量映射到后续 geom/stat 所需的美学特征。变量 `variable` 在图层数据中计算，因此无需引用原始数据。所以使用 `ggplot(df, aes(variable))`，而不用 `ggplot(df, aes(df$variable))`。对 x,y 的美学特征一般可以省略，其它的必须命名。
+
+
+
+## 演示数据
+
+下面以 ggplot2 内置的 mpg 数据演示，mpg 数据是美国环境保护署收集的1999年到2008年流行车型的燃油经济性的信息。
+
+```r
+> library(ggplot2)
 > str(mpg)
 tibble [234 x 11] (S3: tbl_df/tbl/data.frame)
  $ manufacturer: chr [1:234] "audi" "audi" "audi" "audi" ...
@@ -79,7 +130,7 @@ mpg 数据包含 234 行 11 列。如下所示：
 | ---- | ------------ | ------------------------------------------- |
 | 1    | manufacturer | 生产厂家                                    |
 | 2    | model        | 类型                                        |
-| 3    | displ        | 发动机排量，升                              |
+| 3    | displ        | 发动机排量（升）                              |
 | 4    | year         | 生产年份                                    |
 | 5    | cyl          | 气缸数量                                    |
 | 6    | trans        | 传输类型                                    |
@@ -88,6 +139,8 @@ mpg 数据包含 234 行 11 列。如下所示：
 | 9    | hwy          | 每加仑高速公路英里                          |
 | 10   | fl           | 汽油种类                                    |
 | 11   | class        | 类型                                        |
+
+## 映射
 
 下面就一个问题就行分析：是否汽车的排量越大，油耗越大？
 
@@ -138,44 +191,53 @@ ggplot(mpg, aes(x=displ, y=hwy)) + geom_point()
 
 ![point](images/2020-05-31-08-51-18.png)
 
-下面，我们在 `aes()` 中再增加一个映射，将 mpg 的 `class` 映射为颜色，`color=class`。这样不同汽车类型，用不同颜色的数据点表示：
+- 颜色映射
+
+下面，我们在 `aes()` 中再将 mpg 的 `class` 映射为颜色，`color=class`。这样不同汽车类型，用不同颜色的数据点表示：
 
 ```r
-ggplot(mpg, aes(x=displ, y=hwy, color=class)) + geom_point()
+ggplot(mpg, aes(x=displ, y=hwy, color=class)) +
+  geom_point()
 ```
 
 ![point](images/2020-05-31-08-53-28.png)
 
+- class 映射为数据点大小
+
 还可以将 `class` 映射为数据点大小：
 
 ```r
-ggplot(mpg, aes(x=displ, y=hwy, size=class)) + geom_point()
+ggplot(mpg, aes(x=displ, y=hwy, size=class)) +
+  geom_point()
 ```
 
-![point size](images/2020-05-31-09-02-12.png)
+![point size](images/2020-08-31-10-26-59.png)
 
 - 将 `class` 映射为形状
 
 ```r
-ggplot(mpg, aes(x=displ, y=hwy, shape=class)) + geom_point()
+ggplot(mpg, aes(x=displ, y=hwy, shape=class)) +
+  geom_point()
 ```
 
-![point shape](images/2020-05-31-09-03-30.png)
+![point shape](images/2020-08-31-10-28-36.png)
 
 - 将 `class` 映射为透明度
 
 ```r
-ggplot(mpg, aes(x=displ, y=hwy, alpha=class)) + geom_point()
+ggplot(mpg, aes(x=displ, y=hwy, alpha=class)) +
+  geom_point()
 ```
 
 ![point alpha](images/2020-05-31-09-04-26.png)
 
-## 设置
+## 映射 vs. 设置
 
 想把图中的数据点设置为某个颜色，例如将图形的数据点设置为蓝色：
 
 ```r
-ggplot(mpg, aes(x=displ, y=hwy)) + geom_point(color="blue")
+ggplot(mpg, aes(x=displ, y=hwy)) +
+  geom_point(color="blue")
 ```
 
 ![color](images/2020-05-31-09-05-49.png)
@@ -196,7 +258,8 @@ ggplot(mpg, aes(x=displ, y=hwy)) + geom_point(color="blue")
 `geom_point()` 画散点图，`geom_smooth()` 可以绘制平滑曲线。例如：
 
 ```r
-p2 <- ggplot(data=mpg, aes(x=displ, y=hwy))+geom_smooth()
+p2 <- ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_smooth()
 p2
 ```
 
@@ -205,7 +268,9 @@ p2
 - 散点图加平滑曲线
 
 ```r
-p3 <- ggplot(data=mpg, aes(x=displ, y=hwy)) + geom_point() + geom_smooth()
+p3 <- ggplot(data=mpg, aes(x=displ, y=hwy)) +
+  geom_point() +
+  geom_smooth()
 p3
 ```
 
@@ -237,7 +302,7 @@ ggplot(mpg) +
 
 如果将映射关系放在 `geom_point()` 例，就是局部变量。
 
-如果 `geom_point()` 缺少绘图所需的映射关系，会继承全局变量的映射关系。例如：
+如果 `geom_point()` 缺少绘图所需的映射关系，会**继承全局变量**的映射关系。例如：
 
 ```r
 ggplot(mpg, aes(x=displ, y =hwy))+

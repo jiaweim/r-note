@@ -1,6 +1,6 @@
 library(tidyverse)
 
-d.cancer <- read_csv("src/data/cancer.csv")
+d.cancer <- read_csv("../data/cancer.csv")
 d.cancer %>%
   summarise_at(
     c("v0", "v1"),

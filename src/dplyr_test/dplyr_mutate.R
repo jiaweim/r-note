@@ -1,6 +1,6 @@
 library(tidyverse)
 
-d.class <- read_csv("src/data/class.csv")
+d.class <- read_csv("../data/class.csv")
 print(knitr::kable(d.class))
 
 d2 <- d.class %>% 

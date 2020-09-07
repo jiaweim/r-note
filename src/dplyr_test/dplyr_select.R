@@ -1,6 +1,6 @@
 library(tidyverse)
 
-d.class <- read_csv("src/data/class.csv")
+d.class <- read_csv("../data/class.csv")
 knitr::kable(d.class)
 d.class %>% 
   select(name, age) %>% 

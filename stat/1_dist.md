@@ -10,12 +10,22 @@
 
 ## 简介
 
-R 中与 xxx 分布有关的函数包括：
+R 中内置了许多生成随机数的函数。对应不同的分布。
 
-- dxxx(x), 即 xxx 分布的分布密度函数（PDF）或概率函数（PMF） $p(x)$。
-- pxxx(q), 即 xxx 分布的分布函数（CDF）$F(q)=P(x\le q)$。
-- qxxx(p)，即 xxx 分布的分位数函数 $q(p), p \isin (0,1)$，对连续型分布，$q(p)=F^{-1}(p)$，即 $F(x)=p$ 的解 x。
-- rxxx(n)，即 xxx 的随机数函数，可以生成 n 个 xxx 的随机数。
+|分布|表示|随机数生成函数|
+|---|---|---|
+|Uniform|$U(a,b)$|`runif`|
+|Normal|$N(\mu,\sigma)$|`rnorm`|
+|Binormal|$Bin(n,p)$|`rbinorm`|
+|Piosson|$pois(\lambda)$|`rpois`|
+|Beta|$Beta(\alpha,\beta)$|`rbeta`|
+
+R 中与 xxx 分布有关的函数一般有4个：
+
+- dxxx(x), xxx 分布的分布密度函数（PDF）或概率函数（PMF） $p(x)$。
+- pxxx(q), xxx 分布的分布函数（CDF）$F(q)=P(x\le q)$。
+- qxxx(p)，xxx 分布的分位数函数 $q(p), p \isin (0,1)$，对连续型分布，$q(p)=F^{-1}(p)$，即 $F(x)=p$ 的解 x。
+- rxxx(n)，xxx 的随机数函数，可以生成 n 个 xxx 的随机数。
 
 dxxx(x) 函数加选项 `log=TRUE`，用来计算 $log p(x)$，比使用 `log(dxxx(x))` 更精确。
 
@@ -79,4 +89,3 @@ rnorm(n, mean = 0, sd = 1)
 [45]  1.0406363208  1.3120237985 -0.0300020767 -0.2500257125
 [49]  0.0234144857  1.6598706557
 ```
-
