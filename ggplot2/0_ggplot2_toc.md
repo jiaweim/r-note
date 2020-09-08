@@ -8,6 +8,7 @@
 - [折线图](chart_line.md)
 - [函数曲线](chart_curve.md)
 - [导出图形](output.md)
+- [Facetting](facetting.md)
 
 ## 参考
 

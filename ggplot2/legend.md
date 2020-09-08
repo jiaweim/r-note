@@ -1,5 +1,14 @@
 # Legend
 
+- [Legend](#legend)
+  - [简介](#简介)
+  - [Layout](#layout)
+  - [标题](#标题)
+    - [使用 scale](#使用-scale)
+
+2020-09-07, 21:10
+***
+
 ## 简介
 
 从某种程度上来说，图例（legend）比坐标轴更复杂，因为：
@@ -20,5 +29,15 @@
 |bottom|
 |none|无legend|
 
+## 标题
+
+修改 legend 标题的方法有两种。
+
+- 在 `scale` 中设置标题和标签。
+- 修改数据框
+
+### 使用 scale
+
+legend 可以和 fill, colours, linetype, shape 等美学特征关联。
 
 

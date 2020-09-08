@@ -1,6 +1,6 @@
 library(readr)
 
-bp.data <- read_csv(file = "src/data/bp.csv",
+bp.data <- read_csv(file = "../data/bp.csv",
                     locale = locale(encoding = "GBK"),
                     col_types = cols(
                       `序号` = col_integer(),

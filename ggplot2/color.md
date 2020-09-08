@@ -9,6 +9,7 @@
   - [选择颜色](#选择颜色)
   - [设置亮度和饱和度](#设置亮度和饱和度)
   - [自定义颜色](#自定义颜色)
+  - [渐变色](#渐变色)
 
 2020-08-28, 11:54
 @jiaweiM
@@ -253,3 +254,83 @@ ggplot(d1, aes(x = cond, y = yval, fill = cond)) +
 ```
 
 ![bar](images/2020-08-28-12-26-54.png)
+
+## 渐变色
+
+渐变色系列：
+
+- `scale_*_gradient` 创建两个颜色的渐变，low-high
+- `scale_*_gradient2` 创建分段渐变色，low-mid-high
+- `scale_*_gradientn` 创建 n 个颜色的渐变
+
+对连续色阶，一般保持色相（hue）不变，改变色度（chroma）和亮度（luminance）。
+
+方法签名：
+
+```r
+scale_colour_gradient(
+  ...,
+  low = "#132B43",
+  high = "#56B1F7",
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar",
+  aesthetics = "colour"
+)
+
+scale_fill_gradient(
+  ...,
+  low = "#132B43",
+  high = "#56B1F7",
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar",
+  aesthetics = "fill"
+)
+
+scale_colour_gradient2(
+  ...,
+  low = muted("red"),
+  mid = "white",
+  high = muted("blue"),
+  midpoint = 0,
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar",
+  aesthetics = "colour"
+)
+
+scale_fill_gradient2(
+  ...,
+  low = muted("red"),
+  mid = "white",
+  high = muted("blue"),
+  midpoint = 0,
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar",
+  aesthetics = "fill"
+)
+
+scale_colour_gradientn(
+  ...,
+  colours,
+  values = NULL,
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar",
+  aesthetics = "colour",
+  colors
+)
+
+scale_fill_gradientn(
+  ...,
+  colours,
+  values = NULL,
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar",
+  aesthetics = "fill",
+  colors
+)
+```

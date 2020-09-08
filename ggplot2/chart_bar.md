@@ -10,6 +10,7 @@
   - [Grouping Bars](#grouping-bars)
   - [Count Bar](#count-bar)
   - [Color](#color)
+  - [方向](#方向)
 
 2020-06-16, 21:48
 ***
@@ -361,3 +362,8 @@ p <- ggplot(diamonds, aes(x = cut)) +
 
 将变量映射到 `fill` 属性。
 
+## 方向
+
+`orientation` 参数用于指定方向。ggplot2会猜测图的方向，少数情况会猜测失败，此时可以用该参数指定。
+
+`x` 对应垂直条形图，`y` 对应水平条形图。

@@ -22,4 +22,4 @@ ego <- enrichGO(gene = entrez_id_list$ENTREZID,
                 qvalueCutoff = 0.05)
 
 p <- barplot(ego, split = "ONTOLOGY") + facet_grid(ONTOLOGY ~ ., scale = 'free')
-ggsave("b.pdf")
+#ggsave("b.pdf")
