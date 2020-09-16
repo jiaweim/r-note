@@ -7,4 +7,26 @@ f <- function() {
   lines(x, y2, lwd = 2, col = 'blue')
   abline(h = 0, col = 'gray')
 }
-f()
+
+
+b <- function (file, pvalue){
+  data <- read.csv(file)
+  ###
+
+
+  data
+}
+
+data1 <- b("test.csv", 0.02)
+
+
+
+a <- function(a, b) {
+  a + b
+}
+
+x <- 5
+y <- 3
+
+z <- a(x, y)
+print(z)
