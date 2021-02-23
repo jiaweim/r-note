@@ -12,42 +12,41 @@
     - [数据管理](#数据管理)
     - [字符串处理](#字符串处理)
   - [逻辑函数](#逻辑函数)
-  - [lapply](#lapply)
 
 2020-05-14, 08:33
 ***
 
 ## 函数列表
 
-| 函数                            | 说明                                                                                                       |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| class(a_var)                    | 输出变量类型                                                                                               |
-| sum(a_vector)                   | Calculates the sum of all elements of a vecotor                                                            |
-| c()                             | 创建向量，将多个值连接起来作为一个向量                                                                     |
-| names()                         | 为数据集的 columns 命名                                                                                    |
-| help.start()                    | 打开帮助文档首页                                                                                           |
-| help("foo"), ?foo               | 查看函数 foo 的帮助                                                                                        |
-| help.search("foo"), ??foo       | 以foo 为关键字搜索本地帮助文档                                                                             |
-| RSiteSearch("foo")              | 以 foo 为关键词搜索在线文档和邮件列表存档                                                                  |
-| apropos("foo", mode="function") | 列出名称中含有 foo的所有可用函数                                                                           |
-| data()                          | 获得内置数据集列表                                                                                         |
-| getwd()                         | 返回当前的 working directory                                                                               |
-| setwd()                         | 设置 workspace                                                                                             |
-| leng(x)                         | 返回向量 x 的长度                                                                                          |
-| library()                       | 显示库中有哪些包                                                                                           |
-| ls()                            | 列出当前空间的变量                                                                                         |
+| 函数 | 说明 |
+| --- | --- |
+| class(a_var)  | 输出变量类型  |
+| sum(a_vector) | Calculates the sum of all elements of a vecotor |
+| c() | 创建向量，将多个值连接起来作为一个向量 |
+| names()   | 为数据集的 columns 命名 |
+| help.start()                    | 打开帮助文档首页  |
+| help("foo"), ?foo               | 查看函数 foo 的帮助   |
+| help.search("foo"), ??foo       | 以foo 为关键字搜索本地帮助文档   |
+| RSiteSearch("foo")              | 以 foo 为关键词搜索在线文档和邮件列表存档 |
+| apropos("foo", mode="function") | 列出名称中含有 foo的所有可用函数       |
+| data()                          | 获得内置数据集列表   |
+| getwd()                         | 返回当前的 working directory |
+| setwd()                         | 设置 workspace |
+| leng(x)                         | 返回向量 x 的长度 |
+| library()                       | 显示库中有哪些包   |
+| ls()                            | 列出当前空间的变量   |
 | install.packages()              | 显示一个CRAN镜像站点的列表，选择其中一个镜像站点后，可以看到所有可用包的列表。 install.packages ("glclus") | 下载并安装gclus包 |
-| mean()                          | 计算均值                                                                                                   |
-| mode                            | 获得向量类型                                                                                               |
-| cbind()                         | 把若干列结合成矩阵                                                                                         |
-| rbind()                         | row bind缩写，把向量或矩阵按照行合并成一个矩阵                                                             |
-| rnorm                           | 生成100个服从N(0,1)分布的随机变量                                                                          |
-| colSums()                       | 计算矩阵每列的加和值                                                                                       |
-| rowSums()                       | 计算矩阵每行的加和值                                                                                       |
-| sd                              | 标准差                                                                                                     |
-| typeof                          |                                                                                                            |
+| mean()                          | 计算均值  |
+| mode                            | 获得向量类型     |
+| cbind() | 把若干列结合成矩阵 |
+| rbind()  | row bind缩写，把向量或矩阵按照行合并成一个矩阵 |
+| rnorm                           | 生成100个服从N(0,1)分布的随机变量 |
+| colSums()                       | 计算矩阵每列的加和值  |
+| rowSums()                       | 计算矩阵每行的加和值  |
+| sd                              | 标准差   |
+| typeof                          |        |
 | vignette()                      | 列出当前已安装包中所有可用的 vignette文档                                                                  |
-| vignette("foo")                 | 为主题 foo 显示指定的 vignette文档                                                                         |
+| vignette("foo")                 | 为主题 foo 显示指定的 vignette文档   |
 
 - help.start() 会打开一个浏览器窗口，可在其中查看入门和高级的帮助文档、常见问题集，以及参考材料。
 - RSiteSearch() 可在在线帮助手册和 R-Help 邮件列表的讨论存档中搜索指定主题，并在浏览器中返回结果。
@@ -252,15 +251,4 @@ factor：因子 codes：因子的编码 levels：因子的各水平的名字nlev
 ```r
 > unique(c(1, 2, 1, 3, NA, 4, NA))
 [1]  1  2  3 NA  4
-```
-
-## lapply
-
-rep
-语法：
-
-```r
-rep(x, …)
-rep.int(x, times)
-rep.len(x, length.out)
 ```
