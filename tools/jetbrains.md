@@ -11,10 +11,10 @@
   - [R packages](#r-packages)
   - [R files toolbar](#r-files-toolbar)
   - [Markdown toolbar](#markdown-toolbar)
+  - [QA](#qa)
   - [References](#references)
 
 2020-08-28, 11:34
-@jiaweiM
 ***
 
 ## 简介
@@ -119,6 +119,21 @@ R Tools 中的 **Plots** 栏用于预览图。
 ![rmd](images/2020-08-28-11-50-26.png)
 
 ![toolbar](images/2020-08-28-11-50-59.png)
+
+## QA
+
+```r
+Warning in (function (file = "", n = NULL, text = NULL, prompt = "?", keep.source = getOption("keep.source"),  :
+  argument encoding="UTF-8" is ignored in MBCS locales
+```
+
+编码问题，对 Windows 系统：
+
+Region -> Change date, time, or number formats -> Administrative -> Change system locale
+
+![](images/2023-03-21-17-42-27.png)
+
+然后重启电脑。
 
 ## References
 

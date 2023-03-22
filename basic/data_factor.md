@@ -10,6 +10,8 @@
   - [tapply](#tapply)
   - [Ordered factor](#ordered-factor)
   - [forcats 包的因子函数](#forcats-包的因子函数)
+  - [gl](#gl)
+  - [参考](#参考)
 
 2020-06-10, 10:33
 ***
@@ -21,6 +23,29 @@
 R 提供了有序和无序因子，有序因子代表有序度量，如打分、疾病严重程度等。
 
 ## 创建factor
+
+```r
+factor(x = character(), levels, labels = levels,
+       exclude = NA, ordered = is.ordered(x), nmax = NA)
+ordered(x, …)
+
+is.factor(x)
+is.ordered(x)
+
+as.factor(x)
+as.ordered(x)
+
+addNA(x, ifany = FALSE)
+```
+
+**参数：**
+
+- `x`，输入的数据向量；
+- `levels`，指定各 level 值，默认按字母顺序；
+- `labels`，各个 level 的标签；
+- `exclude`，从 x 中剔除的水平值；
+- `ordered`，因子水平是否有序；
+- `nmax`，水平个数限制。
 
 用 `factor()` 函数把字符型向量转换为因子，如：
 
@@ -230,3 +255,32 @@ library(forcats)
      blue     green       red
 1129.2587  138.3185  370.9222
 ```
+
+## gl
+
+```r
+gl(n, k, length = n*k, labels = seq_len(n), ordered = FALSE)
+```
+
+生成因子水平。
+
+**参数：**
+
+- `n`，level 个数；
+- `k`，每个 level 重复的次数；
+- `length`，设置的长度；
+- `labels`，各个 level 的值；
+- `ordered`，确定 level 是否有序。
+
+```r
+> v <- gl(3, 4, labels = c('Google', 'Taobao', 'Runoob'))
+> print(v)
+ [1] Google Google Google Google Taobao Taobao Taobao Taobao Runoob Runoob Runoob
+[12] Runoob
+Levels: Google Taobao Runoob
+```
+
+## 参考
+
+- https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/factor
+- https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/gl

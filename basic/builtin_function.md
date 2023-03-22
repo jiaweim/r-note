@@ -5,9 +5,12 @@
   - [逻辑运算函数](#逻辑运算函数)
   - [str(a)](#stra)
   - [管理R工作空间的函数](#管理r工作空间的函数)
-  - [sink("filename")](#sinkfilename)
+  - [文件输出](#文件输出)
+    - [sink](#sink)
   - [source("filename")](#sourcefilename)
   - [图形输出](#图形输出)
+    - [pdf](#pdf)
+    - [png](#png)
   - [R 包](#r-包)
     - [数据管理](#数据管理)
     - [字符串处理](#字符串处理)
@@ -19,34 +22,34 @@
 ## 函数列表
 
 | 函数 | 说明 |
-| --- | --- |
-| class(a_var)  | 输出变量类型  |
+|--|--|
+| class(a_var) | 输出变量类型 |
 | sum(a_vector) | Calculates the sum of all elements of a vecotor |
 | c() | 创建向量，将多个值连接起来作为一个向量 |
-| names()   | 为数据集的 columns 命名 |
-| help.start()                    | 打开帮助文档首页  |
-| help("foo"), ?foo               | 查看函数 foo 的帮助   |
-| help.search("foo"), ??foo       | 以foo 为关键字搜索本地帮助文档   |
-| RSiteSearch("foo")              | 以 foo 为关键词搜索在线文档和邮件列表存档 |
-| apropos("foo", mode="function") | 列出名称中含有 foo的所有可用函数       |
-| data()                          | 获得内置数据集列表   |
-| getwd()                         | 返回当前的 working directory |
-| setwd()                         | 设置 workspace |
-| leng(x)                         | 返回向量 x 的长度 |
-| library()                       | 显示库中有哪些包   |
-| ls()                            | 列出当前空间的变量   |
-| install.packages()              | 显示一个CRAN镜像站点的列表，选择其中一个镜像站点后，可以看到所有可用包的列表。 install.packages ("glclus") | 下载并安装gclus包 |
-| mean()                          | 计算均值  |
-| mode                            | 获得向量类型     |
+| names() | 为数据集的 columns 命名 |
+| help.start() | 打开帮助文档首页 |
+| help("foo"), ?foo | 查看函数 foo 的帮助 |
+| help.search("foo"), ??foo | 以foo 为关键字搜索本地帮助文档 |
+| RSiteSearch("foo") | 以 foo 为关键词搜索在线文档和邮件列表存档 |
+| apropos("foo", mode="function") | 列出名称中含有 foo的所有可用函数 |
+| data() | 获得内置数据集列表 |
+| getwd() | 返回当前工作目录 |
+| setwd() | 设置工作目录 |
+| leng(x) | 返回向量 x 的长度 |
+| library() | 显示库中有哪些包 |
+| ls() | 列出当前空间定义的变量 |
+| install.packages() | 显示一个CRAN镜像站点的列表，选择其中一个镜像站点后，可以看到所有可用包的列表。 install.packages ("glclus") | 下载并安装gclus包 |
+| mean() | 计算均值 |
+| mode | 获得向量类型 |
 | cbind() | 把若干列结合成矩阵 |
-| rbind()  | row bind缩写，把向量或矩阵按照行合并成一个矩阵 |
-| rnorm                           | 生成100个服从N(0,1)分布的随机变量 |
-| colSums()                       | 计算矩阵每列的加和值  |
-| rowSums()                       | 计算矩阵每行的加和值  |
-| sd                              | 标准差   |
-| typeof                          |        |
-| vignette()                      | 列出当前已安装包中所有可用的 vignette文档                                                                  |
-| vignette("foo")                 | 为主题 foo 显示指定的 vignette文档   |
+| rbind() | row bind缩写，把向量或矩阵按照行合并成一个矩阵 |
+| rnorm | 生成100个服从N(0,1)分布的随机变量 |
+| colSums() | 计算矩阵每列的加和值 |
+| rowSums() | 计算矩阵每行的加和值 |
+| sd | 标准差 |
+| typeof |  |
+| vignette() | 列出当前已安装包中所有可用的 vignette文档 |
+| vignette("foo") | 为主题 foo 显示指定的 vignette文档 |
 
 - help.start() 会打开一个浏览器窗口，可在其中查看入门和高级的帮助文档、常见问题集，以及参考材料。
 - RSiteSearch() 可在在线帮助手册和 R-Help 邮件列表的讨论存档中搜索指定主题，并在浏览器中返回结果。
@@ -126,33 +129,44 @@ str 表示 structur，用于显示对象结构。a 为任意数据结构。
 
 ## 管理R工作空间的函数
 
-| 函数                            | 功能                                          |
-| ------------------------------- | --------------------------------------------- |
-| getwd()                         | 显示当前的工作目录                            |
-| setwd("adirectory")             | 修改当前的工作目录为 adirectory               |
-| ls()                            | 列出当前工作空间中的对象                      |
-| rm(objectlist)                  | 移除一个或多个对象                            |
-| help(options)                   | 显示可用选项的说明                            |
-| options()                       | 显示或设置当前选项                            |
-| history(#)                      | 显示最近使用过的#个命令（默认25）             |
-| savehistory("myfile")           | 保存命令历史到文件myfile中（默认为.Rhistory） |
-| loadhistory("myfile")           | 载入一个命令历史文件（默认为 .Rhistory）      |
-| save.image("myfile")            | 保存工作空间到文件myfile中（默认为 .RData）   |
-| save(objectlist, file="myfile") | 保存指定对象到一个文件                        |
-| load("myfile")                  | 读取一个工作空间到当前会话中                  |
-| q()                             | 提出R                                         |
+| 函数 | 功能 |
+|--|--|
+| getwd() | 显示当前的工作目录 |
+| setwd("adirectory") | 修改当前的工作目录为 adirectory |
+| ls() | 列出当前工作空间中的对象 |
+| rm(objectlist) | 移除一个或多个对象 |
+| help(options) | 显示可用选项的说明 |
+| options() | 显示或设置当前选项 |
+| history(#) | 显示最近使用过的#个命令（默认25） |
+| savehistory("myfile") | 保存命令历史到文件myfile中（默认为.Rhistory） |
+| loadhistory("myfile") | 载入一个命令历史文件（默认为 .Rhistory） |
+| save.image("myfile") | 保存工作空间到文件myfile中（默认为 .RData） |
+| save(objectlist, file="myfile") | 保存指定对象到一个文件 |
+| load("myfile") | 读取一个工作空间到当前会话中 |
+| q() | 提出R |
 
-`options(digits=3)`
-设置
+## 文件输出
 
-## sink("filename")
+### sink
 
-将输出重定向到文件 filename 中。
-默认，如果文件已存在，则覆盖其内容。
-参数
+```r
+sink(file = NULL, append = FALSE, type = c("output", "message"),
+     split = FALSE)
+sink.number(type = c("output", "message"))
+```
 
-- append=TRUE, 可以将文本追加到文件后。
-- split=TRUE, 同时将输出发动到屏幕和输出文件中。
+将输出重定向到文件 `file`。默认覆盖同名文件已有内容。
+
+**参数：**
+
+- `append = FALSE`
+
+`TRUE` 表示将文本追加到文件。
+
+- `split = FALSE`
+
+`TRUE` 表示同时输出到屏幕和输出文件。
+
 
 ## source("filename")
 
@@ -160,14 +174,22 @@ str 表示 structur，用于显示对象结构。a 为任意数据结构。
 
 ## 图形输出
 
-| 函数                         | 输出            |
-| ---------------------------- | --------------- |
-| pdf("filename.pdf")          | PDF文件         |
+| 函数 | 输出 |
+|--|--|
+| pdf("filename.pdf") | PDF文件 |
 | win.metafile("filename.wmf") | Windows图元文件 |
-| png("filename.png")          | PNG文件         |
-| jpeg("filename.jpg")         | JPEG文件        |
-| bmp("filename.bmp")          | BMP文件         |
-| postscript("filename.ps")    | PostScript文件  |
+| png("filename.png") | PNG文件 |
+| jpeg("filename.jpg") | JPEG文件 |
+| bmp("filename.bmp") | BMP文件 |
+| postscript("filename.ps") | PostScript文件 |
+
+重定向图形输出，可先使用函数 `pdf("filename.pdf")`、`png("filename.png")` 等创建文件，然后进行图形绘制，最后使用 `dev.off()` 将图形输出到文件，并返回到终端。
+
+
+
+### pdf
+
+### png
 
 ## R 包
 

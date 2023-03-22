@@ -8,6 +8,8 @@
   - [数据结构](#数据结构)
   - [对象](#对象)
   - [数组](#数组)
+    - [apply](#apply)
+  - [参考](#参考)
 
 2020-05-28, 19:20
 *** **
@@ -126,6 +128,22 @@ R 包含多种数据类型，常用的有：Vector, List, Matrix, Array, Factor,
 
 ## 数组
 
+数组与矩阵类似，但是维度可以大于 2.
+
+```r
+array(data = NA, dim = length(data), dimnames = NULL)
+as.array(x, ...)
+is.array(x)
+```
+
+**参数：**
+
+- `data`，包含数组数据的向量
+- `dim`，数组维度
+- `dimnames`，各维度的命令列表
+
+数组选取元素的方式和矩阵相同。
+
 ```r
 > ar <- array(c(11:14, 21:24, 31:34), dim = c(2, 2, 3))
 > ar
@@ -147,3 +165,41 @@ R 包含多种数据类型，常用的有：Vector, List, Matrix, Array, Factor,
 [1,]   31   33
 [2,]   32   34
 ```
+
+### apply
+
+`apply()` 对数组或矩阵的元素进行跨维度计算，格式：
+
+```r
+apply(X, MARGIN, FUN, …)
+```
+
+```python
+> v1 <- c(5, 9, 3)
+> v2 <- c(10, 11, 12, 13, 14, 15)
+# 创建数组
+> ar1 <- array(c(v1, v2), dim = c(3, 3, 2))
+> print(ar1)
+, , 1
+
+     [,1] [,2] [,3]
+[1,]    5   10   13
+[2,]    9   11   14
+[3,]    3   12   15
+
+, , 2
+
+     [,1] [,2] [,3]
+[1,]    5   10   13
+[2,]    9   11   14
+[3,]    3   12   15
+# 计算数组中所有矩阵数值之和
+> print(apply(ar1, 3, sum))
+[1] 92 92
+```
+
+
+## 参考
+
+- https://rstudio.github.io/r-manuals/r-intro/Arrays-and-matrices.html
+- https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/apply

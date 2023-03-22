@@ -11,19 +11,22 @@
   - [GitHub 和 BioConductor](#github-和-bioconductor)
   - [载入包](#载入包)
   - [迁移扩展包](#迁移扩展包)
+  - [参考](#参考)
 
 2020-05-31, 10:07
 ***
 
 ## 函数
 
-|函数|功能|
-|---|---|
-|install.packages()|安装包。不加参数，显示CRAN镜像站点站点，加包名称，直接下载安装包|
-|installed.packages()|列出安装的包|
-|update.packages()|更新已安装的包|
-|library()|载入包|
-|help(package="package_name")|输出某个包的简短描述，以及包中的函数名称和数据集名称的列表|
+| 函数 | 功能 |
+|--|--|
+| install.packages() | 安装包。不加参数，显示CRAN镜像站点站点，加包名称，直接下载安装包 |
+| installed.packages() | 列出安装的包 |
+| update.packages() | 更新已安装的包 |
+| library("lib name") | 载入包 |
+| library() | 不带参数，查看已安装的 R 包 |
+| search() | 编译环境下已载入的包 |
+| help(package="package_name") | 输出某个包的简短描述，以及包中的函数名称和数据集名称的列表 |
 
 ## 简介
 
@@ -49,6 +52,23 @@ install.packages(c("ggplot2", "devtools", "dplyr"))
 ![Packages](images/2020-05-28-22-51-14.png)
 
 ## 安装包
+
+```r
+install.packages(pkgs, lib, repos = getOption("repos"),
+                 contriburl = contrib.url(repos, type),
+                 method, available = NULL, destdir = NULL,
+                 dependencies = NA, type = getOption("pkgType"),
+                 configure.args = getOption("configure.args"),
+                 configure.vars = getOption("configure.vars"),
+                 clean = FALSE, Ncpus = getOption("Ncpus", 1L),
+                 verbose = getOption("verbose"),
+                 libs_only = FALSE, INSTALL_opts, quiet = FALSE,
+                 keep_outputs = FALSE, …)
+```
+
+**参数：**
+
+- `repos`，指定镜像
 
 以安装sos包为例。sos 包用来搜索某些函数的帮助文档。 在RStudio中用 **Tools** 菜单的“Install Packages”安装， 输入sos就可以安装该扩展包。
 
@@ -110,7 +130,12 @@ devtools::install_github("kjhealy/socviz")
 
 其中 kjhealy 是 Github 网站的某个作者的名称， socviz 是该作者名下的一个R扩展包。
 
-还有一些包需要从Bioconductor网站安装。 示例如下：
+还有一些包需要从Bioconductor网站安装：
+
+- 需要先安装 `BiocManager`
+- 然后用 `BiocManager` 安装 Bioconductor 中的包
+
+示例如下：
 
 ```r
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -151,3 +176,7 @@ install.packages(packages)
 ```
 
 安装时如果提问是否安装需要编译的源代码包， 最好选择否， 因为安装源代码包速度很慢还有可能失败。
+
+## 参考
+
+- https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages

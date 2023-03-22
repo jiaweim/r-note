@@ -11,6 +11,7 @@
     - [访问列](#访问列)
     - [访问行](#访问行)
     - [范围选择](#范围选择)
+  - [插入列](#插入列)
   - [增强型数据框 tibble](#增强型数据框-tibble)
     - [CSV 格式字符串](#csv-格式字符串)
 
@@ -21,7 +22,7 @@
 
 数据框是矩形结构，包含行和列。统计分析中类似于 Excel 表格的数据最多，所以数据框（data.frame）在 R 中使用十分频繁。
 
-数据框底层实现为列表，列表中的元素是向量，这些向量构成数据框的列，不过每一列必须具有相同的长度，而且列必须命令。
+数据框底层实现为列表，列表中的元素是向量，这些向量构成数据框的列，每一列长度必须相同，且类型一致。
 
 可以将数据框看作包含多种类型数据的矩阵。其特征有：
 
@@ -31,6 +32,25 @@
 - 每一列的数据类型必须相同
 
 ## 创建数据框
+
+```r
+data.frame(…, row.names = NULL, check.rows = FALSE,
+           check.names = TRUE, fix.empty.names = TRUE,
+           stringsAsFactors = default.stringsAsFactors())
+default.stringsAsFactors()
+```
+
+**参数：**
+
+- `row.names`，行名，可以设置为单个数字、字符串或字符串和数字的向量；
+- `check.rows`，检测行的名称和长度是否一致；
+- `check.names`，检查数据框中的变量名是否合规；
+- `fix.empty.names`，是否为未命名参数自动命名；
+- `stringsAsFactors`，字符串是否转换为因子。
+
+**函数：**
+
+- `summary()` 显示数据框的概要信息。
 
 用 `data.frame` 函数，例如：
 
@@ -294,6 +314,10 @@ Dog   Dog  40    160      M
 2 Lucy  35
 3  Dog  40
 ```
+
+## 插入列
+
+
 
 ## 增强型数据框 tibble
 

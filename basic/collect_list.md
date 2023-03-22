@@ -8,13 +8,14 @@
   - [NULL 值](#null-值)
   - [列表类型转换](#列表类型转换)
   - [strsplit](#strsplit)
+  - [参考](#参考)
 
 2020-06-15, 20:47
 *** *
 
 ## 简介
 
-列表，可以包含不同类型的数据，如vector, function 甚至其他的 list。
+列表，可以包含**不同类型**的数据，如vector, function 甚至其他的 list。
 
 列表的一个主要功能是提供 R 分析结果。如结果包含回归系统、预测值、残差、检验结果等一系列不能放到规则形状数据结构中的内容。
 
@@ -23,6 +24,62 @@
 列表可以包含多个元素，而且不要求类型相同。
 
 ## 创建 List
+
+```r
+list(…)
+pairlist(…)
+as.list(x, …)
+# S3 method for environment
+as.list(x, all.names = FALSE, sorted = FALSE, …)
+as.pairlist(x)
+
+is.list(x)
+is.pairlist(x)
+
+alist(…)
+```
+
+使用 `list()` 创建列表，可以使用 `names()` 给列表中元素命名。
+
+列表中元素可以使用索引访问，也可以使用 `names()` 命名的名字进行访问。使用 `unlist()` 将列表转换为向量。
+
+```r
+> list_data <- list(c('Google', "Baidu", "Taobao"), matrix(c(1, 2, 3, 4, 5, 6), nrow = 2), list('baidu', 12.3))
+# 为元素是何止名称
+> names(list_data) <- c("Sites", "Numbers", "Lists")
+> print(list_data)
+$Sites
+[1] "Google" "Baidu"  "Taobao"
+
+$Numbers
+     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6
+
+$Lists
+$Lists[[1]]
+[1] "baidu"
+
+$Lists[[2]]
+[1] 12.3
+# 添加元素
+> list_data[4] <- "new"
+# 删除元素
+> list_data[4] <- NULL
+# 更新元素
+> list_data[3] <- "update"
+> list_data
+$Sites
+[1] "Google" "Baidu"  "Taobao"
+
+$Numbers
+     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6
+
+$Lists
+[1] "update"
+```
 
 ```r
 > j <- list(name="Joe", salary=5500,  union=T)
@@ -257,3 +314,7 @@ NULL
 [2,]    8    3    7
 [3,]    6    1    9
 ```
+
+## 参考
+
+- https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/list
