@@ -2,6 +2,8 @@
 
 - [概率分布](#概率分布)
   - [简介](#简介)
+  - [应用](#应用)
+  - [t 分布](#t-分布)
   - [正态分布](#正态分布)
     - [随机数](#随机数)
 
@@ -12,20 +14,26 @@
 
 R 中内置了许多生成随机数的函数。对应不同的分布。
 
-|分布|表示|随机数生成函数|
-|---|---|---|
-|Uniform|$U(a,b)$|`runif`|
-|Normal|$N(\mu,\sigma)$|`rnorm`|
-|Binormal|$Bin(n,p)$|`rbinorm`|
-|Piosson|$pois(\lambda)$|`rpois`|
-|Beta|$Beta(\alpha,\beta)$|`rbeta`|
+R 中统计函数名称由前缀和后缀组成：
 
-R 中与 xxx 分布有关的函数一般有4个：
+- 前缀
+  - d 表示分布密度函数（PDF）或概率函数（PMF）
+  - p 表示累计分布函数（CDF）$F(q)=P(x\le q)$
+  - q 表示分位数
+  - r 表示随机
+- 后缀标识分布类型
 
-- dxxx(x), xxx 分布的分布密度函数（PDF）或概率函数（PMF） $p(x)$。
-- pxxx(q), xxx 分布的分布函数（CDF）$F(q)=P(x\le q)$。
-- qxxx(p)，xxx 分布的分位数函数 $q(p), p \isin (0,1)$，对连续型分布，$q(p)=F^{-1}(p)$，即 $F(x)=p$ 的解 x。
-- rxxx(n)，xxx 的随机数函数，可以生成 n 个 xxx 的随机数。
+| 分布 | 缩写 | 参数 | 函数 |
+|--|--|--|--|
+| 正态分布 | norm | mean, sd | dnorm, pnorm, qnorm, rnorm |
+| 二项分布 | binom | size, prob | dbinom, pbinom, qbinom, rbinom |
+| 泊松分布 | pois | lambda | dpois, ppois, qpois, rpois |
+| 超几何分布 | hyper | m, n, k | dhyper, phyper, qhyper, rhyper |
+| 卡方分布 | chisq | df, ncp | dchisq, pchisq, qchisq, rchisq |
+| t 分布 | r | df,ncp | dt, pt, qt, rt |
+| F 分布 | f | df1, ncp | df, pf, qf, rf |
+| 负二项分布 | nbinom | size, prob | dnbinom, pnbinom, qnbinom, rnbinom |
+| 指数分布 | exp | rate | dexp, pexp, qexp, rexp |
 
 dxxx(x) 函数加选项 `log=TRUE`，用来计算 $log p(x)$，比使用 `log(dxxx(x))` 更精确。
 
@@ -59,6 +67,16 @@ qxxx(p) 加选项 `lower.tail=TRUE`，表示计算 $P(X > x)=p$ 的解x；加选
   - 逻辑斯谛分布，dlogis
 
 更多分布可以参考 R 网站 [https://cran.r-project.org/web/views/Distributions.html](https://cran.r-project.org/web/views/Distributions.html)。
+
+## 应用
+
+生活中许多连续型随机变量服从正态分布，如人体身高、作物产量等。
+
+离散型随机变量满足二项分布、泊松分布等，如基于 RNA-seq 得到的基因表达丰富计数值就可用泊松分布来近似，而在做基因表达差异分析时，多采用负二项分布模型进行分析。
+
+## t 分布
+
+
 
 ## 正态分布
 
