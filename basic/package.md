@@ -121,11 +121,11 @@ update.packages(ask = FALSE)
 
 ## GitHub 和 BioConductor
 
-有一些扩展包没有在CRAN系统提供，而是放在了Github网站。对于这样的包， 安装方法如下：
+有一些扩展包没有在CRAN系统提供，而是放在 Github。对于这样的包， 安装方法如下：
 
 ```r
 if(!require(devtools)) install.packages('devtools')
-devtools::install_github("kjhealy/socviz")
+	devtools::install_github("kjhealy/socviz")
 ```
 
 其中 kjhealy 是 Github 网站的某个作者的名称， socviz 是该作者名下的一个R扩展包。

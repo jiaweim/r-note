@@ -337,40 +337,6 @@ library(haven)
 d <- read_excel("./data/cfps2010.dta")
 ```
 
-### read.table
-
-```r
-read.table(file, header = FALSE, sep = "", quote = "\"'",
-           dec = ".", numerals = c("allow.loss", "warn.loss", "no.loss"),
-           row.names, col.names, as.is = !stringsAsFactors,
-           na.strings = "NA", colClasses = NA, nrows = -1,
-           skip = 0, check.names = TRUE, fill = !blank.lines.skip,
-           strip.white = FALSE, blank.lines.skip = TRUE,
-           comment.char = "#",
-           allowEscapes = FALSE, flush = FALSE,
-           stringsAsFactors = default.stringsAsFactors(),
-           fileEncoding = "", encoding = "unknown", text, skipNul = FALSE)
-```
-
-1. file
-
-
-- **header**
-
-文件第一行是否为标题。
-
-- **na.strings**
-
-字符串向量，用于指定设置为 `NA` 的所有字符串。在 logical, integer, numeric 以及 complex 字段中的空白字符也被解释为缺失值。
-
-另外，在测试时会提前取出字符串前后的空格，所以在指定 `na.strings` 也应该去除前后空格。例如，将 '?' 指定为缺失值：
-
-```r
-read.table ("Auto.data", header =T,na.strings ="?")
-```
-
-
-
 ## 读取带分隔符的文本文件
 
 语法：

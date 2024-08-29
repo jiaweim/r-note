@@ -1,0 +1,206 @@
+---
+title: "linmod"
+author: "Jiawei Mao"
+date: "2024-06-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## t-test
+
+```{r}
+library(rWSBIM2122)
+data(gexp)
+gexp
+```
+
+```{r}
+t.test(expression ~ group, data = gexp)
+```
+
+```{r}
+library("ggplot2")
+p <- ggplot(gexp, aes(x = group, y = expression)) +
+  geom_boxplot() + geom_jitter()
+p
+```
+
+```{r}
+mod1 <- lm(expression ~ group, data = gexp)
+mod1
+```
+
+```{r}
+p + geom_point(
+  data = data.frame(x = c(1, 2), y = c(2.75, 4.33)),
+  aes(x = x, y = y),
+  colour = "red",
+  size = 5
+) + geom_abline(intercept = coefficients(mod1)[1] - coefficients(mod1)[2],
+              slope = coefficients(mod1)[2])
+```
+
+```{r}
+summary(mod1)
+```
+
+```{r}
+t.test(expression ~ group, data = gexp, var.equal = TRUE)
+```
+
+```{r}
+mod2 <- t.test(gexp[1:10, 1], gexp[11:20, 1], paired = TRUE)
+```
+
+```{r}
+gexp2 <- dplyr::full_join(gexp[1:10, ], gexp[11:20, ], 
+                          by = "ID", suffix = c("_1", "_2"))
+ggplot(gexp, aes(x = group, y = expression)) +
+    geom_boxplot() +
+    geom_point(aes(colour = ID), size = 4) +
+    geom_segment(data = gexp2,
+                 aes(x = group_1, xend = group_2,
+                     y = expression_1, yend = expression_2,
+                     colour = ID))
+```
+
+```{r}
+mod2 <- lm(expression ~ group + ID, data = gexp)
+mod2
+```
+
+```{r}
+avg_id <- (gexp2$expression_1 + gexp2$expression_2) / 2
+coefs_id <- avg_id[-1] - avg_id[1]
+names(coefs_id) <- paste0("ID", 2:10)
+coefs_id
+```
+
+```{r}
+summary(mod2)
+```
+
+```{r}
+data("lmdata", package = "rWSBIM2122")
+lmdata
+```
+
+```{r}
+lmannot
+```
+
+```{r}
+library("tidyverse")
+## Prepare the data
+x <-
+  data.frame(lmdata) %>%
+  rownames_to_column() %>%
+  pivot_longer(names_to = "sample", values_to = "expression", -rowname) %>%
+  full_join(lmannot) %>%
+  mutate(sample = sub("sample_", "", sample))
+```
+
+```{r}
+x_i <- filter(x, rowname == "gene_1")
+x_i
+```
+
+```{r}
+mod_i <- lm(expression ~ condition * cell_type, data = x_i)
+summary(mod_i)
+```
+
+```{r}
+ggplot(x_i,
+       aes(
+         x = sample,
+         y = expression,
+         colour = condition,
+         shape = cell_type
+       )) +
+  geom_point()
+```
+
+```{r}
+x_i <- filter(x, rowname == "gene_2")
+x_i
+```
+
+```{r}
+mod_i <- lm(expression ~ condition * cell_type, data = x_i)
+summary(mod_i)
+```
+
+```{r}
+ggplot(x_i, aes(x = sample, y = expression, colour = cell_type)) +
+  geom_point() +
+  facet_wrap( ~ condition)
+```
+
+```{r}
+x_i <- filter(x, rowname == "gene_3")
+x_i
+```
+
+```{r}
+mod_i <- lm(expression ~ condition * cell_type, data = x_i)
+summary(mod_i)
+```
+
+```{r}
+ggplot(x_i, aes(x = sample, y = expression, colour = condition)) +
+    geom_point() +
+    facet_wrap(~ cell_type)
+```
+
+```{r}
+x_i <- filter(x, rowname == "gene_4")
+x_i
+```
+
+```{r}
+mod_i <- lm(expression ~ condition * cell_type, data = x_i)
+summary(mod_i)
+```
+
+```{r}
+ggplot(x_i, aes(x = sample, y = expression,
+                colour = condition,
+                shape = cell_type)) +
+    geom_point()
+```
+
+```{r}
+x_i <- filter(x, rowname == "gene_5")
+x_i
+```
+
+```{r}
+mod_i <- lm(expression ~ condition * cell_type, data = x_i)
+summary(mod_i)
+```
+
+```{r}
+group_by(x_i, cell_type, condition) %>% summarise(mean = mean(expression))
+```
+
+```{r}
+ggplot(x_i, aes(x = sample, y = expression,
+                colour = condition,
+                shape = cell_type)) +
+    geom_point() +
+    facet_grid(cell_type ~ condition)
+```
+
+```{r}
+x_i <- filter(x, rowname == "gene_3")
+summary(lm(expression ~ condition + cell_type, data = x_i))
+```
+
+```{r}
+x_i <- filter(x, rowname == "gene_5")
+summary(lm(expression ~ condition + cell_type, data = x_i))
+```

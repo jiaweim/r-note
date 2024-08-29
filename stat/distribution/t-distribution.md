@@ -32,7 +32,7 @@ $$S^2=\frac{1}{N-1}\sum_{i=1}^N (x_i-\overline{x})^2$$
 
 t 分布通常用 $t_k$ 表示，其中 k 表示自由度。
 
-![](images/2023-03-23-15-52-39.png)
+<img src="images/2023-03-23-15-52-39.png" style="zoom:50%;" />
 
 当自由度 $\nu \rightarrow +\infty$，对应正态分布。
 
