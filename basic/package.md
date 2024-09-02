@@ -25,8 +25,8 @@
 | `update.packages()` | 更新已安装的包 |
 | `library("lib name")` | 载入包 |
 | `library()` | 不带参数，查看已安装的 R 包 |
-| search() | 编译环境下已载入的包 |
-| help(package="package_name") | 输出某个包的简短描述，以及包中的函数名称和数据集名称的列表 |
+| `search()` | 编译环境下已载入的包 |
+| `help(package="package_name")` | 输出某个包的简短描述，以及包中的函数名称和数据集名称的列表 |
 
 ## 简介
 
