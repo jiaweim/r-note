@@ -19,6 +19,10 @@ renv，用于 R 项目的环境管理：
 install.packages("renv")
 ```
 
+## 使用
+
+- [renv 快速入门](./renv_intro.md)
+
 ## Workflow
 
 <img src="./images/renv.png" style="zoom:67%;" />

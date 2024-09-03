@@ -35,6 +35,7 @@
 - [R Packages](https://r-pkgs.org/)
 - [Modern Statistics for Modern Biology](https://www.huber.embl.de/msmb/index.html)
 - [R 中文文档](https://github.com/dingguohui)
+- [Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
 
 ### 可视化
 
@@ -49,7 +50,10 @@
 R 的统计功能在生物学中的应用。
 
 - [R for Data Science](https://r4ds.had.co.nz/)
+- [R for Data Science, 2ed](https://r4ds.hadley.nz/)
 - [x] [R language for programmers](https://www.johndcook.com/blog/r_language_for_programmers/)
 - [R 语言教程](http://www.math.pku.edu.cn/teachers/lidf/docs/Rbook/html/_Rbook/index.html)
 - [GitHub 整合资源](https://github.com/ujjwalkarn/DataScienceR)
-- [数据科学中的 R 语言](https://bookdown.org/wangminjie/R4DS/intro-R.html)
+- [数据科学中的 R 语言](https://bookdown.org/wangminjie/R4DS/)
+- [Studio Education](https://education.rstudio.com/learn/beginner/)
+
