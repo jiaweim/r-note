@@ -1,6 +1,20 @@
 # 常用命令
 
-# 库和包
+## 通用
+
+- 查看工作目录
+
+```R
+getwd()
+```
+
+- 修改工作目录
+
+Session > Set Working Directory > Choose Directory
+
+
+
+## 库和包
 
 - 查看当前库所在位置
 

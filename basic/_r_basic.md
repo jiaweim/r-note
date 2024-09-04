@@ -18,3 +18,4 @@
 - [函数](./function.md)
 - [内置函数](builtin_function.md)
   - [数学函数](func_math.md)
+- [IO](./io.md)

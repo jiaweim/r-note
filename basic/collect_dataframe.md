@@ -1,30 +1,13 @@
 # DataFrame
 
-- [DataFrame](#dataframe)
-  - [简介](#简介)
-  - [创建数据框](#创建数据框)
-  - [数据框属性](#数据框属性)
-    - [列名](#列名)
-    - [行名](#行名)
-  - [数据框内容访问](#数据框内容访问)
-    - [访问单个元素](#访问单个元素)
-    - [访问列](#访问列)
-    - [访问行](#访问行)
-    - [范围选择](#范围选择)
-  - [插入列](#插入列)
-  - [增强型数据框 tibble](#增强型数据框-tibble)
-    - [CSV 格式字符串](#csv-格式字符串)
-
 2020-08-29, 21:00
 ***
 
 ## 简介
 
-数据框是矩形结构，包含行和列。统计分析中类似于 Excel 表格的数据最多，所以数据框（data.frame）在 R 中使用十分频繁。
+data.frame 是矩形结构，包含行和列，可以看作 list 的二维版本。统计分析中类似于 Excel 表格的数据最多，所以 data.frame 在 R 中使用十分频繁。
 
-数据框底层实现为列表，列表中的元素是向量，这些向量构成数据框的列，每一列长度必须相同，且类型一致。
-
-可以将数据框看作包含多种类型数据的矩阵。其特征有：
+data.frame 底层实现为列表，列表中的元素是向量，这些向量构成 data.frame 的 column，每个 column 的长度必须相同，且类型一致。其特征有：
 
 - column 名不能为空
 - row names 必须唯一
@@ -52,7 +35,7 @@ default.stringsAsFactors()
 
 - `summary()` 显示数据框的概要信息。
 
-用 `data.frame` 函数，例如：
+用 `data.frame()` 函数创建数据库，接受任意数目向量为参数。例如：
 
 ```r
 > d <- data.frame(
@@ -77,6 +60,29 @@ default.stringsAsFactors()
 - 如果 x 为向量，则 x 称为数据库唯一一列内容；
 - 如果 x 为列表，且列表元素是长度相同的向量，则每个向量对应一列；
 - 如果 x 为矩阵，则矩阵的列转换为数据框的列
+
+如果查看 data-frame 类型，你会发现是 list：
+
+```R
+> df <- data.frame(face = c("ace", "two", "six"),
++                  suit = c("clubs", "clubs", "clubs"), value = c(1, 2, 3))
+> df
+  face  suit value
+1  ace clubs     1
+2  two clubs     2
+3  six clubs     3
+> typeof(df)
+[1] "list"
+> class(df)
+[1] "data.frame"
+> str(df)
+'data.frame':	3 obs. of  3 variables:
+ $ face : chr  "ace" "two" "six"
+ $ suit : chr  "clubs" "clubs" "clubs"
+ $ value: num  1 2 3
+```
+
+事实上，data-frame 就是包含 `data.frame` class 属性的 list。使用 `str` 函数可以查看 list (或 data-frame) 包含哪些类型的对象。
 
 ## 数据框属性
 

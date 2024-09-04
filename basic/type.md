@@ -1,21 +1,7 @@
 # R 数据类型
 
-- [R 数据类型](#r-数据类型)
-  - [存储模式与基本类型](#存储模式与基本类型)
-    - [判断类型](#判断类型)
-    - [缺失值](#缺失值)
-  - [逻辑类型](#逻辑类型)
-  - [NULL](#null)
-  - [类型转换与升档](#类型转换与升档)
-  - [属性](#属性)
-    - [attributes 函数](#attributes-函数)
-    - [attr 函数](#attr-函数)
-    - [names 属性](#names-属性)
-    - [dim 属性](#dim-属性)
-  - [类属](#类属)
-  - [str() 函数](#str-函数)
-
-2020-07-04, 16:10
+2024-09-04 ⭐
+@author Jiawei Mao
 ***
 
 ## 存储模式与基本类型
@@ -124,7 +110,7 @@ R有一个特殊的 `NULL` 类型， 这个类型只有唯一的一个NULL值，
 
 ## 类型转换与升档
 
-可以用 `as.xxx()` 类的函数在不同类型之间进行强制转换。
+使用 `as.xxx()` 函数在不同类型之间进行强制转换。
 
 - `as.numeric()` 把内容是数字的字符串转换为数值。
 - `as.character()` 把数值型转换为字符串，如果变量本来就是数值，则结果不变。
@@ -132,12 +118,12 @@ R有一个特殊的 `NULL` 类型， 这个类型只有唯一的一个NULL值，
 如：
 
 ```r
-> as.numeric("12")
-[1] 12
-> as.numeric(c(FALSE, TRUE))
-[1] 0 1
-> as.character(sqrt(1:4))
-[1] "1"  "1.4142135623731"  "1.73205080756888" "2"
+> as.character(1)
+[1] "1"
+> as.logical(1)
+[1] TRUE
+> as.numeric(FALSE)
+[1] 0
 ```
 
 类型转换也可能是隐式的，比如，四则运算中数值会被统一转换为 `double` 类型，逻辑运算中运算元素会被统一转换为 `logical` 类型。
@@ -146,8 +132,9 @@ R有一个特殊的 `NULL` 类型， 这个类型只有唯一的一个NULL值，
 
 在用 `c()` 函数合并若干元素时，如果元素基本类型不同， 将统一转换成最复杂的一个，复杂程度从简单到复杂依次为：
 
-$$logical<integer<double<character$$
-
+$$
+logical<integer<double<character
+$$
 这种做法称为**类型提升**，例如：
 
 ```r
@@ -164,13 +151,42 @@ $$logical<integer<double<character$$
 [1] "abc 1"
 ```
 
+使用逻辑值进行数学运算时，R 使用相同的类型提升：
+
+```R
+> sum(c(TRUE, TRUE, FALSE, FALSE))
+[1] 2
+```
+
+等价于：
+
+```R
+> sum(c(1, 1, 0, 0))
+[1] 2
+```
+
 ## 属性
+
+属性是可以附加到任何 R 对象的一段信息。
 
 除了 `NULL` 以外， R的变量都可以看成是对象，都可以有属性。在R语言中，属性是把变量看成对象后，除了其存储内容（如元素）之外的其它附加信息， 如维数、类属等。 R对象一般都有 `length` 和 `mode` 两个属性。
 
+向量最常见的属性包括 name, dimension 和 class。这三个属性都有对应的辅助函数，使用对应函数可以设置或查看属性。
+
 ### attributes 函数
 
-对象x的所有属性可以用 `attributes()` 读取，如
+使用 `attributes` 函数查看对象属性。
+
+- 没有属性返回 NULL
+
+```R
+> die
+[1] 1 2 3 4 5 6
+> attributes(die)
+NULL
+```
+
+例如：
 
 ```r
 > x <- table(c(1, 2, 1, 3, 2, 1))
@@ -234,46 +250,116 @@ attr(,"theta")
 
 ### names 属性
 
-有元素名的向量、列表、数据框等都有 `names` 属性，许多R函数的输出本质上也是列表，所以也有 `names` 属性。 用 `names(x)` 读取或设定。 如：
+有名称的向量、列表、数据框等都有 `names` 属性，许多 R 函数的输出本质上也是列表，所以也有 `names` 属性。 用 `names(x)` 读取或设定 names 属性。例如：
 
-```r
-> x <- 1:5
-> y <- x^2
-> lmr <- lm(y ~ x)
-> names(lmr)
- [1] "coefficients"  "residuals"     "effects"       "rank"          "fitted.values"
- [6] "assign"        "qr"            "df.residual"   "xlevels"       "call"
-[11] "terms"         "model"
+```R
+> die <- c(1,2,3,4,5,6)
+> names(die)
+NULL
 ```
 
-对于没有元素名的向量x，`names(x)` 返回 `NULL`。
+`NULL` 表示 `die` 没有 names 属性。
+
+- 可以用 `names` 函数设置属性：
+
+```R
+> names(die) <- c("one", "two", "three", "four", "five", "six")
+> names(die)
+[1] "one"   "two"   "three" "four"  "five"  "six"  
+> attributes(die)
+$names
+[1] "one"   "two"   "three" "four"  "five"  "six"  
+
+> die
+  one   two three  four  five   six 
+    1     2     3     4     5     6 
+```
+
+查看向量时，R 会在元素上方显示名称。
+
+- 但是，names 属性不影响向量值，对向量值进行操作也不影响 names 属性。例如：
+
+```R
+> die + 1
+  one   two three  four  five   six 
+    2     3     4     5     6     7 
+```
+
+- 用 `names` 修改 names 属性
+
+```R
+> names(die) <- c("uno", "dos", "tres", "quatro", "cinco", "seis")
+> die
+   uno    dos   tres quatro  cinco   seis 
+     1      2      3      4      5      6 
+```
+
+- 用 `names` 删除 names 属性
+
+```R
+> names(die) <- NULL
+> die
+[1] 1 2 3 4 5 6
+```
 
 ### dim 属性
 
-`dim` 属性的存在表明对象是矩阵、一维或多维数组。 如
+`dim` 属性设置向量维度。例如：
 
-```r
-> x <- matrix(1:12, nrow=3, ncol=4)
-> attr(x, "dim") # 等同于dim(x)
-[1] 3 4
+```R
+> die <- c(1,2,3,4,5,6)
+> die
+[1] 1 2 3 4 5 6
+> dim(die) <- c(2,3)
+> die
+     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6
 ```
 
-修改 `dim` 属性可以将向量转换成矩阵（数组），或修改了矩阵的性质， 元素按列次序重排填入新的矩阵。如：
+或者将 `dim` 设置为 3 行 2 列：
 
-```r
-> x <- 1:4
-> dim(x) <- c(2, 2)
-> x
+```R
+> dim(die) <- c(3,2)
+> die
      [,1] [,2]
-[1,]    1    3
-[2,]    2    4
+[1,]    1    4
+[2,]    2    5
+[3,]    3    6
 ```
+
+设置可以设置为 (1, 2, 3)，表示 1 行 2 列 3 个 slice。只要乘积和元素总数一致就行：
+
+```R
+> dim(die) <- c(1, 2, 3)
+> die
+, , 1
+
+     [,1] [,2]
+[1,]    1    2
+
+, , 2
+
+     [,1] [,2]
+[1,]    3    4
+
+, , 3
+
+     [,1] [,2]
+[1,]    5    6
+```
+
+> [!NOTE]
+>
+> R 将 `dim` 的第一个值作为 row 数，第二个值作为 column 数。
+>
+> R 总是按 column 填充。如果需要更好的控制填充方式，可以采用 matrix 或 array 函数。
 
 R允许 `dim` 仅有一个元素，对应一维向量，这与没有 `dim` 属性的向量还是有区别。 另外要注意，取矩阵子集时如果结果仅有一列或一行， 除非用了 `drop=FALSE` 选项，结果不再有 `dim` 属性，退化成了普通向量。
 
-## 类属
+## class 属性
 
-R 具有一定的面向对象语言特征，其数据类型有一个 `class` 属性， 函数`class()` 可以返回变量类型的类属， 比如
+R 具有一定的面向对象语言特征，其数据类型有一个 `class` 属性， 函数`class()` 可以返回变量类型的类属性， 比如
 
 ```r
 > typeof(factor(c('F', 'M', 'M', 'F')))
@@ -289,6 +375,96 @@ R 具有一定的面向对象语言特征，其数据类型有一个 `class` 属
 ```
 
 如果一个对象具有 `class` 属性，则一些通用函数会针对这类对象进行专门操作，比如 `print()` 函数在显示向量和回归结果时采用完全不同的格式。在其它程序设计语言中称为重载。
+
+使用 `dim` 修改 dim 属性不会改变对象类型，但是会改变 `class` 属性。例如：
+
+```R
+> die <- c(1,2,3,4,5,6)
+> die
+[1] 1 2 3 4 5 6
+> typeof(die)
+[1] "double"
+> class(die)
+[1] "numeric"
+
+> dim(die) <- c(2,3)
+> typeof(die)
+[1] "double"
+> class(die)
+[1] "matrix" "array" 
+```
+
+`class` 属性描述 `die` 的格式。许多 R 函数会根据对象的 `class` 属性处理数据。
+
+`attributes` 有时候不显示 `class` 属性，此时要用 `class()` 来显式查询：
+
+```R
+> attributes(die)
+$dim
+[1] 2 3
+
+> class(die)
+[1] "matrix" "array" 
+```
+
+对没有 `class` 属性的对象，`class()` 返回对象的原子类型。
+
+```R
+> class("Hello")
+[1] "character"
+> class(5)
+[1] "numeric"
+```
+
+> [!NOTE]
+>
+> double 的 `class` 属性为 "numeric"。
+
+### Date Time
+
+R 的属性系统使 R 能表示更多的数据类型。例如，R 使用一个特殊的类表示日期和时间。例如：
+
+```R
+> now <- Sys.time()
+> now
+[1] "2024-09-04 13:59:42 CST"
+> typeof(now)
+[1] "double"
+> class(now)
+[1] "POSIXct" "POSIXt" 
+```
+
+`Sys.time()` 返回计算机的当前时间。显示看起来像一个字符串，但它的数据类型实际上是 `double`，其 class 为 `POSIXct` 和 `POSIXt`。
+
+POSIXct 是一个广泛使用的表示日期和时间的框架，每个时间都用从 1970年1月1日上午 12:00 开始的秒数来描述。例如，上例的时间发生在 1970年1月1日 12:00 后的 1725429582 秒，因此在 POSIXct 系统，该时间保存为 1725429582。
+
+R 通过一个 double 向量创建 time 对象，即 1725429582。用 `unclass` 函数移除 `now` 的 `class` 属性，就可以看到该 double 值：
+
+```R
+> unclass(now)
+[1] 1725429582
+```
+
+R 为该 double 向量添加两个 `class` 属性：POSIXct 和 POSIXt.
+
+这两属性告诉 R 函数它们在处理的是 POSIXct 时间，因此它们能以时间的方式处理它。例如，R 函数在显示时间前使用 POSIXct 标准将时间转换为用户友好的字符串。
+
+可以将 `POSIXct` class 属性赋予其它 R 对象。例如，你想知道 1970年1月1日12:00 1百万秒后是什么日子？
+
+```R
+> mil <- 1000000
+> mil
+[1] 1e+06
+> class(mil) <- c("POSIXct", "POSIXt")
+> mil
+[1] "1970-01-12 21:46:40 CST"
+```
+
+是 1970 年 1 月 12 日。
+
+这个转换很容易，`POSIXct` class 不依赖其它属性，但一般来说，强制使用对象的 class 属性不合适。
+
+R 中有许多不同的数据类，其中 factor 类在 R 中使用十分普遍，具体参考 [factor](./data_factor.md)。
 
 ## str() 函数
 
