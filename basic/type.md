@@ -407,7 +407,7 @@ $dim
 [1] "matrix" "array" 
 ```
 
-对没有 `class` 属性的对象，`class()` 返回对象的原子类型。
+对没有 `class` 属性的对象，`class()` 返回**对象的原子类型**。
 
 ```R
 > class("Hello")
