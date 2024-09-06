@@ -179,4 +179,21 @@ print(s)
 [1] "1989-01-19 +08"
 ```
 
-### while 循环和 repeat 循环
+### while 循环
+
+```R
+while(condition){
+    code
+}
+```
+
+## repeat 循环
+
+```R
+repeat{
+    code
+    break
+}
+```
+
+`repeat` 重复运行某段代码，直到遇到 break。
