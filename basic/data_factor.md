@@ -1,28 +1,21 @@
 # 因子类型
 
-- [因子类型](#因子类型)
-  - [简介](#简介)
-  - [创建factor](#创建factor)
-    - [类型转换](#类型转换)
-    - [levels](#levels)
-  - [factor 实例](#factor-实例)
-  - [table 函数](#table-函数)
-  - [tapply](#tapply)
-  - [Ordered factor](#ordered-factor)
-  - [forcats 包的因子函数](#forcats-包的因子函数)
-  - [gl](#gl)
-  - [参考](#参考)
-
 2020-06-10, 10:33
 ***
 
 ## 简介
 
-在 R 中，factor 是一种特殊的向量，用于指定其它相同长度向量元素的离散分类（分组），如性别、省份、职业。
+factor 用于存储分类信息，比如性别、种族、省份、职业等。
 
-R 提供了有序和无序因子，有序因子代表有序度量，如打分、疾病严重程度等。
+R 提供有序和无序 factor，有序因子代表有序量，如打分、疾病严重程度等。
 
-## 创建factor
+## 创建 factor
+
+使用 `factor()` 函数创建因子。R 会：
+
+- 记录数据，将其转换为整数，并存储为整数向量
+- 添加 `levels` 属性，为每个 factor 值添加一个标签
+- 添加 `class` 属性，为 `factor`
 
 ```r
 factor(x = character(), levels, labels = levels,
@@ -47,39 +40,45 @@ addNA(x, ifany = FALSE)
 - `ordered`，因子水平是否有序；
 - `nmax`，水平个数限制。
 
-用 `factor()` 函数把字符型向量转换为因子，如：
+例如：
 
-```r
-> f <- factor(c("a", "b", "c"))
-> f
-[1] a b c
-Levels: a b c
-> class(f)
-[1] "factor"
-```
-
-更复杂一点：
-
-```r
-> x <- c("Male", "Female", "Male", "Male", "Female")
-> sex <- factor(x)
-> sex
-[1] Male   Female Male   Male   Female
-Levels: Female Male
-> attributes(sex)
+```R
+> gender <- factor(c("male", "female", "female", "male"))
+> typeof(gender)
+[1] "integer"
+> attributes(gender)
 $levels
-[1] "Female" "Male"  
+[1] "female" "male"  
 
 $class
 [1] "factor"
-
-> levels(sex)
-[1] "Female" "Male"  
 ```
+
+使用 `unclass()` 属性可以查看 R 是如何存储 factor 的：
+
+```R
+> unclass(gender)
+[1] 2 1 1 2
+attr(,"levels")
+[1] "female" "male"
+```
+
+在显式 factor 时，R 用 `levels` 属性值。对每个 1，显示为 "female"，每个 2 显示为 "male"。
+
+```R
+> gender
+[1] male   female female male  
+Levels: female male
+```
+
+factor 使得将分类变量放入统计模型变得容易，因为这些变量已经被编码为数字。不过，因子让人困惑的地方在于，它看起来是字符串，但行为像整数。
+
+在加载和创建数据时，R 通常会尝试将字符串转换为因子。一般来说，禁止 R 自动转换为因子性能更好。
+
+
 
 可以看到
 
-- 因子的 class 属性为 `factor`。
 - `levels` 属性对应可选值，可以通过 `levels()` 函数访问。
 
 ### 类型转换
@@ -93,7 +92,7 @@ $class
 [1] 2 1 2 2 1
 ```
 
-因为因子实际保存为整数值，所以对因子进行字符型操作会导致错误。用 `as.character()` 可以把因子转换为原来的字符型，如：
+因为因子实际保存为整数值，所以对因子进行字符型操作会导致错误。用 `as.character()` 可以把因子转换为字符类型，如：
 
 ```r
 > as.character(sex)

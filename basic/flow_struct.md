@@ -46,6 +46,22 @@ if(condition1) exp1 else exp2
 
 > 和 java 结构一致
 
+如果 condition1 返回布尔向量，`if` 语句只使用该向量的第一个元素作为判断。
+
+多次判断：
+
+```R
+if (a > b) {
+  print("A wins!")
+} else if (a < b) {
+  print("B wins!")
+} else {
+  print("Tie.")
+}
+```
+
+
+
 ### 用逻辑下标代替分支结构
 
 R 是向量化语言，所以应尽可能少用标量运算。比如，x 是一个向量，要定义 y 域 x 等长，且 y 的每一个 元素当前仅当 x 对应元素为整数时等于 1，否则为 0.
@@ -163,4 +179,21 @@ print(s)
 [1] "1989-01-19 +08"
 ```
 
-### while 循环和 repeat 循环
+### while 循环
+
+```R
+while(condition){
+    code
+}
+```
+
+## repeat 循环
+
+```R
+repeat{
+    code
+    break
+}
+```
+
+`repeat` 重复运行某段代码，直到遇到 break。

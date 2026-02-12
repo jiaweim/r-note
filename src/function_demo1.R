@@ -19,8 +19,6 @@ b <- function (file, pvalue){
 
 data1 <- b("test.csv", 0.02)
 
-
-
 a <- function(a, b) {
   a + b
 }

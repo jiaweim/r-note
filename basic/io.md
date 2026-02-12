@@ -1,21 +1,353 @@
 # R IO
 
-- [R IO](#r-io)
-  - [控制台 IO](#控制台-io)
-    - [scan](#scan)
-    - [print](#print)
-    - [cat](#cat)
-    - [sink](#sink)
-    - [save](#save)
-  - [键盘输入](#键盘输入)
-  - [文件读写](#文件读写)
-    - [常见格式](#常见格式)
-    - [read.table](#readtable)
-  - [读取带分隔符的文本文件](#读取带分隔符的文本文件)
-  - [xlsx](#xlsx)
+2024-09-04 ⭐
+@author Jiawei Mao
+***
 
-2020-05-14, 10:58
-*** *
+## base R 数据集
+
+R 在 `datasets` 包中自带了许多数据集。查看数据集列表：
+
+```R
+help(package = "datasets")
+```
+
+要使用这些数据集，只需键入名称。每个数据集已经保存为一个 R 对象。例如：
+
+```R
+> iris
+    Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+1            5.1         3.5          1.4         0.2     setosa
+2            4.9         3.0          1.4         0.2     setosa
+3            4.7         3.2          1.3         0.2     setosa
+4            4.6         3.1          1.5         0.2     setosa
+5            5.0         3.6          1.4         0.2     setosa
+6            5.4         3.9          1.7         0.4     setosa
+7            4.6         3.4          1.4         0.3     setosa
+8            5.0         3.4          1.5         0.2     setosa
+9            4.4         2.9          1.4         0.2     setosa
+...
+```
+
+## 工作目录
+
+每次打开 R，它都会链接到计算机上的一个目录，R 称之为**工作目录**。
+
+当你加载文件时，R 会在这里查找文件；当你保存文件，R 也会保存到这里。查看工作目录：
+
+```R
+> getwd()
+[1] "D:/repo/rstudio_demo/hello_world"
+```
+
+可以直接将数据放到工作目录，也可以将工作目录设置到数据所在为止。使用 `setwd()` 设置工作目录。推荐将工作目录设置为正在处理的项目的文件夹，这样所有数据、脚本和图标都保存在同一个地方。例如：
+
+```R
+> setwd("D:/data/project1")
+> getwd()
+[1] "D:/data/project1"
+```
+
+如果文件不在工作目录的根目录，R 假设其路径从当前工作目录开始。
+
+在 RStudio 中，可以通过 Session > Set Working Directory > Choose Directory 来设置工作目录。
+
+查看工作目录文件：
+
+```R
+> list.files()
+[1] "abalone.csv"       "cards.csv"         "deck.csv"         
+[4] "hello_world.Rproj" "poker.R"           "qplot_demo.R"     
+[7] "renv"              "renv.lock"         "s1.R"  
+```
+
+## 纯文本文件
+
+### read.table
+
+```R
+read.table(file, header = FALSE, sep = "", quote = "\"'",
+           dec = ".", numerals = c("allow.loss", "warn.loss", "no.loss"),
+           row.names, col.names, as.is = !stringsAsFactors, tryLogical = TRUE,
+           na.strings = "NA", colClasses = NA, nrows = -1,
+           skip = 0, check.names = TRUE, fill = !blank.lines.skip,
+           strip.white = FALSE, blank.lines.skip = TRUE,
+           comment.char = "#",
+           allowEscapes = FALSE, flush = FALSE,
+           stringsAsFactors = FALSE,
+           fileEncoding = "", encoding = "unknown", text, skipNul = FALSE)
+
+read.csv(file, header = TRUE, sep = ",", quote = "\"",
+         dec = ".", fill = TRUE, comment.char = "", ...)
+
+read.csv2(file, header = TRUE, sep = ";", quote = "\"",
+          dec = ",", fill = TRUE, comment.char = "", ...)
+
+read.delim(file, header = TRUE, sep = "\t", quote = "\"",
+           dec = ".", fill = TRUE, comment.char = "", ...)
+
+read.delim2(file, header = TRUE, sep = "\t", quote = "\"",
+            dec = ",", fill = TRUE, comment.char = "", ...)
+```
+
+使用 `read.table()` 读取纯文本文件，第一个参数为文件名。`read.table()`有很多参数：
+
+- `sep`
+
+数据分隔符。默认为遇到的第一个空格，即空格, tab、换行符和回车。
+
+- `header`
+
+文件的第一行是否为标题。
+
+- `na.strings`
+
+表示缺失值的字符串。所以匹配该字符串的值，`read.table()` 将其转换为 NA。
+
+- `skip` 和 `nrow`
+
+有些纯文本文件开头包含一段介绍性文字，它们不属于数据集；或者你只想读取一部分数据。
+
+`skip` 表示开头跳过的行数；`nrow` 表示读取该行数后停止。
+
+例如，下面的数据，需要跳过前 3 行，然后读取剩下的 5 行：
+
+```
+This data was collected by the National Poker Institute.
+We accidentally repeated the last row of data.
+
+"card", "suit", "value"
+"ace", "spades", 14
+"king", "spades", 13
+"queen", "spades", 12
+"jack", "spades", 11
+"ten", "spades", 10
+"ten", "spades", 10
+```
+
+```R
+read.table("poker.csv", sep = ",", header = TRUE, skip = 3, nrow = 5)
+```
+
+标题行不包含在 `nrow` 中。
+
+- `stringsAsFactors`
+
+R 默认会将字符串转换为 factor，但这并不合理（R4.4 默认不转换为 factor）。因此建议保证 `stringsAsFactors = FALSE`：
+
+```R
+read.table("poker.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE)
+```
+
+也可以在全局改变默认行为：
+
+```R
+options(stringsAsFactors = FALSE)
+```
+
+这就确保所有字符串被读取为字符串，而不是 factor，直到你结束当前 R 会话，或者再次修改全局设置：
+
+```R
+options(stringsAsFactors = TRUE)
+```
+
+### read Family
+
+R 附带了特定设置的 `read.table` 快捷方式：
+
+| 函数          | 配置                              | 使用          |
+| ------------- | --------------------------------- | ------------- |
+| `read.table`  | `sep="", header=FALSE`            | 通用          |
+| `read.csv`    | `sep = ",", header=TRUE`          | csv 文件      |
+| `read.delim`  | `sep = "\t", header=TRUE`         | tab 文件      |
+| `read.csv2`   | `sep = ";", header=TRUE, dec=","` | 欧洲 csv 文件 |
+| `read.delim2` | `sep="\t", header=TRUE, dec=","`  | 欧洲 tab 文件 |
+
+> [!NOTE]
+>
+> 欧洲用逗号作为小数点，分号作为分隔符。
+
+### read.fwf
+
+有些文本文件不使用分隔符，而是采用固定宽度来分隔数据。这类文件称为固定宽度文件（fixed-width files），通常以 `.fwf` 结尾。
+
+fwf 文件不怎么好处理，R 提供了读取 fwf 文件的函数，但没提供保存为 fwf 文件的函数。
+
+`read.fwf()` 函数的参数与 `read.table` 类似，多了一个 `widths` 参数，定义每个数据开始的位置。示例：
+
+```R
+poker <- read.fwf("poker.fwf", widths = c(10, 7, 6), header = TRUE)
+```
+
+### HTML 链接
+
+`read.table()`, `read.csv()` 可以直接读取网络上的文件。将文件名替换为 web 地址即可：
+
+```R
+poker <- read.csv("http://.../poker.csv")
+```
+
+### 保存纯文本文件
+
+| 文件格式   | 函数和语法                                                   |
+| ---------- | ------------------------------------------------------------ |
+| csv        | ` write.csv(r_object, file = filepath, row.names = FALSE)`   |
+| csv (欧洲) | `write.csv2(r_object, file = filepath, row.names = FALSE)`   |
+| tab        | `write.table(r_object, file = filepath, sep = "\t", row.names=FALSE)` |
+
+这三个函数的第一个参数为包含数据集的 R 对象。`file` 是文件路径（包括扩展名）。
+
+默认将数据保存到当前工作目录。如果提供完整路径，则保存到对应为止。
+
+- 保存 poker 保存到工作目录的 `data` 子目录
+
+```R
+write.csv(poker, "data/poker.csv", row.names = FALSE)
+```
+
+> [!IMPORTANT]
+>
+> `write.csv()` 和 `write.table` 不能创建新目录，因为指定的文件路径，每个文件夹必须存在。 
+
+`row.names = FALSE` 参数是必然将 data-frame 的 row 名称保存为文件中的 column。R 会自动为 row 编号，作为每个 row 的名称。如果将其保存到文件，下次再次读取文件，这些编号成为新的 column，而 R 再次自动为 row 编号，导致前面两列都成了编号。
+
+### 压缩文件
+
+用函数 `bzfile()`, `gzfile()` 或 `xzfile()` 包围文件名或文件路径，即可压缩纯文本文件。例如：
+
+```R
+write.csv(poker, file = bzfile("data/poker.csv.bz2"), row.names = FALSE)
+```
+
+这三个函数对应的压缩类型：
+
+| 函数     | 压缩类型       |
+| -------- | -------------- |
+| `bzfile` | bzip2          |
+| `gzfile` | gnu zip (gzip) |
+| `xzfile` | xz             |
+
+最好调整文件扩展名以反应压缩类型。`read` 函数会自动读取压缩文件：
+
+```R
+read.csv("poker.csv.bz2")
+```
+
+## R 文件
+
+R 提供了两种用于存储数据的文件格式：.RDS 和 .RData。
+
+RDS 存储单个 R 对象，RData 可以存储多个 R 对象。
+
+使用 `readRDS()` 读取 RDS 文件：
+
+```R
+poker <- readRDS("poker.RDS")
+```
+
+RData 文件则使用 `load` 函数：
+
+```R
+load("file.RData")
+```
+
+对 RData，不需要分配对象，RData 中的对象将以其原始名称加载到 R 会话中。RData 可以包含多个 R 对象，因此加载一个对象可能会读取多个对象。`load()` 函数不会告诉你读了多少个对象，也不会告诉你各个对象的名称，因此在加载 RData 文件时，应该已经知道里面包含的内容。
+
+在 RStudio 的 environment 窗口可以查看 R 会话期间创建或加载的所有对象。
+
+还可以在加载 RData 时加上括号，即 `(load("poker.RData"))`，这会是的 R 打印从 RData 加载的每个对象的名称。
+
+`readRDS()` 和 `load()` 的第一个参数都是文件路径。
+
+### 保存 R 文件
+
+可以将 R 对象（如 data frame）保存为 RData 文件或 RDS 文件。RData 可以一次存储多个对象，但推荐使用 RDS，这样代码的可重现性更好。
+
+- 使用 `save()` 保存为 RData 文件
+- 使用 `saveRDS()` 保存为 RDS 文件
+
+两个函数的第一个参数均为 R 对象，第二个参数为文件路径。
+
+例如，假设有 `a`, `b`, `c` 三个 R 对象，可以将它们都保存到相同的 RData 文件，然后在另一个 R 会话中加载：
+
+```R
+a <- 1
+b <- 2
+c <- 3
+save(a, b, c, file = "stuff.RData")
+load("stuff.RData")
+```
+
+但是，如果你忘记对象名称，或者将文件交给其他人使用，就很难确定文件中包含哪些对象。
+
+RDS 文件相对清晰，每个文件只能保存一个对象，加载它的人可以决定如何命名该对象。也不需要担心加载的对象是否会与已有对象重名：
+
+```R
+saveRDS(a, file = "stuff.RDS")
+a <- readRDS("stuff.RDS")
+```
+
+将数据保存为 R 文件的主要优势：
+
+- R 会自动压缩文件
+- R 会保存对象相关的元数据
+
+如果你的数据包含因子、日期或 class 属性，这将非常便捷。
+
+另一方面，R 文件不能被其它程序读取，在共享方面效率低。
+
+## 加载数据 
+
+[deck.csv](https://gist.github.com/garrettgman/9629323) 是一个 CSV 文件。在 RStudio 中导入该文件：
+
+<img src="./images/image-20240904154759091.png" alt="image-20240904154759091" style="zoom: 50%;" />
+
+RStudio 会提示选择要导入的文件，然后打开一个向导辅助导入数据，如下图所示：：
+
+- Name，数据集名称
+- Separator，分隔符
+- Heading，是否包含标题行
+- Strings as factors，是否将字符串转换为 factor，建议不勾选
+- 右侧为预览
+
+<img src="./images/image-20240904154915246.png" alt="image-20240904154915246" style="zoom:50%;" />
+
+设置好后，点击 Import。RStudio 会读取文件，将数据保存为 data-frame，并同时打开一个 data-viewer 展示导入的数据。
+
+可以用 `head(deck)` 查看导入的数据：
+
+```R
+> head(deck)
+   face   suit value
+1  king spades    13
+2 queen spades    12
+3  jack spades    11
+4   ten spades    10
+5  nine spades     9
+6 eight spades     8
+```
+
+> [!NOTE]
+>
+> `head()` 和 `tail()` 是用来查看大型数据集的两个简便方法。
+>
+> `head()` 返回数据集的前 6 行，`tail()` 返回最后 6 行。
+>
+> 要查看不同的行数，可以提供第二个参数，例如 `head(deck, 10)` 查看前 10 行。
+
+## 保存数据
+
+使用 `write.csv()` 将数据保存为 csv 格式。例如，将上面的 deck 数据保存为 cards.csv 文件：
+
+```R
+write.csv(deck, file = "cards.csv", row.names = FALSE)
+```
+
+`write.csv()` 函数包含大量参数，其中有三个参数是必须的：
+
+- 要保存的 data-frame
+- 文件名
+- `row.names=FALSE`，这样可以避免 R 在 data-frame 的第一列添加数字编号。
 
 ## 控制台 IO
 
@@ -337,40 +669,6 @@ library(haven)
 d <- read_excel("./data/cfps2010.dta")
 ```
 
-### read.table
-
-```r
-read.table(file, header = FALSE, sep = "", quote = "\"'",
-           dec = ".", numerals = c("allow.loss", "warn.loss", "no.loss"),
-           row.names, col.names, as.is = !stringsAsFactors,
-           na.strings = "NA", colClasses = NA, nrows = -1,
-           skip = 0, check.names = TRUE, fill = !blank.lines.skip,
-           strip.white = FALSE, blank.lines.skip = TRUE,
-           comment.char = "#",
-           allowEscapes = FALSE, flush = FALSE,
-           stringsAsFactors = default.stringsAsFactors(),
-           fileEncoding = "", encoding = "unknown", text, skipNul = FALSE)
-```
-
-1. file
-
-
-- **header**
-
-文件第一行是否为标题。
-
-- **na.strings**
-
-字符串向量，用于指定设置为 `NA` 的所有字符串。在 logical, integer, numeric 以及 complex 字段中的空白字符也被解释为缺失值。
-
-另外，在测试时会提前取出字符串前后的空格，所以在指定 `na.strings` 也应该去除前后空格。例如，将 '?' 指定为缺失值：
-
-```r
-read.table ("Auto.data", header =T,na.strings ="?")
-```
-
-
-
 ## 读取带分隔符的文本文件
 
 语法：
@@ -416,6 +714,125 @@ a_table <- read.table("io/input.csv", header = TRUE, sep = ",")
 
 `read.csv` 对 `read.table`  进行了包装，从而更便于读取 CSV 文件。
 
+## Excel 文件
+
+### 从 Excel 导出
+
+将数据从 Excel 迁移到 R 的最佳方式是从 Excel 将数据导出为 .csv 或 .txt 文件。这样 R 或其它数据分析软件就能读取。文本文件是数据存储的通用格式。
+
+导出数据还解决了另一个问题。Excel 使用专有格式和元数据，直接转换为 R  不容易。例如，一个 Excel 文件可能包含多个表格，每个表格都有自己的列和宏。当 Excel 将其导出为 .csv 或 .txt 文件，Excel 会保证导出的正确性。而直接使用 R 可能无法保证转换的有效性。
+
+### 复制粘贴
+
+可以复制 Excel 表格的部分内容并粘贴到 R。从 Excel 复制数据后，使用 R 读取剪贴板：
+
+```R
+read.table("clipboard")
+```
+
+在 Mac 中：
+
+```R
+read.table(pipe("pbpaste"))
+```
+
+如果单元格包含带空格的值，`read.table()`  可能无法正确处理，此时可以采用其它 `read` 函数，或者直接从 Excel 导出 csv 文件。
+
+### XLConnect
+
+有许多包可以直接在 R 中读取 Excel 文件。可惜这些包大多无法跨平台工作，不过 `XLConnect` 包可以在所有文件系统工作。安装并加载：
+
+```R
+install.packages("XLConnect")
+library(XLConnect)
+```
+
+XLConnect 依赖于 Java 平台，所以在第一次打开 XLConnect 时，RStudio 会要求安装 JRE。
+
+### 读取 XLSX
+
+用 XLConnect 读取 XSLX 文件可以采用一步或两步法。两步法：
+
+1. 用 `loadWorkbook()` 加载 .xls 或 .xlsx 文件，采用为文件名
+
+```R
+wb <- loadWorkbook("file.xlsx")
+```
+
+2. 用 `readWorksheet()` 用 workbook 读取表格
+
+- 第一个参数为 `loadWorkbook()` 返回的 workbook 对象；
+
+- 第二个参数为 `sheet` 为表格名称或编号
+
+`readWorksheet()` 余下四个参数指定要读取的单元格的范围：
+
+- `startRow` 和 `endRow`
+- `startCol` 和 `endCol`
+
+如果不提供范围，`readWorksheet()` 读取包含数据的矩形区域。
+
+`readWorksheet()` 假设该区域包含标题，可以用 `header = FALSE` 设置不包含标题。
+
+例如：从 `wb` 读取第一个表格：
+
+```R
+sheet1 <- readWorksheet(wb, sheet = 1, startRow = 0, startCol = 0,
+                        endRow = 100, endCol = 3)
+```
+
+R 将读取的数据保存为 data-frame。`readWorksheet()` 除了第一个参数，其它参数都是向量化的，因此可以使用它从一个 workbook 一次读取多个表格，返回 data-frame list。
+
+以上两步可以合并为一步，用 `readWorksheetFromFile()` 函数直接从 Excel 文件读取一个或多个表格：
+
+```R
+sheet1 <- readWorksheetFromFile("file.xlsx", sheet = 1, startRow = 0,
+	startCol = 0, endRow = 100, endCol = 3)
+```
+
+### 输出 XLSX
+
+输出一个 Excel 文件分为 4 步：
+
+1. 使用 `loadWorkbook()` 设置一个 workbook 对象
+
+步骤和读取一样，只是添加参数 `create = TRUE`。XLConnect 会创建一个空的 workbook，保存时，XLConnect 会将数据写入指定的文件位置：
+
+```R
+wb <- loadWorkbook("file.xlsx", create = TRUE)
+```
+
+2. 使用 `createSheet()` 创建表格
+
+```R
+createSheet(wb, "Sheet 1")
+```
+
+3. 使用 `writeWorksheet()` 将 data-frame 或 matrix 对象保存到 sheet
+
+```R
+writeWorksheet(wb, data = poker, sheet = "Sheet 1")
+```
+
+- 第一个参数是待写入的 workbook 对象
+- 第二个参数 `data` 是待输出的数据
+- 第三个参数 `sheet` 是待写入 sheet 的名称
+- 参数 `startRow` 和 `startCol` 指定将数据写入表格哪个位置，默认均为 1
+- `header` 表示是否同时输出 column names
+
+4. 使用 `saveWorkbook()` 保存 workbook
+
+R 会将 workbook 保存到 `loadWorkbook()` 指定的文件位置。如果该位置已有文件，则覆盖它。
+
+调用 `writeWorksheetToFile` 可以将这 4 个步骤合并为一步：
+
+```R
+writeWorksheetToFile("file.xlsx", data = poker, sheet = "Sheet 1",
+  startRow = 1, startCol = 1)
+```
+
+XLConnect 还有许多高级功能，包括使用公式、单元格样式等，具体可参考 XLConnect 文档。
+
 ## xlsx
 
 `readxl` 包的 `read_excel()` 可用于读取 `.xls` 和 `.xlsx` 文件。
@@ -445,3 +862,39 @@ data <- read_excel('datafile.xls', sheet = 'Revenues')
 data <- read_excel('datafile.xls',
                    col_types = c('blank', 'text', 'date', 'numeric'))
 ```
+
+## 从其他程序加载文件
+
+和 Excel 文件一样，可以使用原程序将其导出为纯文本文件，通常为 csv 文件。
+
+不过，也有各种 packages 支持直接读取这些程序的数据文件。示例：
+
+| 文件格式                 | 函数             | 包         |
+| ------------------------ | ---------------- | ---------- |
+| ERSI ArcGIS              | `read.shapefile` | shapefiles |
+| Matlab                   | `readMat`        | R.matlab   |
+| minitab                  | `read.mtp`       | foreign    |
+| SAS (permanent data set) | `read.ssd`       | foreign    |
+| SAS (XPORT format)       | `read.xport`     | foreign    |
+| SPSS                     | `read.spss`      | foreign    |
+| Stata                    | `read.dta`       | foreign    |
+| Systat                   | `read.systat`    | foreign    |
+
+## 连接数据库
+
+可以使用 R 连接数据库并读取数据。
+
+如何实现这一点取决于使用的数据库系统，例如：
+
+- 使用 RODBC 包可以通过 ODBC 连接数据库
+- 使用 DBI 包可以通过单独的驱动连接到数据库。
+
+DBI 包为处理不同数据库提供了通用语法。需要下载一个特定于数据库的包与 DBI 一起使用：
+
+- 对 MySQL 使用 RMySQL
+- 对 SQLite 使用 RSQLite
+- 对 Oracle 使用 ROracle
+- 对 PostgreSQL 使用 RPostgreSQL
+- 对 JDBC 使用 RJDBC
+
+加载合适的驱动程序包后，就可以使用 DBI 提供的命令访问数据库。

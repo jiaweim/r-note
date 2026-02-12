@@ -1,19 +1,22 @@
 # 包管理
 
 2020-05-31, 10:07
+2024-09-04 updating R and packages
+2024-09-03 ⭐⭐
+@author Jiawei Mao
 ***
 
 ## 函数
 
 | 函数 | 功能 |
 |--|--|
-| install.packages() | 安装包。不加参数，显示CRAN镜像站点站点，加包名称，直接下载安装包 |
-| installed.packages() | 列出安装的包 |
-| update.packages() | 更新已安装的包 |
-| library("lib name") | 载入包 |
-| library() | 不带参数，查看已安装的 R 包 |
-| search() | 编译环境下已载入的包 |
-| help(package="package_name") | 输出某个包的简短描述，以及包中的函数名称和数据集名称的列表 |
+| `install.packages()` | 安装包。不加参数，显示CRAN镜像站点站点，加包名称，直接下载安装包 |
+| `installed.packages()` | 列出安装的包 |
+| `update.packages()` | 更新已安装的包 |
+| `library("lib name")` | 载入包 |
+| `library()` | 不带参数，查看已安装的 R 包 |
+| `search()` | 编译环境下已载入的包 |
+| `help(package="package_name")` | 输出某个包的简短描述，以及包中的函数名称和数据集名称的列表 |
 
 ## 简介
 
@@ -68,6 +71,18 @@ options(repos=c(CRAN="http://mirror.tuna.tsinghua.edu.cn/CRAN/"))
 install.packages("sos")
 ```
 
+- 安装一个包
+
+```R
+install.packages("package name")
+```
+
+- 一次安装多个包
+
+```R
+install.packages(c("ggplot2", "reshape2", "dplyr"))
+```
+
 ### 选择安装路径
 
 如果权限允许，可以选择安装在R软件的主目录内或者用户自己的私有目录位置。
@@ -94,6 +109,7 @@ update.packages()
 update.packages(ask = FALSE)
 ```
 
+<<<<<<< HEAD
 - 更新指定包
 
 ```R
@@ -112,18 +128,36 @@ install.packages("ggplot2", dependencies = TRUE, update = TRUE)
 ### devtools
 
 可以使用 `devtools` 实现该功能：
+=======
+示例：同时更新 ggplot2, reshape2 和 dplyr 三个包
+>>>>>>> f84c6c9f3789276dc81cf6b8040d16638c43a3f0
 
+```R
+update.packages(c("ggplot2", "reshape2", "dplyr"))
 ```
 
-```
+更新 package 后，需要启动新的 R 会话才能使用新版本的 package。
+
+如果在更新前已经加载了该 package，则需要关闭旧 R 会话，打开新的 R 会话。
+
+## devtools
+
+`devtools` R package 提供从 CRAN 以外的地方安装 package 的功能。devtools 提供了：
+
+- `install_github`
+- `install_gitorious`
+- `install_bitbucket`
+- `install_url`
+
+等函数。它们功能类似 `install.packages`，但是 repository 不同。其中 `install_github` 特别有用，因为许多 R 开发者在 GitHub 上提供它们包的开发版本。开发版本包含新功能和补丁，但是可能没有 CRAN 版本稳定。
 
 ## GitHub 和 BioConductor
 
-有一些扩展包没有在CRAN系统提供，而是放在了Github网站。对于这样的包， 安装方法如下：
+有一些扩展包没有在CRAN系统提供，而是放在 Github。对于这样的包， 安装方法如下：
 
 ```r
 if(!require(devtools)) install.packages('devtools')
-devtools::install_github("kjhealy/socviz")
+	devtools::install_github("kjhealy/socviz")
 ```
 
 其中 kjhealy 是 Github 网站的某个作者的名称， socviz 是该作者名下的一个R扩展包。
@@ -141,12 +175,18 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install(c("Biostrings"))
 ```
 
-## 载入包
+## 加载包
 
 例如，载入 RWeka 包：
 
 ```r
 library(RWeka)
+```
+
+- 查看当前库中有哪些 package
+
+```r
+library()
 ```
 
 ## 迁移扩展包
