@@ -41,7 +41,7 @@ R 插件支持功能：
 2. 安装 R 插件，对 PyCharm 或 Intellij IDEA 均可
 3. 创建 R project
 4. 配置 R interpreter
-5. 检查并暗转所需包
+5. 检查并安装所需包
 6. 创建 `.R` 文件
 7. 运行 R 脚本
 8. 分析、导出以及保存结果

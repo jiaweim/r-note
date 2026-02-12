@@ -1,17 +1,5 @@
 # 快速入门
 
-- [快速入门](#快速入门)
-  - [简介](#简介)
-    - [语法模板](#语法模板)
-    - [ggplot](#ggplot)
-    - [aes](#aes)
-  - [演示数据](#演示数据)
-  - [映射](#映射)
-  - [映射 vs. 设置](#映射-vs-设置)
-  - [几何对象](#几何对象)
-  - [全局变量和局部变量](#全局变量和局部变量)
-  - [导出图片](#导出图片)
-
 2020-05-29, 21:44
 *** *
 
@@ -349,3 +337,7 @@ p <- ggplot(mpg, aes(x = displ, y = hwy)) +
 
 ggsave(filename = "myfirst_plot.pdf", plot = p, width = 8, height = 6, dpi = 300)
 ```
+
+## 参考
+
+- https://ggplot2.tidyverse.org/articles/ggplot2.html

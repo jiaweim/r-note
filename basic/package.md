@@ -1,18 +1,5 @@
 # 包管理
 
-- [包管理](#包管理)
-  - [函数](#函数)
-  - [简介](#简介)
-  - [安装包](#安装包)
-    - [选择安装路径](#选择安装路径)
-  - [更新包](#更新包)
-  - [安装老版本的包](#安装老版本的包)
-    - [devtools](#devtools)
-  - [GitHub 和 BioConductor](#github-和-bioconductor)
-  - [载入包](#载入包)
-  - [迁移扩展包](#迁移扩展包)
-  - [参考](#参考)
-
 2020-05-31, 10:07
 ***
 
@@ -106,6 +93,17 @@ update.packages()
 ```r
 update.packages(ask = FALSE)
 ```
+
+- 更新指定包
+
+```R
+#syntax to update package
+install.packages("package_name", dependencies = TRUE, update = TRUE)
+#example usage
+install.packages("ggplot2", dependencies = TRUE, update = TRUE)
+```
+
+
 
 ## 安装老版本的包
 
