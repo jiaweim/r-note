@@ -13,14 +13,14 @@
 
 **库（library）**: 包含安装的 packages 的目录。
 
-这个术语的概念容易混淆，例如 `library(dplyr)` 加载的时 dplyr 包，而是库。不过没关系，我们基本上不需要考虑库的问题，直接将所有 package 安装到所有项目共享的系统库。使用 renv，则将开始使用项目库（project library），即为每个项目单独维护 packages。
+这个术语的概念容易混淆，例如 `library(dplyr)` 加载的是 dplyr 包，而是库。不过没关系，我们基本上不需要考虑库的问题，所有 package 默认安装到所有项目共享的**系统库**（system library）。使用 renv，则将开始使用**项目库**（project library），即为每个项目单独维护 packages，从而实现各项目之间依赖隔离。
 
-- 使用 `.libPaths()` 查看当前库
-- 使用 `lapply(.libPaths(), list.files)` 查看每个库中可用的包
+- 使用 `.libPaths()` 查看当前 library 的路径
+- 使用 `lapply(.libPaths(), list.files)` 查看每个库中可用的 packages
 
 **存储库（repository）**: 是 packages 的来源。
 
-`install.packages()` 从 repository（通常是网络上的某个地方）获取 package，将其放入 library（计算机上的一个目录）。CRAN 是最重要的 repository，其它免费的 repository 还有 [Bioconductor](https://bioconductor.org/), [Posit Public Package Manager](https://packagemanager.posit.co/) 和 [R Universe](https://r-universe.dev/search)，R universe 将 GitHub 转变成 repository。
+`install.packages()` 从 repository（通常是网络上的某个地方）获取 package，将其放入本地 library（计算机上的一个目录）。CRAN 是最重要的 repository，其它免费的 repository 还有 [Bioconductor](https://bioconductor.org/), [Posit Public Package Manager](https://packagemanager.posit.co/) 和 [R Universe](https://r-universe.dev/search)，R universe 将 GitHub 转变成 repository。
 
 - 使用 `getOption("repos")` 查看当前使用的 repository
 - 调用 `install.packages("{pkgname}")`，R 会依次在每个 repository 查找 `pkgname`
@@ -160,3 +160,7 @@ unlink(root, recursive = TRUE)
 ```
 
 然后使用 `utils::remove::packages("renv")` 卸载 renv。
+
+## 参考
+
+- https://rstudio.github.io/renv/articles/renv.html

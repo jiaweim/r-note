@@ -1,20 +1,21 @@
 # 字符串
 
-- [字符串](#字符串)
-  - [字符串向量](#字符串向量)
-  - [连接字符串 - paste](#连接字符串---paste)
-  - [paste0](#paste0)
-  - [大小写](#大小写)
-  - [字符串长度](#字符串长度)
-  - [子字符串](#子字符串)
-  - [类型转换](#类型转换)
-  - [sprintf](#sprintf)
-  - [字符串拆分](#字符串拆分)
-  - [字符串替换](#字符串替换)
-  - [正则表达式](#正则表达式)
+2020-06-01, 22:11 ⭐
+@author Jiawei Mao
+***
 
-2020-06-01, 22:11
-*** *
+## 函数列表
+
+| 函数                                                         | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `nchar(x)`                                                   | 计算 `x` 包含的字符数。例如，`x <- c("ab", "cde", "fghij")`，`length(x)` 返回 3，`nchar(x[3])` 返回 5 |
+| `substr(x, start, stop)`                                     | 提取或替换子字符串。如 `x <- "abcdef"`，那么 `substr(x, 2, 4)` 返回 `bcd`；`substr(x, 2, 4) <- "22222"` 使得 `x` 为 `"a222ef"` |
+| `grep(pattern, x, ignore.case=FALSE, fixed=FALSE)`           | 在 `x` 中搜索 `pattern`。若 `fixed=FALSE`，则 `pattern` 为正则表达式；若 `fixed=TRUE`，则 `pattern` 为文本字符串。返回匹配的索引。例如，`grep("A", c("b","A","ac", "Aw"), fixed=TRUE)` 返回 `c(2, 4)` |
+| `sub(pattern, replacement, x, ignore.case=FALSE, fixed=FALSE)` | 在 `x` 中搜索 `pattern`，并替换为 `replacement`。若 `fixed=FALSE`，则 `pattern` 为正则表达式；若 `fixed=TRUE`，则 `pattern` 为文本字符串。例如，`sub("\\s",".","Hello There"` 返回 `Hello.There`。其中 `"\\s"` 是查找空格的正则表达式 |
+| `strsplit(x, split, fixed=FALSE)`                            | 以 `split` 分隔字符串向量 `x`。若 `fixed=FALSE`，则 `pattern` 为正则表达式；若 `fixed=TRUE`，则 `pattern` 为文本字符串。例如，`y <- strsplit("abc", "")` 返回 |
+| `paste(..., sep="")`                                         |                                                              |
+
+
 
 ## 字符串向量
 
@@ -24,16 +25,33 @@ s1 <- c('abc', '', 'a cat', NA, '李磊')
 
 元素为字符串的向量。
 
-## 连接字符串 - paste
+## paste
 
-`paste` 函数用于连接多个字符串，默认以空格连接。例如：
+`paste` 函数用于连接多个字符串，默认以空格连接。
+
+```R
+paste (..., sep = " ", collapse = NULL, recycle0 = FALSE)
+paste0(...,            collapse = NULL, recycle0 = FALSE)
+```
+
+参数：
+
+- `...`，一个或多个 R 对象，转换为字符向量
+- `sep`，分隔字符，不能为 `NA_character_`
+- `collapse`，
+
+`paste` 通过 `as.character` 将其参数转换为字符串，然后
+
+
+
+例如：
 
 ```r
 > paste(c('ab', 'cd'), c('ef', 'gh'))
 [1] "ab ef" "cd gh"
 ```
 
-`paste()` 在连接字符串向量时遵守 R 的向量间运算规则，可以自动把数值型向量转换为字符串，可以一对多连接，例如：
+`paste()` 遵守 R 的向量间运算规则，可以自动把数值型向量转换为字符串，可以一对多连接，例如：
 
 ```r
 > paste("x", 1:3)
@@ -141,7 +159,7 @@ s1 <- c('abc', '', 'a cat', NA, '李磊')
 [1] "file001.txt" "file010.txt" "file100.txt"
 ```
 
-## 字符串拆分
+## strsplit
 
 `strsplit()` 把字符串按照指定分隔符拆分。例如:
 

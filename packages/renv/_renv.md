@@ -7,7 +7,7 @@
 
 renv，用于 R 项目的环境管理：
 
-- Isolated: 为一个项目安装新的或更新 package，而不影响其它项目，反之亦然。因为 renv 为每个项目提供私有库。
+- Isolated: 为一个项目安装新的 package 或更新 package，而不影响其它项目，反之亦然。因为 renv 为每个项目提供私有库。
 - Portable: 将项目从一台计算机转移到另一台计算机很容易，甚至跨平台。用 renv 安装项目所依赖的包很容易。
 - Reproducible: renv 会记录项目所依赖包的具体版本。
 
@@ -19,17 +19,24 @@ renv，用于 R 项目的环境管理：
 install.packages("renv")
 ```
 
+或者从 r-universe 安装开发版本：
+
+```R
+install.packages("renv", repos = "https://rstudio.r-universe.dev")
+```
+
 ## 使用
 
 - [renv 快速入门](./renv_intro.md)
+- [安装 package](./install_package_renv.md)
 
 ## Workflow
 
-<img src="./images/renv.png" style="zoom:67%;" />
+<img src="./images/renv.png" width="500" />
 
 - 使用 `renv::init()` 在新项目或现有项目中初始化 renv
 
-该操作会设置一个项目库（project library），包含当前使用的所有 packages。packages 相关信息都记录在一个 lockfile 中，即 `renv.lock` 文件，以及一个 `.Rprofile` 文件以确保每次打开该项目都使用该库。
+该操作会创建一个项目库（project library），包含当前使用的所有 packages。packages 相关信息都记录在一个名为 lockfile 中，即 `renv.lock` 文件，以及一个 `.Rprofile` 文件以确保每次打开该项目都使用该库。
 
 - 更新
 
@@ -42,3 +49,4 @@ install.packages("renv")
 ## 参考
 
 - https://github.com/rstudio/renv
+
