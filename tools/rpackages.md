@@ -107,7 +107,7 @@ library(devtools)
 
 下面介绍一下 `regexcite` 目录的文件：
 
-- `.Rbuildignore` - 文件，列出那些包含在项目中，但从源码构建 R 包时应跳过的文件。简而言之，就是一个黑名单，列出那些在打包时要忽略的文件
+- `.Rbuildignore` - 文件，列出那些包含在项目中，但从源码构建 R 包时应跳过的文件。简而言之，就是一个黑名单，列出那些在打包时要忽略的文件。一般使用 RStudio 才有。
 - `.gitignore` - 文件，
 - `DESCRIPTION` - 文件
 - `NAMESPACE` - 文件
