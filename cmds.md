@@ -1,5 +1,7 @@
 # 常用命令
 
+
+
 ## 通用
 
 - 查看工作目录
@@ -36,39 +38,25 @@ getOption("repos")
 
 ## renv
 
-- 初始化项目库
-
 ```R
-renv::init()
-```
+# 初始化项目
+renv::init() 
+renv::init(bare=TRUE) # 初始化空的项目库
 
-- 初始化空的项目库
+# 更新或安装包
+renv::install()
+renv::update()
 
-```R
-renv::init(bare=TRUE)
-```
-
-- 更新 lockfile
-
-```R
+# 记录包版本，更新 lockfile
 renv::snapshot()
-```
 
-- 安装 lockfile 中所有 packages（恢复项目库）
-
-```r
+# 安装 lockfile 中记录的包: 恢复项目库
 renv::restore()
 ```
 
-- 安装 package
 
-```R
-renv::install()
-```
 
-- 更新 package
 
-```R
-renv::update()
-```
+
+
 
