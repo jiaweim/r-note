@@ -4,7 +4,9 @@
 - [前言](./0-preface.md)
 - [1. 项目 1：加权骰子](./1-project1-weighted-dice.md)
 - [2. 基础入门](./2-basics.md)
+- [3. 包与帮助页面](./3-packages.md)
 - [附录 A：安装 R 和 RStudio](./Appendix-A.md)
+- [附录 B：R 包](./Appendix-B.md)
 
 ## 简介
 
