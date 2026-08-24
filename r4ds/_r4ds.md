@@ -2,7 +2,7 @@
 
 - [引言](./p1.introduction.md)
 - [整体概览](./p2.whole_game.md)
-  - [数据可视化](./1.data-visualize.md)
+  - [1. 数据可视化](./1.data-visualize.md)
 
 ## 参考
 
