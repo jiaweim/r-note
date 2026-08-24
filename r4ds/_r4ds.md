@@ -3,6 +3,7 @@
 - [引言](./p1.introduction.md)
 - [整体概览](./p2.whole_game.md)
   - [1. 数据可视化](./1.data-visualize.md)
+  - [2. 工作流基础](./2.workflow-basics.md)
 - [交流输出](./communicate.md)
 
 ## 参考
