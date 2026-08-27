@@ -6,6 +6,7 @@
   - [2. 工作流基础](./2.workflow-basics.md)
   - [3. 数据转换](./3.data-transform.md)
   - [4. 代码风格](./4.workflow-style.md)
+  - [5. 整理数据](./5.data-tidy.md)
 - [交流输出](./communicate.md)
 
 ## 参考
