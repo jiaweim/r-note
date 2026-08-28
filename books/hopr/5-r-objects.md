@@ -1,5 +1,8 @@
 # R 对象
 
+2026-08-28⭐
+@author Jiawei Mao
+***
 在本章中，你将使用 R 语言来组装一副包含 52 张牌的扑克牌。
 
 你将从构建代表扑克牌的简单 R 对象开始，然后逐步构建出一个完整的数据表。简而言之，你将从零开始构建一个相当于 Excel 电子表格的数据结构。当你完成本章内容时，你的扑克牌看起来会像下面这样：
@@ -600,15 +603,20 @@ card
 
 ## 6. 强制类型转换（Coercion）
 
-R 的强制类型转换行为有时可能会让人觉得有些不便，但它绝非毫无规律。R 在进行数据类型转换时，始终遵循着一套固定的规则。一旦你熟悉了这些规则，就可以巧妙地利用 R 的转换机制来实现许多令人惊喜的实用功能。
+R 的强制类型转换行为虽然看着不便，但它绝非毫无规律。R 在进行数据类型转换时，始终遵循着一套固定的规则。一旦你熟悉了这些规则，就可以巧妙地利用 R 的转换机制来实现许多令人惊喜的实用功能。
 
-那么，R 究竟是如何进行强制类型转换的呢？如果原子向量中包含字符串，R 就会将向量中的所有其他元素都转换为字符串。如果向量中仅包含逻辑值和数字，R 则会将逻辑值转换为数字：每个 `TRUE` 变为 `1`，每个 `FALSE` 变为 `0`，如图 5.1 所示。
+那么，R 究竟是如何进行强制类型转换的呢：
+
+- 如果原子向量中包含字符串，R 就会将向量中的所有其他元素都转换为字符串。
+- 如果向量中仅包含逻辑值和数字，R 则会将逻辑值转换为数字：每个 `TRUE` 变为 `1`，每个 `FALSE` 变为 `0`，如图 5.1 所示。
 
 R 始终使用相同的规则将数据统一为单一类型。如果存在字符串，所有数据都会被强制转换为字符串；否则，逻辑值会被强制转换为数值。
 
-**图 5.1：** R 始终使用相同的规则将数据统一为单一类型。如果存在字符串，所有数据都会被强制转换为字符串；否则，逻辑值会被强制转换为数值。
+<img src="./images/hopr_0301.png" alt="R always uses the same rules to coerce data to a single type. If character strings are present, everything will be coerced to a character string. Otherwise, logicals are coerced to numerics." width="500" />
 
-这种机制能够很好地保留信息。通过观察字符串，你可以很容易地看出它原本包含什么信息。例如，你可以轻易识别出 `"TRUE"` 和 `"5"` 的原始来源。同样，你也可以轻松地将由 `1` 和 `0` 组成的向量逆向转换回 `TRUE` 和 `FALSE`。
+> **图 5.1：** R 始终使用相同的规则将数据统一为单一类型。如果存在字符串，所有数据都会被强制转换为字符串；否则，逻辑值会被强制转换为数值。
+
+这种机制能够很好地保留信息。通过字符串可以很容易看出它原本包含什么信息。例如，你可以轻易识别出 `"TRUE"` 和 `"5"` 的原始来源。同样，你也可以轻松地将由 `1` 和 `0` 组成的向量逆向转换回 `TRUE` 和 `FALSE`。
 
 当你对逻辑值进行数学运算时，R 也会应用相同的强制转换规则。因此，以下代码：
 
@@ -625,20 +633,20 @@ sum(c(1, 1, 0, 0))
 
 这意味着，`sum()` 函数可以用来统计逻辑向量中 `TRUE` 的数量（而 `mean()` 函数则可以计算 `TRUE` 所占的比例）。是不是非常巧妙？
 
-你可以使用 `as.` 系列函数，显式地要求 R 将数据从一种类型转换为另一种类型。只要存在合理的转换方式，R 就会执行转换：
+你可以使用 `as.` 系列函数，显式地将数据从一种类型转换为另一种类型。只要存在合理的转换方式，R 就会执行转换：
 
 ```r
-as.character(1)
-## "1"
+> as.character(1)
+[1] "1"
 
-as.logical(1)
-## TRUE
+> as.logical(1)
+[1] TRUE
 
-as.numeric(FALSE)
-## 0
+> as.numeric(FALSE)
+[1] 0
 ```
 
-现在你已经了解了 R 是如何进行强制类型转换的，但这并不能帮你成功保存一张扑克牌。要做到这一点，你需要彻底避免强制转换。你可以通过使用一种全新的对象类型——列表（list）来实现。
+了解了 R 是如何进行强制类型转换的，但这并不能帮你成功保存一张扑克牌。要做到这一点，你需要彻底避免强制转换。你可以通过使用一种全新的对象类型——列表（list）来实现。
 
 在了解列表之前，我们先来解决一个你可能正在思考的问题。
 
@@ -648,4 +656,273 @@ as.numeric(FALSE)
 
 在另一些情况下，仅允许单一数据类型也并非什么劣势。向量是 R 中最常见的数据结构，因为它们非常适合用来存储变量。变量中的每个值衡量的都是同一种属性，因此完全没有必要使用不同的数据类型。
 
-<img src="./images/hopr_0301.png" alt="R always uses the same rules to coerce data to a single type. If character strings are present, everything will be coerced to a character string. Otherwise, logicals are coerced to numerics." width="500" />
+## 7. 列表（Lists）
+
+列表与原子向量类似，都将数据组织成一维集合。不过，列表组合的并非单个值，而是 R 对象。例如，你可以创建一个列表，在其第一个元素中放入一个长度为 31 的数值型向量，第二个元素中放入一个长度为 1 的字符型向量，并在第三个元素中放入一个新的长度为 2 的列表。要实现这一点，请使用 `list()` 函数。
+
+`list()` 函数创建列表的方式与 `c()` 函数创建向量的方式相同。只需使用逗号分隔列表中的每个元素：
+
+```r
+> list1 <- list(100:130, "R", list(TRUE, FALSE))
+> list1
+[[1]]
+ [1] 100 101 102 103 104 105 106 107 108 109 110 111 112 113
+[15] 114 115 116 117 118 119 120 121 122 123 124 125 126 127
+[29] 128 129 130
+
+[[2]]
+[1] "R"
+
+[[3]]
+[[3]][[1]]
+[1] TRUE
+
+[[3]][[2]]
+[1] FALSE
+```
+
+双中括号索引 `[[]]` 告诉你当前显示的是列表中的第几个元素；单中括号索引（`[ ]`）则告诉你当前显示的是该元素中的第几个子元素。例如，100 是列表中第一个元素的第一个子元素，而 "R" 是第二个元素的第一个子元素。这种双重索引系统的出现，是因为列表中的每个元素都可以是任何 R 对象，包括拥有自己索引的新向量（或新列表）。
+
+列表是 R 语言中的基本对象类型，与原子向量处于同等地位。与原子向量一样，列表也被用作构建更复杂 R 对象的基石。
+
+可想而知，列表的结构可能会变得非常复杂，但这种灵活性使其成为 R 语言中极为实用的通用存储工具：你可以使用列表将任何对象组合在一起。
+
+不过，并非所有的列表都必须很复杂。你可以用一个非常简单的列表来存储一张扑克牌。
+
+**练习 5.5（使用列表制作一张扑克牌）** 使用列表存储一张扑克牌，例如红桃 A（点数为 1）。列表应在不同的元素中分别保存该牌的牌面、花色和点数。
+
+**解答：** 你可以像这样创建你的扑克牌。在下面的例子中，列表的第一个元素是字符型向量（长度为 1），第二个元素也是字符型向量，第三个元素是数值型向量：
+
+```r
+card <- list("ace", "hearts", 1)
+card
+## 
+## [1] "ace"
+##
+## 
+## [1] "hearts"
+##
+## 
+## [1] 1
+```
+
+你也可以使用列表来存储一整副扑克牌。既然你可以将单张扑克牌保存为一个列表，那么你就可以将一整副扑克牌保存为一个包含 52 个子列表的列表（每张牌一个子列表）。但我们就不费这个劲了——有一种更简洁的方法可以达到同样的目的。你可以使用一种特殊的列表类，也就是我们熟知的数据框（data frame）。
+
+## 8. 数据框（Data Frames）
+
+数据框是列表的二维版本。它绝对是数据分析中最实用的存储结构，也是存储一整副扑克牌的理想方式。你可以将数据框理解为 R 语言中的 Excel 电子表格。
+
+数据框将多个向量组合成一个二维表格。向量成为表格中的一列。因此，数据框的每一列可以包含不同类型的数据；但在同一列中，每个单元格的数据类型必须相同，如图 5.2 所示。
+
+<img src="./images/hopr_0302.png" alt="Data frames store data as a sequence of columns. Each column can be a different data type. Every column in a data frame must be the same length." width="500" />
+
+> **图 5.2**：数据框以列序列的形式存储数据。每一列可以是不同的数据类型，但数据框中的每一列必须具有相同的长度。
+
+可以使用 `data.frame()` 函数手动创建数据框。向 `data.frame()` 传入任意数量的向量，并用逗号分隔。每个向量都应被赋予一个描述性的名称。`data.frame()` 会将每个向量转化为新数据框中的一列：
+
+```r
+> df <- data.frame(
++   face = c("ace", "two", "six"),
++   suit = c("clubs", "clubs", "clubs"), value = c(1, 2, 3)
++ )
+> df
+  face  suit value
+1  ace clubs     1
+2  two clubs     2
+3  six clubs     3
+```
+
+你需要确保每个向量的长度相同（或者可以通过 R 的循环补齐规则（recycling rules）使其长度相同；参见图 2.4），因为数据框无法组合长度不同的列。
+
+在上面的代码中，我将 `data.frame()` 的参数命名为 `face`、`suit` 和 `value`，你也可以根据自己的喜好命名。`data.frame()` 会使用你提供的参数名作为数据框的列名。
+
+> [!TIP]
+>
+> **名称（Names）**
+>
+> 在创建列表或向量时也可以指定名称。语法与创建 `data.frame()` 时相同：
+>
+> ```r
+> list(face = "ace", suit = "hearts", value = 1)
+> c(face = "ace", suit = "hearts", value = "one")
+> ```
+>
+> 这些名称将存储在对象的 `names` 属性中。
+
+如果你查看数据框的类型，你会发现它本质上是一个列表。事实上，每个数据框都是一个带有 `data.frame` 类的列表。你可以使用 `str()` 函数来查看列表（或数据框）中组合了哪些类型的对象：
+
+```r
+> typeof(df)
+[1] "list"
+
+> class(df)
+[1] "data.frame"
+
+> str(df)
+'data.frame':	3 obs. of  3 variables:
+ $ face : chr  "ace" "two" "six"
+ $ suit : chr  "clubs" "clubs" "clubs"
+ $ value: num  1 2 3
+```
+
+请注意，R 将你的字符串自动保存为了因子（factor）。我之前就说过，R 语言非常喜欢因子！在这里这不算什么大问题，但你可以通过在 `data.frame()` 中添加 `stringsAsFactors = FALSE` 参数来阻止这种行为：
+
+```r
+df <- data.frame(face = c("ace", "two", "six"),  
+  suit = c("clubs", "clubs", "clubs"), value = c(1, 2, 3),
+  stringsAsFactors = FALSE)
+```
+
+> [!NOTE]
+>
+> 新版 R 已经修改了该行为，默认类型为字符型（至少 R 4.6.1 默认为字符型）。
+
+数据框是构建一整副扑克牌的绝佳方式。你可以将数据框中的每一行代表一张扑克牌，每一列代表一种属性——每种属性都可以拥有其对应的数据类型。这个数据框看起来大致如下：
+
+```text
+##    face   suit value
+## 1  king spades    13
+## 2 queen spades    12
+## 3  jack spades    11
+## 4   ten spades    10
+## 5  nine spades     9
+## 6 eight spades     8
+## 7 seven spades     7
+## 8   six spades     6
+## 9  five spades     5
+## 10 four spades     4
+## 11 three spades    3
+## 12  two spades     2
+## 13  ace spades     1
+## 14 king  clubs    13
+## 15 queen clubs    12
+## 16  jack clubs    11
+## 17   ten clubs    10
+##  ... 以此类推。
+```
+
+你可以使用 `data.frame()` 来创建这个数据框，但看看需要输入多少代码！你需要编写三个向量，每个向量都包含 52 个元素：
+
+```r
+deck <- data.frame(
+  face = c("king", "queen", "jack", "ten", "nine", "eight", "seven", "six",
+    "five", "four", "three", "two", "ace", "king", "queen", "jack", "ten", 
+    "nine", "eight", "seven", "six", "five", "four", "three", "two", "ace", 
+    "king", "queen", "jack", "ten", "nine", "eight", "seven", "six", "five", 
+    "four", "three", "two", "ace", "king", "queen", "jack", "ten", "nine", 
+    "eight", "seven", "six", "five", "four", "three", "two", "ace"),  
+  suit = c("spades", "spades", "spades", "spades", "spades", "spades", 
+    "spades", "spades", "spades", "spades", "spades", "spades", "spades", 
+    "clubs", "clubs", "clubs", "clubs", "clubs", "clubs", "clubs", "clubs", 
+    "clubs", "clubs", "clubs", "clubs", "clubs", "diamonds", "diamonds", 
+    "diamonds", "diamonds", "diamonds", "diamonds", "diamonds", "diamonds", 
+    "diamonds", "diamonds", "diamonds", "diamonds", "diamonds", "hearts", 
+    "hearts", "hearts", "hearts", "hearts", "hearts", "hearts", "hearts", 
+    "hearts", "hearts", "hearts", "hearts", "hearts"), 
+  value = c(13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 13, 12, 11, 10, 9, 8, 
+    7, 6, 5, 4, 3, 2, 1, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 13, 12, 11, 
+    10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+)
+```
+
+我们应该尽量避免手动输入大型数据集。手动输入不仅容易引发拼写错误，还会导致重复性劳损（RSI）。获取大型数据集的最佳方式始终是将其保存为计算机文件。然后，你可以让 R 读取该文件并将内容存储为一个对象。
+
+我已经为你准备了一个包含扑克牌信息数据框的文件，所以你完全不需要手动输入上面的代码。相反，请将注意力转移到如何将数据加载到 R 中。
+
+## 9. 加载数据
+
+你可以从 [`deck.csv` 文件](http://bit.ly/deck_CSV)中加载 `deck` 数据框。在阅读下文之前，请先花点时间下载该文件。访问相关网站，点击“Download Zip”（下载压缩包），然后解压并打开浏览器下载的文件夹，`deck.csv` 文件就在里面。
+
+`deck.csv` 是一个逗号分隔值文件（简称 CSV）。CSV 是纯文本文件，可以使用文本编辑器打开它。如果你打开 `deck.csv`，会注意到它包含一个数据表，看起来类似于下面的表格。表格的每一行使用逗号分隔行内的单元格。所有的 CSV 文件都遵循这种基本格式：
+
+```text
+"face","suit","value"
+"king","spades",13
+"queen","spades",12
+"jack","spades",11
+"ten","spades",10
+"nine","spades",9
+... 以此类推。
+```
+
+要将纯文本文件加载到 R 中，请点击 RStudio 中的“Import Dataset”（导入数据集）图标，如图 5.3 所示。然后选择“From text file”（从文本文件导入）。
+
+![You can import data from plain-text files with RStudio's Import Dataset.](./images/hopr_0303.png)
+
+>  图 5.3：你可以使用 RStudio 的“Import Dataset”功能从纯文本文件中导入数据。
+
+RStudio 会要求你选择要导入的文件，随后打开一个向导来协助你导入数据，如图 5.4 所示。你可以使用该向导为数据集指定名称，使用哪个字符作为分隔符、使用哪个字符表示小数（在美国通常是句号，在欧洲通常是逗号），以及数据集是否包含一行列名（称为表头/header）。为了帮助你，向导会显示原始文件的样子，以及根据你输入的设置加载后数据的预览效果。
+
+你还可以在向导中取消勾选“Strings as factors”（字符串转为因子）复选框。我建议取消勾选它。如果取消勾选，R 会将所有的字符串作为字符型（character strings）加载。如果不取消勾选，R 会将它们转换为因子（factors）。
+
+![RStudio's import wizard.](./images/hopr_0304.png)
+
+>  图 5.4：RStudio 的导入向导。
+
+确认无误后，点击“Import”（导入）。RStudio 将读取数据并将其保存为一个数据框。同时，RStudio 还会打开一个数据查看器，以便你以电子表格的格式查看新数据。这是检查数据是否按预期导入的好方法。如果一切顺利，你的文件应该会出现在 RStudio 的“View”（查看）选项卡中，如图 5.5 所示。你也可以在控制台中使用 `head(deck)` 来检查该数据框。
+
+> [!TIP]
+>
+> **在线数据**
+>
+> 你可以通过点击“Import Dataset”下的“From Web URL…”（从网址导入）选项，直接从互联网加载纯文本文件。该文件必须拥有自己的独立 URL，并且你需要保持网络连接。
+
+![When you import a data set, RStudio will save the data to a data frame and then display the data frame in a View tab. You can open any data frame in a View tab at any time with the View function.](./images/hopr_0305.png)
+
+>  **图 5.5**：导入数据集时，RStudio 会将数据保存为数据框，并在“View”选项卡中显示。你可以随时使用 `View()` 函数打开数据框。
+
+现在轮到你了。请下载 `deck.csv` 并将其导入 RStudio。请务必将输出结果保存为一个名为 `deck` 的 R 对象：在接下来的几章中你会用到它。如果一切顺利，你的数据框的前几行应该如下所示：
+
+```r
+> head(deck)
+   face   suit value
+1  king spades    13
+2 queen spades    12
+3  jack spades    11
+4   ten spades    10
+5  nine spades     9
+6 eight spades     8
+```
+
+`head()` 和 `tail()` 是两个函数，它们提供了一种查看大型数据集的简便方法：
+
+- `head()` 仅返回数据集的前六行
+-  `tail()` 仅返回最后六行
+
+如果你想查看其他数量的行，可以为 `head()` 或 `tail()` 提供第二个参数，即你想查看的行数。例如：`head(deck, 10)`。
+
+R 可以打开多种类型的文件——不仅仅是 CSV。请访问《在 R 中加载和保存数据》（Loading and Saving Data in R），了解如何在 R 中打开其他常见类型的文件。
+
+## 10. 保存数据
+
+在继续往下讲之前，我们先把 `deck` 另存为一个新的 `.csv` 文件。这样你就可以把它通过电子邮件发给同事，存储在 U 盘上，或者在其他程序中打开。在 R 语言中，你可以使用 `write.csv()` 命令将任何数据框保存为 `.csv` 文件。要保存 `deck`，请运行：
+
+```r
+write.csv(deck, file = "cards.csv", row.names = FALSE)
+```
+
+R 会将你的数据框转换为逗号分隔值格式的纯文本文件，并保存到工作目录。要查看当前工作目录的位置，请运行 `getwd()`。若要更改工作目录的路径，请在 RStudio 的菜单栏中依次点击 `Session > Set Working Directory > Choose Directory`。
+
+你可以利用 `write.csv()` 提供的丰富可选参数来自定义保存过程（详情请参阅 `?write.csv`）。不过，在每次运行 `write.csv()` 时，有三个参数是你应该始终使用的。
+
+1. 你需要告诉 `write.csv()` 想要保存的数据框的名称
+2. 你需要提供一个文件名。R 会完全照搬你提供的名称，因此请务必加上文件扩展名。
+3. 最后，你应该加上 `row.names = FALSE` 这个参数。这可以防止 R 在数据框的开头自动添加一列数字。虽然这些数字会将你的行标记为 1 到 52，但你用来打开 `cards.csv` 的其他程序大概率无法识别这种行名系统。相反，其他程序很可能会把这些行名误认为是数据框中的第一列数据。事实上，如果你在 R 中重新打开 `cards.csv`，R 自己也会这么认为。如果你在 R 中多次保存并打开 `cards.csv`，就会发现数据框的开头不断生成重复的行号列。我无法解释 R 为什么会这么做，但我可以告诉你如何避免这个问题：只要使用 `write.csv()` 保存数据，就始终加上 `row.names = FALSE`。
+
+有关保存文件的更多详细信息（包括如何压缩已保存的文件以及如何将文件保存为其他格式），请参阅《在 R 中加载和保存数据》（Loading and Saving Data in R）。
+
+现在已经有了一副虚拟扑克牌可供使用。稍微休息一下吧，等你回来后，我们将开始编写一些用于处理这副扑克牌的函数。
+
+## 11. 本章小结
+
+在 R 语言中，你可以使用五种不同的对象来保存数据。它们允许你以不同的关系结构来存储各种类型的值，如图 5.6 所示。在这些对象中，数据框（data frames）对数据科学是最实用的。数据框用于存储数据科学中最常见的数据形式之一：表格型数据（tabular data）。
+
+<img src="./images/hopr_0306.png" alt="R's most common data structures are vectors, matrices, arrays, lists, and data frames." width="500" />
+
+>  *图 5.6：R 语言中最常见的数据结构包括向量（vectors）、矩阵（matrices）、数组（arrays）、列表（lists）和数据框（data frames）。*
+
+只要数据被保存为纯文本文件，你就可以通过 RStudio 的“Import Dataset”（导入数据集）按钮将表格型数据加载到数据框中。这个限制并没有听起来那么苛刻，因为大多数软件程序都可以将数据导出为纯文本文件。因此，如果你有一个 Excel 文件（举例来说），你可以在 Excel 中打开它，然后将数据导出为 CSV 格式，以便在 R 中使用。事实上，在原始程序中打开文件是一个好习惯。Excel 文件使用了诸如工作表和公式之类的元数据（metadata），这有助于 Excel 处理该文件。虽然 R 也可以尝试从文件中提取原始数据，但它在这方面做得不如 Microsoft Excel 好。没有任何程序比 Excel 本身更擅长转换 Excel 文件。同样，也没有任何程序比 SAS 更擅长转换 SAS Xport 文件，以此类推。
+
+不过，你可能会遇到一种情况：手里有一个特定程序生成的文件，但电脑上却没有安装那个程序。你肯定不想为了打开一个 SAS 文件而去购买一份价值数千美元的 SAS 许可证。幸运的是，R 可以打开多种类型的文件，包括来自其他程序和数据库的文件。如果你确定自己将完全在 R 中进行工作，R 甚至拥有其专属的文件格式，这能帮你节省内存和时间。如果你想进一步了解在 R 中加载和保存数据的所有选项，请参阅《在 R 中加载和保存数据》（Loading and Saving Data in R）。
+
+下一章“R 语言表示法”（R Notation）将建立在本章所学技能的基础之上。在本章中，你学习了如何在 R 中存储数据。而在“R 语言表示法”一章中，你将学习如何在数据被存储后去访问这些值。此外，你还将编写两个函数（洗牌函数 `shuffle` 和发牌函数 `deal`），让你能够开始真正使用你的那副扑克牌。
