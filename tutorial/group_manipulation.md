@@ -104,7 +104,11 @@ $D
 [1] 2
 ```
 
-处理 lists 可能很麻烦，所以将 `lapply` 的结果转换为 `vector` 更好。`sapply` 与 `lapply` 除了返回 `vector`，其它完全一样：
+处理 lists 可能很麻烦，所以将 `lapply` 的结果转换为 `vector` 更好。
+
+- `sapply` 与 `lapply` 除了返回 `vector`，其它完全一样：
+
+`sapply` 全称是 "simplify apply"，核心功能：对向量、列表或数据框的每个元素逐一应用指定函数，并尝试将结果自动简化为向量或矩阵。
 
 ```r
 > sapply(theList, sum)
