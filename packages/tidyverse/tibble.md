@@ -1,28 +1,25 @@
 # Tibble
 
-- [Tibble](#tibble)
-  - [简介](#简介)
-  - [创建 tibble](#创建-tibble)
-    - [tibble](#tibble-1)
-    - [使用不规范名称](#使用不规范名称)
-    - [tribble](#tribble)
-    - [data.frame 转 tibble](#dataframe-转-tibble)
-  - [Tibble vs. data.frame](#tibble-vs-dataframe)
-    - [print](#print)
+2026-09-01
+@author Jiawei Mao
 
-2020-09-08, 13:58
-@jiawei
 ***
 
 ## 简介
 
 `tibble` 是增强的 `data.frame`，选取 `tibble` 的行或列，即使遇到当行或单列，数据也不会降维，总是返回 `tibble`。
 
-- 不自动将字符串转换为因子。
-- 不自动降维
-- 定义时不需要列名称合法，不过在引用变量名是需要用反撇号 `` 包起来。
+- tibble 数据库的打印格式更紧凑
+- 不自动将字符串转换为因子（新版 R 也不会）
+- 不自动降维，例如，对应 `mtcars[, "mpg"]` 对 `data.frame` 提取子集，将返回一个向量，而不是单列的数据库。而 `mtcars[, "mpg"]` 对 `tibble` 数据框会返回单列 tibble 数据库，不会降维
+- 定义时不需要 column 名称合法，不过在引用变量名是需要用反撇号 `` 包起来。
 - tibble 不支持行名，将数据框用 `as_tibble()` 转换为 tibble 时，可以用 `rownames="变量名"` 选项将行转换为 tibble 的一列，其中 "变量名" 对应该列名。
 - tibble 允许列为列表类型。
+
+> [!NOTE]
+>
+> - R 中的句点 `.` 没有特殊意义，但美元符号 `$` 用于指定数据框或列表中的成分
+> - R 不提供多行注释，多行注释只能每一行以 `#` 开头
 
 ## 创建 tibble
 
@@ -84,24 +81,27 @@
 
 ### data.frame 转 tibble
 
-`as_tibble()` 将 `data.frame` 转换为 tibble:
+`as_tibble()` 将 `data.frame` 转换为 tibble：
 
 ```r
-> as_tibble(iris)
-# A tibble: 150 x 5
-   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-          <dbl>       <dbl>        <dbl>       <dbl> <fct>  
- 1          5.1         3.5          1.4         0.2 setosa 
- 2          4.9         3            1.4         0.2 setosa 
- 3          4.7         3.2          1.3         0.2 setosa 
- 4          4.6         3.1          1.5         0.2 setosa 
- 5          5           3.6          1.4         0.2 setosa 
- 6          5.4         3.9          1.7         0.4 setosa 
- 7          4.6         3.4          1.4         0.3 setosa 
- 8          5           3.4          1.5         0.2 setosa 
- 9          4.4         2.9          1.4         0.2 setosa 
-10          4.9         3.1          1.5         0.1 setosa 
-# ... with 140 more rows
+> library(tibble)
+> mtcars <- as_tibble(mtcars)
+> mtcars
+# A tibble: 32 × 11
+     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+ 1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
+ 2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
+ 3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
+ 4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
+ 5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
+ 6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
+ 7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
+ 8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
+ 9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
+10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
+# ℹ 22 more rows
+# ℹ Use `print(n = ...)` to see more rows
 ```
 
 ## Tibble vs. data.frame

@@ -51,7 +51,8 @@ matrix(data = NA, nrow = 1, ncol = 1, byrow = FALSE,
 |`data`|提供数据的列表或向量|
 |`nrow`|行数|
 |`ncol`|列数|
-|`byrow`|是否按行填充。`FALSE` 表示按列填充矩阵，否则按行填充|
+|`byrow`|是否按行填充。`FALSE` 表示按列填充矩阵，否则按行填充，默认按列填充|
+|`dimnames`|行名和列名|
 
 - `dimnames`
 

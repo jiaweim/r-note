@@ -5,9 +5,9 @@
 
 ## 简介
 
-data.frame 是矩形结构，包含行和列，可以看作 list 的二维版本。统计分析中类似于 Excel 表格的数据最多，所以 data.frame 在 R 中使用十分频繁。
+`data.frame` 是矩形结构，包含行和列，可以看作 list 的二维版本。统计分析中类似于 Excel 表格的数据最多，所以 `data.frame` 在 R 中使用十分频繁。
 
-data.frame 底层实现为列表，列表中的元素是向量，这些向量构成 data.frame 的 column，每个 column 的长度必须相同，且类型一致。其特征有：
+`data.frame` 底层实现为列表，列表中的元素是向量，这些向量构成 `data.frame` 的 column，每个 column 的长度必须相同，且类型一致。其特征有：
 
 - column 名不能为空
 - row names 必须唯一
@@ -17,10 +17,9 @@ data.frame 底层实现为列表，列表中的元素是向量，这些向量构
 ## 创建数据框
 
 ```r
-data.frame(…, row.names = NULL, check.rows = FALSE,
+data.frame(..., row.names = NULL, check.rows = FALSE,
            check.names = TRUE, fix.empty.names = TRUE,
-           stringsAsFactors = default.stringsAsFactors())
-default.stringsAsFactors()
+           stringsAsFactors = FALSE)
 ```
 
 **参数：**
