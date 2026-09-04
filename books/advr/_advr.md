@@ -4,6 +4,8 @@
 - [前言](./preface.md)
 - [简介](./1.introduction.md)
 - [基础篇引言](./p1.foundations-intro.md)
+- [面向对象系统](./p3.oop.md)
+  - [12. 基础类型](./12.base-types.md)
 
 ## 简介
 
