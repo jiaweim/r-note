@@ -8,6 +8,8 @@
   - [4. 代码风格](./4.workflow-style.md)
   - [5. 整理数据](./5.data-tidy.md)
   - [7. 导入数据](./7.data-import.md)
+- [可视化](./p3.visualize.md)
+  - [9. Layers](./9.layers.md)
 - [编程](./p6.program.md)
 - [交流输出](./communicate.md)
 
