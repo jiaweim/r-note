@@ -11,6 +11,7 @@
 - [可视化](./p3.visualize.md)
   - [9. Layers](./9.layers.md)
   - [10. 探索性数据分析](./10.eda.md)
+  - [11. 沟通](./11.communication.md)
 - [编程](./p6.program.md)
 - [交流输出](./communicate.md)
 
