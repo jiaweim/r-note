@@ -7,6 +7,10 @@
 ## 目录
 
 - [导入 tree 数据](./1.tree_import.md)
+- [2. 树操作](./2.manipulate-tree.md)
+- [4. 系统发育树可视化](./4.tree-visualization.md)
+- [5. 系统发育树注释](./5.tree-annotation.md)
+- [6. 系统发育树的可视化探索](./6.visual-exploration.md)
 
 ## 简介
 
