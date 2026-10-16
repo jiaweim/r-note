@@ -1,6 +1,9 @@
 # read.tree
 
+@since 2026-10-16⭐
+@author Jiawei Mao
 
+***
 
 读取一个包含一棵或多棵括号格式树的文件，即 Newick 或 New Hampshire 格式。
 
@@ -68,4 +71,92 @@ read.tree(file = "", text = NULL, tree.names = NULL, skip = 0,
 如果从文件中读取多棵树，则返回 `multiPhylo` 类，即 `phylo` 对象列表。每棵树的名称可通过 `tree.names` 指定，也可以从文件中读取。
 
 ## 示例
+
+- 完成流程演示
+
+```R
+# 1. Newick 数字符串：猫头鹰物种进化树
+s <- "owls(((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3):6.3,Tyto_alba:13.5);"
+
+# 2. 创建临时文件名，前缀 tree，后缀 .tre
+treefile <- tempfile("tree", fileext = ".tre")
+
+# 3. 将 Newick 字符串写入临时文件
+cat(s, file = treefile, sep = "\n")
+
+# 4. 读取树文件
+tree.owls <- read.tree(treefile)
+
+# 5. 查看树结构
+str(tree.owls)
+# List of 4
+#  $ edge       : int [1:6, 1:2] 5 6 7 7 6 5 6 7 1 2 ...
+#  $ edge.length: num [1:6] 6.3 3.1 4.2 4.2 7.3 13.5
+#  $ Nnode      : int 3
+#  $ tip.label  : chr [1:4] "Strix_aluco" "Asio_otus" "Athene_noctua" "Tyto_alba"
+#  - attr(*, "class")= chr "phylo"
+#  - attr(*, "order")= chr "cladewise"
+
+# 6. 在控制台打印 tree 基本信息
+tree.owls
+#
+# Phylogenetic tree with 4 tips and 3 internal nodes.
+# 
+# Tip labels:
+#   Strix_aluco, Asio_otus, Athene_noctua, Tyto_alba
+# 
+# Rooted; includes branch length(s).
+
+# 7. 强制以多棵树 list 形式读取（即使只有一棵树）
+tree.owls <- read.tree(treefile, keep.multi = TRUE)
+
+# 8. 打印信息
+tree.owls
+# 1 phylogenetic tree
+
+# 9. 获取每棵树的名称
+names(tree.owls)
+# [1] "owls"
+
+# 10. 删除临时文件
+unlink(treefile)
+```
+
+- 使用 `text` 选项
+
+```R
+> TREE <- "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);"
+> TREE
+[1] "((Strix_aluco:4.2,Asio_otus:4.2):3.1,Athene_noctua:7.3);"
+> tree.owls.bis <- read.tree(text = TREE)
+> str(tree.owls.bis)
+List of 4
+ $ edge       : int [1:4, 1:2] 4 5 5 4 5 1 2 3
+ $ edge.length: num [1:4] 3.1 4.2 4.2 7.3
+ $ Nnode      : int 2
+ $ tip.label  : chr [1:3] "Strix_aluco" "Asio_otus" "Athene_noctua"
+ - attr(*, "class")= chr "phylo"
+ - attr(*, "order")= chr "cladewise"
+> tree.owls.bis
+
+Phylogenetic tree with 3 tips and 2 internal nodes.
+
+Tip labels:
+  Strix_aluco, Asio_otus, Athene_noctua
+
+Rooted; includes branch length(s).
+```
+
+- 单个 node 的树
+
+```r
+> ts <- read.tree(text = "((((a))),d);")
+> plot(ts, node.depth = 2)
+```
+
+<img src="./images/Rplot31.png" alt="Rplot31" width="400" />
+
+```R
+> nodelabels()
+```
 
